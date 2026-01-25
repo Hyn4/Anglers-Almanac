@@ -1,0 +1,142 @@
+package dev.rm20.anglersalmanac.interactions;
+
+
+import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.*;
+import com.hypixel.hytale.math.vector.Transform;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.server.core.asset.type.model.config.Model;
+import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
+import com.hypixel.hytale.server.core.entity.InteractionContext;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.*;
+import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.modules.physics.component.PhysicsValues;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.TargetUtil;
+import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
+import dev.rm20.anglersalmanac.components.BobberComponent;
+import dev.rm20.anglersalmanac.components.PhysicsComponent;
+import dev.rm20.anglersalmanac.models.FishingRodData;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.UUID;
+
+
+public class LaunchBobberInteraction extends SimpleInstantInteraction {
+
+    public static final BuilderCodec<LaunchBobberInteraction> CODEC = BuilderCodec.builder(
+            LaunchBobberInteraction.class, LaunchBobberInteraction::new, SimpleInstantInteraction.CODEC
+    ).build();
+
+    @Override
+    protected void firstRun(@Nonnull InteractionType interactionType, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
+        CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
+        Ref<EntityStore> playerRef = context.getOwningEntity();
+        ItemStack heldItem = context.getHeldItem();
+        if (commandBuffer == null || playerRef == null || heldItem == null) return;
+
+        Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
+        if (player == null) return;
+        FishingRodData meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
+        if (meta != null && meta.getBoundBobber() != null) {
+            reelIn(commandBuffer, player, heldItem, meta.getBoundBobber(),meta,playerRef);
+        } else {
+            castOut(interactionType, context, player);
+        }
+    }
+
+    private void castOut(@Nonnull InteractionType interactionType, @Nonnull InteractionContext interactionContext, Player player) {
+        CommandBuffer<EntityStore> commandBuffer = interactionContext.getCommandBuffer();
+        Ref<EntityStore> playerRef = interactionContext.getOwningEntity();
+        TransformComponent transform = playerRef.getStore().getComponent(playerRef, TransformComponent.getComponentType());
+        Transform lookTransform = TargetUtil.getLook(playerRef, commandBuffer);
+        Vector3d spawnPos = transform.getPosition();
+        spawnPos.add(0, 1.5, 0);
+        Vector3d lookDir = lookTransform.getDirection();
+        Vector3d launchVelocity = new Vector3d(lookDir.x*15,(lookDir.y*15)+2,lookDir.z*15);
+        Holder<EntityStore> bobberHolder = EntityStore.REGISTRY.newHolder();
+        Vector3f rotation = new Vector3f();
+        HeadRotation playerHead = commandBuffer.getComponent(playerRef, HeadRotation.getComponentType());
+        if (playerHead != null) {
+            rotation.setYaw(playerHead.getRotation().getYaw() + (float) (Math.PI / 180.0) * 180.0F);
+        }
+
+        bobberHolder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rotation));
+        bobberHolder.addComponent(TransformComponent.getComponentType(), new TransformComponent(spawnPos, rotation));
+        bobberHolder.addComponent(Velocity.getComponentType(), new Velocity(launchVelocity));
+        bobberHolder.ensureComponent(PhysicsValues.getComponentType());
+        bobberHolder.addComponent(PhysicsComponent.getComponentType(), new PhysicsComponent());
+        BobberComponent bobberComp = new BobberComponent();
+        bobberComp.setPlayer(player);
+        bobberHolder.addComponent(BobberComponent.getComponentType(), bobberComp);
+        ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset("Bobber");
+        if (modelAsset == null) modelAsset = ModelAsset.DEBUG;
+
+        Model model = Model.createScaledModel(modelAsset, 2f);
+        bobberHolder.addComponent(PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+        bobberHolder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
+        if (model.getBoundingBox() != null) {
+            bobberHolder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
+        }
+        bobberHolder.putComponent(NetworkId.getComponentType(), new NetworkId(playerRef.getStore().getExternalData().takeNextNetworkId()));
+
+        UUID bobberId = UUID.randomUUID();
+        bobberHolder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(bobberId));
+        commandBuffer.addEntity(bobberHolder, AddReason.SPAWN);
+        ItemStack heldItem = interactionContext.getHeldItem();
+//        FishingRodData meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
+        updateMetadata(player.getInventory(), player.getInventory().getActiveHotbarSlot(), heldItem, bobberId);
+    }
+
+
+    private void reelIn(CommandBuffer<EntityStore> commandBuffer, Player player, ItemStack heldItem, UUID bobberId, FishingRodData fishingRodData, Ref<EntityStore> playerRef) {
+        World world = commandBuffer.getExternalData().getWorld();
+        Ref<EntityStore> bobberRef = world.getEntityStore().getRefFromUUID(bobberId);
+        if (bobberRef != null) {
+            BobberComponent bobberComp = bobberRef.getStore().getComponent(bobberRef,BobberComponent.getComponentType());
+            if(bobberComp!=null) {
+                if (bobberComp.isCanCatch()) {
+                    //HytaleLogger.getLogger().atInfo().log("Fished a fish");
+                    int depth = bobberComp.getWaterDepth();
+                    MinigameManager.StartGame(bobberRef,player,commandBuffer,depth);
+                    //launchFishAtPlayer(bobberRef,player,commandBuffer,depth);
+                }
+            }
+            commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+            //HytaleLogger.getLogger().atInfo().log("Reeled in" + bobberId);
+        }
+        else
+        {
+            //HytaleLogger.getLogger().atInfo().log("Failed to reel in" + bobberId);
+        }
+        updateMetadata(player.getInventory(), player.getInventory().getActiveHotbarSlot(), heldItem, null);
+    }
+
+    private void updateMetadata(Inventory inventory, byte slot, ItemStack stack, @Nullable UUID bobberId) {
+        ItemStack newRod;
+        if (bobberId == null) {
+            newRod = stack.withMetadata(FishingRodData.KEY, null);
+        } else {
+            FishingRodData fishingMetaData = stack.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
+            if (fishingMetaData == null) {
+                fishingMetaData = new FishingRodData();
+            }
+            fishingMetaData.setBoundBobber(bobberId);
+            newRod = stack.withMetadata(FishingRodData.KEYED_CODEC, fishingMetaData);
+        }
+        inventory.getHotbar().replaceItemStackInSlot(slot, stack, newRod);
+    }
+
+
+}

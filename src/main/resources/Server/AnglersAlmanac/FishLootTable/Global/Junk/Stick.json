@@ -1,0 +1,37 @@
+{
+  "ItemId": "Ingredient_Stick",
+  "Category": [
+    "material",
+    "ingredient"
+  ],
+  "Name": "Stick",
+  "Description": "A stick",
+  "FamilyId": "Junk_Global",
+  "Rarity": "Junk",
+  "IsGlobal": true,
+  "Weight": 100,
+  "Size": 30,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 1,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 0,
+    "Behavior": "none",
+    "Stamina": 0
+  }
+}

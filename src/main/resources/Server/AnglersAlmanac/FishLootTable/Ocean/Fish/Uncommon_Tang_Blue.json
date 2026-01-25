@@ -1,0 +1,36 @@
+{
+  "ItemId": "Fish_Tang_Blue_Item",
+  "Category": ["fish", "saltwater"],
+  "Name": "Blue Tang",
+  "Description": "Tang",
+  "FamilyId": "Tang_family",
+  "Rarity": "Uncommon",
+  "IsGlobal": false,
+  "Weight": 150,
+  "Size": 40,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [
+      "Oceans"
+    ],
+    "Biomes": [
+      "Trenches",
+      "Shore",
+      "Beach"
+    ],
+    "Time_of_day": ["Any"],
+    "Required_weather": ["Any"],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 4,
+    "Behavior": "darting",
+    "Stamina": 40
+  }
+}

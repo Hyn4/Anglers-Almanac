@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Trout_Rainbow_Item",
+  "Category": [
+    "fish",
+    "freshwater"
+  ],
+  "Name": "Rainbow Trout",
+  "Description": "A prize catch for any angler.",
+  "FamilyId": "Trout_family",
+  "Rarity": "Rare",
+  "IsGlobal": true,
+  "Weight": 110,
+  "Size": 45,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 2,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 5,
+    "Behavior": "darting",
+    "Stamina": 45
+  }
+}

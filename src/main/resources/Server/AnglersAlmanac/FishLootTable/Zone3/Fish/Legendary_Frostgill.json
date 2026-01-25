@@ -1,0 +1,36 @@
+{
+  "ItemId": "Fish_Frostgill_Item",
+  "Category": [
+    "fish",
+    "freshwater",
+    "arctic"
+  ],
+  "Name": "Frostgill",
+  "Description": "A ice-cold fish with scales like frosted glass.",
+  "FamilyId": "Frostgill_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 20,
+  "Size": 85,
+  "Habitats": {
+    "Zones": ["3"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "Any"
+    ],
+    "Required_weather": ["Any"],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 14,
+    "Behavior": "aggressive",
+    "Stamina": 180
+  }
+}

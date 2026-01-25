@@ -1,0 +1,41 @@
+{
+  "ItemId": "Fish_Catfish_Item",
+  "Category": [
+    "fish",
+    "bottom_feeder"
+  ],
+  "Name": "channel catfish",
+  "Description": "A fish with prominent whiskers",
+  "FamilyId": "catfish_family",
+  "Rarity": "Common",
+  "IsGlobal": true,
+  "Weight": 200,
+  "Size": 45,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "day"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 2,
+    "Height": {
+      "Miny": 0,
+      "Maxy": -1
+    },
+    "Exclude_zones": [
+      "Ocean"
+    ],
+    "Weight_multiplier": 0.2
+  },
+  "Minigame_stats": {
+    "Difficulty": 5,
+    "Behavior": "aggressive",
+    "Stamina": 40
+  }
+}

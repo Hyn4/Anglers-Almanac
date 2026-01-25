@@ -1,0 +1,41 @@
+{
+  "ItemId": "Fish_Crab_Item",
+  "Category": [
+    "fish",
+    "saltwater"
+  ],
+  "Name": "Crab",
+  "Description": "Crab",
+  "FamilyId": "Crab_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 45,
+  "Size": 150,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [
+      "Trenches",
+      "Shore",
+      "Beach"
+    ],
+    "Time_of_day": [
+      "Any"
+    ],
+    "Required_weather": [
+      "Any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 12,
+    "Behavior": "heavy_sinker",
+    "Stamina": 150
+  }
+}

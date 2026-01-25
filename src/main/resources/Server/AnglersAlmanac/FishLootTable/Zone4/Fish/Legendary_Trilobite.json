@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Trilobite_Item",
+  "Category": [
+    "ancient",
+    "saltwater"
+  ],
+  "Name": "Trilobite",
+  "Description": "A living fossil from an age long forgotten.",
+  "FamilyId": "Trilobite_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 35,
+  "Size": 35,
+  "Habitats": {
+    "Zones": ["4"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": 55
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 11,
+    "Behavior": "heavy_sinker",
+    "Stamina": 220
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "ItemId": "Fish_Bluegill_Item",
+  "Category": [
+    "fish",
+    "freshwater"
+  ],
+  "Name": "Bluegill",
+  "Description": "A common sunfish known for the blue-black spot on its gill cover.",
+  "FamilyId": "sunfish_family",
+  "Rarity": "Common",
+  "IsGlobal": true,
+  "Weight": 200,
+  "Size": 20,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "day"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 2,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    },
+    "Exclude_zones": [
+      "Ocean"
+    ],
+    "Weight_multiplier": 0.2
+  },
+  "Minigame_stats": {
+    "Difficulty": 3,
+    "Behavior": "steady",
+    "Stamina": 20
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "ItemId": "Fish_Pike_Item",
+  "Category": [
+    "fish",
+    "freshwater"
+  ],
+  "Name": "Pike",
+  "Description": "An apex predator of the reeds, often called the 'Water Wolf.'",
+  "FamilyId": "Pike_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 30,
+  "Size": 120,
+  "Habitats": {
+    "Zones": [
+      "1"
+    ],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    },
+    "Exclude_biomes": [
+      "Forest_Swamp"
+    ],
+    "Weight_multiplier": 0.1
+  },
+  "Minigame_stats": {
+    "Difficulty": 10,
+    "Behavior": "aggressive",
+    "Stamina": 100
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "ItemId": "Fish_Salmon_Item",
+  "Category": [
+    "fish",
+    "freshwater"
+  ],
+  "Name": "Atlantic Salmon",
+  "Description": "A powerful swimmer prized for its rich flavor and acrobatic leaps.",
+  "FamilyId": "Salmon_family",
+  "Rarity": "Rare",
+  "IsGlobal": true,
+  "Weight": 115,
+  "Size": 75,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 2,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    },
+    "Exclude_zones": [
+      "Ocean"
+    ],
+    "Weight_multiplier": 0.25
+  },
+  "Minigame_stats": {
+    "Difficulty": 7,
+    "Behavior": "sinker",
+    "Stamina": 60
+  }
+}

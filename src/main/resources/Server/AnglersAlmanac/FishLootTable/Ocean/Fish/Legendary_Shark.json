@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Shark_Hammerhead_Item",
+  "Category": [
+    "mammal",
+    "saltwater"
+  ],
+  "Name": "Hammerhead Shark",
+  "Description": "An apex predator.",
+  "FamilyId": "Shark_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 15,
+  "Size": 1500,
+  "Habitats": {
+    "Zones": ["Ocean"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "Any"
+    ],
+    "Required_weather": [
+      "Any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 20,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 13,
+    "Behavior": "aggressive",
+    "Stamina": 250
+  }
+}

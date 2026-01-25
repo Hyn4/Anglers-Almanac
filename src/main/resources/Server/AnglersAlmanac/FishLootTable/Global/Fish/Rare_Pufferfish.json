@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Pufferfish_Item",
+  "Category": [
+    "fish",
+    "saltwater"
+  ],
+  "Name": "Pufferfish",
+  "Description": "Inflates into a prickly ball when threatened. Dangerous if handled poorly.",
+  "FamilyId": "Pufferfish_family",
+  "Rarity": "Rare",
+  "IsGlobal": false,
+  "Weight": 110,
+  "Size": 30,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 2,
+    "Height": {
+      "Min_y": 100,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 8,
+    "Behavior": "floater",
+    "Stamina": 35
+  }
+}

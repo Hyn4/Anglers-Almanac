@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Whale_Humpback_Item",
+  "Category": [
+    "mammal",
+    "saltwater"
+  ],
+  "Name": "Humpback Whale",
+  "Description": "A titan of the sea.",
+  "FamilyId": "Whale_family",
+  "Rarity": "Legendary",
+  "IsGlobal": true,
+  "Weight": 25,
+  "Size": 1500,
+  "Habitats": {
+    "Zones": ["Ocean"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "Any"
+    ],
+    "Required_weather": [
+      "Any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 20,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 15,
+    "Behavior": "heavy_sinker",
+    "Stamina": 500
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Shellfish_Lava_Item",
+  "Category": [
+    "fish",
+    "Lava"
+  ],
+  "Name": "Lava Shellfish",
+  "Description": "A legendary terror.",
+  "FamilyId": "Shellfish_family",
+  "Rarity": "Legendary",
+  "IsGlobal": false,
+  "Weight": 35,
+  "Size": 35,
+  "Habitats": {
+    "Zones": ["4"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "any"
+    ],
+    "Required_weather": [
+      "any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 10,
+    "Behavior": "aggressive",
+    "Stamina": 85
+  }
+}

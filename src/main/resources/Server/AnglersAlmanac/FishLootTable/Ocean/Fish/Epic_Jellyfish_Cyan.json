@@ -1,0 +1,37 @@
+{
+  "ItemId": "Fish_Jellyfish_Cyan_Item",
+  "Category": [
+    "invertebrate",
+    "saltwater"
+  ],
+  "Name": "Cyan Jellyfish",
+  "Description": "Its glow is mesmerizing.",
+  "FamilyId": "Jellyfish_family",
+  "Rarity": "Epic",
+  "IsGlobal": false,
+  "Weight": 75,
+  "Size": 50,
+  "Habitats": {
+    "Zones": ["Ocean"],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Time_of_day": [
+      "night"
+    ],
+    "Required_weather": [
+      "Any"
+    ],
+    "Moon_phase": -1,
+    "Min_depth": 5,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 7,
+    "Behavior": "erratic",
+    "Stamina": 120
+  }
+}

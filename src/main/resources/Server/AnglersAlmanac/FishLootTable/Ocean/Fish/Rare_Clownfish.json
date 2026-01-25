@@ -1,0 +1,36 @@
+{
+  "ItemId": "Fish_Tang_Blue_Item",
+  "Category": ["fish", "saltwater"],
+  "Name": "A small, bright orange fish with white bands.",
+  "Description": "Tang",
+  "FamilyId": "Clownfish_family",
+  "Rarity": "Rare",
+  "IsGlobal": false,
+  "Weight": 110,
+  "Size": 10,
+  "Habitats": {
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [
+      "Oceans"
+    ],
+    "Biomes": [
+      "Trenches",
+      "Shore",
+      "Beach"
+    ],
+    "Time_of_day": ["Any"],
+    "Required_weather": ["Any"],
+    "Moon_phase": -1,
+    "Min_depth": 3,
+    "Height": {
+      "Min_y": 0,
+      "Max_y": -1
+    }
+  },
+  "Minigame_stats": {
+    "Difficulty": 8,
+    "Behavior": "darting",
+    "Stamina": 80
+  }
+}
