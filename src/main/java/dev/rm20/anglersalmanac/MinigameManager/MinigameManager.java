@@ -5,6 +5,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -12,15 +13,31 @@ import com.hypixel.hytale.server.core.universe.world.WorldMapTracker;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
+import dev.rm20.anglersalmanac.components.MinigameComponent;
+import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.models.FishingContext;
+import dev.rm20.anglersalmanac.models.FishingRodData;
 import dev.rm20.anglersalmanac.models.ZoneInfo;
 import dev.rm20.anglersalmanac.utils.EnvironmentParser;
 import dev.rm20.anglersalmanac.utils.FishLootManager;
 import dev.rm20.anglersalmanac.utils.TimeUtils;
 
+import java.util.UUID;
+
 public class MinigameManager {
     public static void StartGame(Ref<EntityStore> bobberRef, Player player, CommandBuffer<EntityStore> commandBuffer, int depth)
     {
+        // Set rod mode
+        //TODO add fail safes for hotbar item changing.
+        //Assuming active hotbar item has not changed.
+
+        // Spawn minigame and set rod mode to minigame (1)
+        FishingRodData meta = player.getInventory().getActiveHotbarItem().getFromMetadataOrNull(FishingRodData.KEYED_CODEC);
+        assert meta != null;
+        Inventory inv  = player.getInventory();
+        UUID minigameID = MinigameComponent.spawnMinigame(commandBuffer.getStore(),player.getReference(), bobberRef);
+        LaunchBobberInteraction.updateMetadata(inv, inv.getActiveHotbarSlot(), inv.getActiveHotbarItem(), meta.getBoundBobber(), minigameID, 1);
+
         //TODO finish this
         FirstRoll(bobberRef, player, commandBuffer, depth);
     }
