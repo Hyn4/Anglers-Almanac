@@ -1,9 +1,6 @@
 package dev.rm20.anglersalmanac.Systems;
 
-import com.hypixel.hytale.component.ArchetypeChunk;
-import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -18,9 +15,11 @@ import dev.rm20.anglersalmanac.models.FishingRodData;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Random;
-
 public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> {
+    ItemStack fishingRod = null;
+
     @Override
     public void tick(float deltaTime, int i, @NonNull ArchetypeChunk<EntityStore> archetypeChunk, @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
 
@@ -29,8 +28,22 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         Ref<EntityStore> playerRef = game.ownerRef;
         Player player = store.getComponent(playerRef, Player.getComponentType());
         ItemStack rodItem = player.getInventory().getActiveHotbarItem(); // TODO ensure that this is always actually the rod. (cancel minigame if switched off)
+        if(rodItem == null)
+        {
+            //LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
+            return;
+        }
         FishingRodData rodMeta = rodItem.getFromMetadataOrNull(FishingRodData.KEYED_CODEC);
-
+        if(rodMeta != null)
+        {
+            fishingRod = rodItem;
+        }
+//        assert rodItem != null;
+//        if (rodMeta == null ) {
+//            AnglersAlmanac.getInstance().getLogger().atInfo().log("Removed bobber - Rod swapped or dropped");
+//            commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+//            return;
+//        }
         switch (game.stateTrigger){
             case FISHMOVE:
                 game.nextFishMoveTime = new Random().nextFloat() * 3f;
@@ -44,7 +57,7 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
             case FAIL:
                 AnglersAlmanac.LOGGER.atInfo().log("YOU FAIL");
                 // Reel in the rod which the bobber owner is using.
-                LaunchBobberInteraction.cancelFishing(commandBuffer, player, rodItem);
+                LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                 break;
             case SUCCESS:
                 AnglersAlmanac.LOGGER.atInfo().log("YOU WIN");
@@ -52,7 +65,7 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
 
                 // Finish fishing.
-                LaunchBobberInteraction.cancelFishing(commandBuffer, player, rodItem);
+                LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                 break;
         }
 
