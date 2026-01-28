@@ -1,0 +1,12 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Fishing/fishing_reel_slow.ogg"
+      ],
+      "Looping": true
+    }
+  ],
+  "MaxDistance": 8,
+  "Volume": 1
+}

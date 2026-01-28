@@ -3,8 +3,12 @@ package dev.rm20.anglersalmanac.Systems;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
@@ -30,7 +34,6 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         ItemStack rodItem = player.getInventory().getActiveHotbarItem(); // TODO ensure that this is always actually the rod. (cancel minigame if switched off)
         if(rodItem == null)
         {
-            //LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
             return;
         }
         FishingRodData rodMeta = rodItem.getFromMetadataOrNull(FishingRodData.KEYED_CODEC);
@@ -38,12 +41,8 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         {
             fishingRod = rodItem;
         }
-//        assert rodItem != null;
-//        if (rodMeta == null ) {
-//            AnglersAlmanac.getInstance().getLogger().atInfo().log("Removed bobber - Rod swapped or dropped");
-//            commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
-//            return;
-//        }
+
+
         switch (game.stateTrigger){
             case FISHMOVE:
                 game.nextFishMoveTime = new Random().nextFloat() * 3f;
@@ -62,24 +61,33 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
             case SUCCESS:
                 AnglersAlmanac.LOGGER.atInfo().log("YOU WIN");
                 // Deal rewards.
-                MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
+                String lootID = MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
+                MinigameManager.DropLoot(lootID, player, commandBuffer,game.bobberRef);
 
                 // Finish fishing.
                 LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                 break;
         }
 
+
         // Do minigame logic.
 
         // Check if bar is over the fish and check win state.
         if(game.fishPos < game.barPos +  AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius && game.fishPos > game.barPos - AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius){
             game.fightProgress += AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishReelRate * deltaTime;
+
+            // TODO Prevent playing sound effect if already playing.
+
+            int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Reel_Slow");
+            SoundUtil.playSoundEvent3d(audio, SoundCategory.SFX, store.getComponent(game.ownerRef, TransformComponent.getComponentType()).getPosition(), playerRef.getStore());
             if(game.fightProgress >= 1.0f){
                 game.stateTrigger = MinigameComponent_TensionBar.Trigger.SUCCESS;
                 return;
             }
         }else{
             game.fightProgress -= AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishEscapeRate * deltaTime;
+            int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Line_Tension");
+            SoundUtil.playSoundEvent3d(audio, SoundCategory.SFX, store.getComponent(game.ownerRef, TransformComponent.getComponentType()).getPosition(), playerRef.getStore());
             if(game.fightProgress <= 0f){
                 game.stateTrigger = MinigameComponent_TensionBar.Trigger.FAIL;
                 return;
