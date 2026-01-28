@@ -6,6 +6,8 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.modules.collision.BlockCollisionData;
 import com.hypixel.hytale.server.core.modules.collision.CollisionModule;
 import com.hypixel.hytale.server.core.modules.collision.CollisionResult;
@@ -13,6 +15,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.physics.component.PhysicsValues;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
@@ -23,7 +26,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class CustomPhysicsSystem extends EntityTickingSystem<EntityStore> {
-
     @Override
     public void tick(float dt, int index, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
                      @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
@@ -44,12 +46,18 @@ public class CustomPhysicsSystem extends EntityTickingSystem<EntityStore> {
         // We check the fluid at the current position
         int fluidId = world.getFluidId((int)position.x, (int)Math.floor(position.y), (int)position.z);
         boolean inWater = (fluidId == 7||fluidId == 8||fluidId == 12);
-
+//        playedWaterSFX =false;
         // 2. Apply Forces (Gravity or Buoyancy)
         if (inWater) {
             if(!bobberComp.InWater())
             {
                 bobberComp.setInWater(true);
+                //Audio
+                int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Water");
+                EntityStore store2 = world.getEntityStore();
+                world.execute(() -> {
+                    SoundUtil.playSoundEvent3d(audio,SoundCategory.SFX, position, store2.getStore());
+                });
             }
             applyWaterForces(dt, position, velocity, bobberComp, world);
         } else {
@@ -180,5 +188,10 @@ public class CustomPhysicsSystem extends EntityTickingSystem<EntityStore> {
     @Override
     public Query<EntityStore> getQuery() {
         return Query.and(PhysicsComponent.getComponentType());
+    }
+
+    private void playWaterSFX()
+    {
+
     }
 }

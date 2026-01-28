@@ -1,0 +1,11 @@
+{
+  "Volume": 0.1,
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Fishing/fishing_water.ogg"
+      ]
+    }
+  ],
+  "Pitch": 12
+}

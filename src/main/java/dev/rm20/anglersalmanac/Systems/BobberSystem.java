@@ -6,11 +6,15 @@ import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.components.BobberComponent;
@@ -75,8 +79,14 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
             if (timeUntilCatch <= 0) {
                 // Fish bite logic
                 component.setCanCatch(true);
-                ParticleUtil.spawnParticleEffect("Fish_Alert", transform.getPosition().add(0, 0.5, 0), store);
-
+                ParticleUtil.spawnParticleEffect("Fish_Alert", transform.getPosition().clone().add(0, 0.5, 0), store);
+                //Audio
+                int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Bubble");
+                World world = store.getExternalData().getWorld();
+                EntityStore store2 = world.getEntityStore();
+                world.execute(() -> {
+                    SoundUtil.playSoundEvent3d(audio, SoundCategory.SFX, transform.getPosition(), store2.getStore());
+                });
                 // Reaction window: How long the player has to click.
                 // Making this slightly more random (e.g., 0.8s to 3.0s)
                 float reactionWindow = 0.8f + random.nextFloat() * 2.2f;

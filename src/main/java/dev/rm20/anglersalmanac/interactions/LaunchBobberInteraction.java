@@ -8,8 +8,10 @@ import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -21,6 +23,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.modules.physics.component.PhysicsValues;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.TargetUtil;
@@ -33,6 +36,7 @@ import dev.rm20.anglersalmanac.models.FishingRodData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.sound.sampled.AudioSystem;
 import java.util.UUID;
 
 
@@ -139,13 +143,17 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
 //        FishingRodData meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
         Inventory inv = player.getInventory();
         updateMetadata(inv, inv.getActiveHotbarSlot(), heldItem, bobberId, null, 0);
-
+        //play sound here
+        int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Reel");
+        SoundUtil.playSoundEvent3d(audio, SoundCategory.SFX, transform.getPosition(), playerRef.getStore());
         //AnglersAlmanac.LOGGER.atInfo().log("Rod metadata %s, %s", heldItem.getFromMetadataOrNull(FishingRodData.KEYED_CODEC), heldItem.getFromMetadataOrNull(ItemModeData.KEYED_CODEC));
     }
 
 
     private void reelIn(CommandBuffer<EntityStore> commandBuffer, Player player, ItemStack heldItem, UUID bobberId, FishingRodData fishingRodData, Ref<EntityStore> playerRef) {
         AnglersAlmanac.LOGGER.atInfo().log("Reeling in");
+        //play sound here
+
         World world = commandBuffer.getExternalData().getWorld();
         Ref<EntityStore> bobberRef = world.getEntityStore().getRefFromUUID(bobberId);
         if (bobberRef != null) {

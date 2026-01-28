@@ -1,0 +1,12 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Fishing/fishing_reel.ogg"
+      ]
+    }
+  ],
+  "Volume": -2.32,
+  "Pitch": 10.272,
+  "MaxDistance": 8
+}

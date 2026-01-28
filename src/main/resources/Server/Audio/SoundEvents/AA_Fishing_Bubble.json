@@ -1,0 +1,11 @@
+{
+  "Volume": 0.8,
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/Fishing/fishing_bubble.ogg"
+      ]
+    }
+  ],
+  "Pitch": 1.152
+}
