@@ -64,9 +64,6 @@ public class MinigameComponent_TensionBar implements Component<EntityStore> {
 
 
     // Internal use:
-    public boolean isFishOn = false;
-    public boolean isInWater = false;
-    public float wetLifetime = 0f; // The seconds for which the bobber has spent in the water.
     public float fightProgress = 0.25f; // The progress to successful catch. Success when progress is at 1f.
     public float fishPos = 0f; // The position of the fish in the bar as a scale from 0 - 1.
     public float barPos = 0f; // The position of the catch bar.
@@ -74,20 +71,14 @@ public class MinigameComponent_TensionBar implements Component<EntityStore> {
     public float nextFishMoveTime = 0.5f; // The time until the next fish movement.
     public float fishMoveTimer = 0f; // Counts up until next fish move.
     public float fishVelocity = 0f; // The movement of the fish.
-    public float hookAtTime = 10f; // Randomised time at which fish will be hooked.
     public SimplePhysicsProvider physicsProvider;
     public Ref<EntityStore> ownerRef;
     public Ref<EntityStore> bobberRef;
     public UUID selfUUID;
-    public byte rodItemStackSlot; // The inventory slot in which the bobber rod exists.
-    public ItemStack rodItemStack; // Both these rod item vars are used to ensure player doesn't move it or their active hotbar slot.
     public enum Trigger {NOTRIGGER, FISHMOVE, SUCCESS, FAIL}
     public Trigger stateTrigger = Trigger.NOTRIGGER;
     public UUID minigameFishModelId;
     public UUID minigameBarModelId;
-    public float bobberAge = 0f;
-    public long lastInteractionTime = 0;
-    public float approxBobberSystemDeltaTime = 1f; // The last known delta time of the bobber system tick.
     public float minigameScale = 2f; // The visual size of the minigame display, adjusted based on distance from bobber.
 
 

@@ -2,9 +2,14 @@
   "Layers": [
     {
       "Files": [
-        "Sounds/Fishing/fishing_reel_slow.ogg"
+        "Sounds/Fishing/FishingSlowReel/fishing_reel_slow_0.ogg",
+        "Sounds/Fishing/FishingSlowReel/fishing_reel_slow_1.ogg",
+        "Sounds/Fishing/FishingSlowReel/fishing_reel_slow_2.ogg",
+        "Sounds/Fishing/FishingSlowReel/fishing_reel_slow_3.ogg"
       ],
-      "Looping": true
+      "Looping": true,
+      "Volume": 1,
+      "StartDelay": 0
     }
   ],
   "MaxDistance": 8,
