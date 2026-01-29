@@ -37,6 +37,7 @@ public class AudioPlayerComponent implements Component<EntityStore> {
     public long playNextTime = 0;
     public long lastPlayTime = 0;
     public int lastSoundIndex = 0;
+    public long allowedOverlap = 0; // (30000000 is an okay value for removing loop silence = 30ms). Audio overlap allowed in nanoseconds.
     public boolean autoplay = false;
     public boolean autoplayAsRandom = false;
     public UUID selfUUID;
@@ -78,7 +79,7 @@ public class AudioPlayerComponent implements Component<EntityStore> {
         // TODO search through all files in all layers to find the longest duration to return.
         var asset = SoundEvent.getAssetMap().getAsset(soundEventId);
         if(asset == null){
-            AnglersAlmanac.LOGGER.atWarning().log("No sound file matching name %s found!", soundEventId);
+            AnglersAlmanac.LOGGER.atSevere().log("No sound file matching name %s found!", soundEventId);
         }
 
         // Get duration from file info.
@@ -99,7 +100,7 @@ public class AudioPlayerComponent implements Component<EntityStore> {
 
     public boolean isCurrentlyPlaying(){
         //TimeUnit.SECONDS.convert(System.nanoTime() - lastCastOrReelTime, TimeUnit.NANOSECONDS) >= cooldownTime;
-        return System.nanoTime() < playNextTime;
+        return System.nanoTime() < playNextTime - allowedOverlap;
     }
 
     public void playRandomSound(Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
@@ -114,10 +115,8 @@ public class AudioPlayerComponent implements Component<EntityStore> {
     public void playSound(String soundId, Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
         SoundUtil.playSoundEvent3d(SoundEvent.getAssetMap().getIndex(soundId), SoundCategory.UI, pos, componentAccessor);
         playNextTime = System.nanoTime() + getDurationOf(soundId);
-        AnglersAlmanac.LOGGER.atInfo().log("current time: %s   next play time: %s", System.nanoTime(), playNextTime);
         lastPlayTime = System.nanoTime();
         lastSoundIndex = sounds.indexOf(soundId);
-        AnglersAlmanac.LOGGER.atInfo().log("AudioPlayerComponenet Playing sound %s", soundId);
     }
     public void playSound(String soundId, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
         playSound(soundId, getAudioPlayerPos(componentAccessor), componentAccessor);

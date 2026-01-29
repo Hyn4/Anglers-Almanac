@@ -184,6 +184,7 @@ public class MinigameComponent_TensionBar implements Component<EntityStore> {
         // Also spawn audio
         AudioPlayerComponent apc = AudioPlayerComponent.spawnNewAudioPlayerEntity(bobberPos, store);
         apc.addSounds(reelInSounds);
+        apc.allowedOverlap = 30000000;
         audioPlayerId = apc.selfUUID;
 
 
