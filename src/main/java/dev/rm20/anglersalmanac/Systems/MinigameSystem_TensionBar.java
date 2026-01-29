@@ -23,6 +23,7 @@ import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
+import dev.rm20.anglersalmanac.components.AudioPlayerComponent;
 import dev.rm20.anglersalmanac.components.BobberComponent;
 import dev.rm20.anglersalmanac.components.MinigameComponent_TensionBar;
 import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
@@ -38,9 +39,7 @@ import java.util.stream.IntStream;
 
 public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> {
     ItemStack fishingRod = null;
-    UUID reelAudioEntityId;
-    UUID escapeAudioEntityId;
-    List<String> soundAssetKeys = Arrays.asList("AA_Fishing_Reel_Slow0", "AA_Fishing_Reel_Slow1", "AA_Fishing_Reel_Slow2", "AA_Fishing_Reel_Slow3");
+    //List<String> soundAssetKeys = Arrays.asList("AA_Fishing_Reel_Slow0", "AA_Fishing_Reel_Slow1", "AA_Fishing_Reel_Slow2", "AA_Fishing_Reel_Slow3");
 
 
     @Override
@@ -94,37 +93,23 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         // Do minigame logic.
 
         PlayerRef playerRefObj = store.getComponent(playerRef, PlayerRef.getComponentType());
-        AudioComponent audioComponent = store.getComponent(store.getExternalData().getRefFromUUID(game.selfUUID), AudioComponent.getComponentType());
+        AudioPlayerComponent apc = store.getComponent(store.getExternalData().getRefFromUUID(game.selfUUID), AudioPlayerComponent.getComponentType());
 
 
         // Check if bar is over the fish and check win state.
         if(game.fishPos < game.barPos +  AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius && game.fishPos > game.barPos - AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius){
             game.fightProgress += AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishReelRate * deltaTime;
 
-            // TODO Pause old sound when switching to new sound.
-
-            // Remove old audio
-            if(escapeAudioEntityId != null) {
-                //SoundUtils.changeSoundAssetVolume(playerRefObj, reelAudioID, 0);
-                commandBuffer.getExternalData().getWorld().execute(() -> {
-                        commandBuffer.removeEntity(commandBuffer.getExternalData().getRefFromUUID(escapeAudioEntityId), RemoveReason.REMOVE);
-                    escapeAudioEntityId = null;
-                    });
-
+            // Remove escape audio
+            if(apc.hasSound("AA_Fishing_Line_Tension")) {
+                apc.removeSound("AA_Fishing_Line_Tension");
                 AnglersAlmanac.LOGGER.atInfo().log("Removed escape sound");
             }
 
-            // Add new audio if not currently playing.
-            if(reelAudioEntityId == null || commandBuffer.getExternalData().getRefFromUUID(reelAudioEntityId) == null) {
-                //SoundUtils.changeSoundAssetVolume(playerRefObj, reelAudioID, 1);
-                //SoundUtil.playSoundEvent3d(reelAudioIndex, SoundCategory.SFX, store.getComponent(game.ownerRef, TransformComponent.getComponentType()).getPosition(), playerRef.getStore());
-                //String reelAudioID = soundAssetKeys.get(new Random().nextInt(soundAssetKeys.size()));
-                String reelAudioID = "AA_Fishing_Reel_Slow";
-                //SoundUtil.playSoundEventEntity(SoundEvent.getAssetMap().getIndex(reelAudioID), store.getComponent(playerRef, NetworkId.getComponentType()).getId(), store);
-                reelAudioEntityId = SoundUtils.createNewSoundEntity(reelAudioID, playerPos, store);
-                //audioComponent.addSound(reelAudioIndex);
-                AnglersAlmanac.LOGGER.atInfo().log("Playing reel slow sound");
-            }
+            // Autoplay reel audio
+            apc.autoplayAsRandom = true;
+            AnglersAlmanac.LOGGER.atInfo().log("Playing reel slow sound");
+
 
 
             // Check win condition.
@@ -135,29 +120,14 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         }else{
             game.fightProgress -= AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishEscapeRate * deltaTime;
 
-
-
-            // Remove old audio
-            if(reelAudioEntityId != null) {
-                //SoundUtils.changeSoundAssetVolume(playerRefObj, reelAudioID, 0);
-                commandBuffer.getExternalData().getWorld().execute(() -> {
-                    commandBuffer.removeEntity(commandBuffer.getExternalData().getRefFromUUID(reelAudioEntityId), RemoveReason.REMOVE);
-                    reelAudioEntityId = null;
-                });
-
-
-                AnglersAlmanac.LOGGER.atInfo().log("Removing reel slow sound");
-            }
+            AnglersAlmanac.LOGGER.atInfo().log("Removing reel slow sound");
 
             // Add new audio
-            if(escapeAudioEntityId == null || commandBuffer.getExternalData().getRefFromUUID(escapeAudioEntityId) == null) {
-                //SoundUtils.changeSoundAssetVolume(playerRefObj, escapeAudioID, 1);
-                //SoundUtil.playSoundEvent3d(escapeAudioIndex, SoundCategory.SFX, store.getComponent(game.ownerRef, TransformComponent.getComponentType()).getPosition(), playerRef.getStore());
-                String escapeAudioID = "AA_Fishing_Line_Tension";
-                escapeAudioEntityId = SoundUtils.createNewSoundEntity(escapeAudioID, playerPos, store);
-                //audioComponent.addSound(escapeAudioIndex);
-                AnglersAlmanac.LOGGER.atInfo().log("Playing line tension sound");
-            }
+            apc.addSound("AA_Fishing_Line_Tension");
+            apc.autoplayAsRandom = false;
+            apc.doLoopSingle("AA_Fishing_Line_Tension", store);
+            AnglersAlmanac.LOGGER.atInfo().log("Playing line tension sound");
+
 
             // Check win condition.
             if(game.fightProgress <= 0f){

@@ -1,29 +1,46 @@
 package dev.rm20.anglersalmanac.components;
 
-import com.hypixel.hytale.component.Component;
-import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.AssetModule;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
+import com.hypixel.hytale.server.core.asset.common.CommonAssetRegistry;
 import com.hypixel.hytale.server.core.asset.common.OggVorbisInfoCache;
+import com.hypixel.hytale.server.core.asset.common.ResourceCommonAsset;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.system.AudioSystems;
+import com.hypixel.hytale.server.core.plugin.registry.AssetRegistry;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.AssetUtil;
+import com.hypixel.hytale.server.core.util.UUIDUtil;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import org.jspecify.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import javax.sound.sampled.spi.AudioFileReader;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class AudioPlayerComponent implements Component<EntityStore> {
-    public static ComponentType<EntityStore, MinigameComponent_TensionBar> COMPONENT_TYPE;
+    public static ComponentType<EntityStore, AudioPlayerComponent> COMPONENT_TYPE;
     private List<String> sounds = new ArrayList<>();
     private HashMap<String, Double> soundDurations = new HashMap<>();
     public long playNextTime = 0;
     public long lastPlayTime = 0;
+    public int lastSoundIndex = 0;
+    public boolean autoplay = false;
+    public boolean autoplayAsRandom = false;
+    public UUID selfUUID;
+
+    public AudioPlayerComponent(){
+
+    }
 
 
     public void addSound(String soundEventId){
@@ -37,9 +54,15 @@ public class AudioPlayerComponent implements Component<EntityStore> {
         soundDurations.remove(soundEventId);
     }
 
+    public boolean hasSound(String soundEventId){
+        return sounds.contains(soundEventId);
+    }
+
     private double readDurationOf(String soundEventId){
         if(!sounds.contains(soundEventId)) return 0;
-        AnglersAlmanac.LOGGER.atInfo().log("file path: %s", SoundEvent.getAssetMap().getPath(soundEventId).toString());
+        // TODO get the path to the actual sound file, not the json SoundEvent asset.
+        AnglersAlmanac.LOGGER.atInfo().log("file path: %s", CommonAssetRegistry.getByName("fishing_reel_slow_0.ogg"));
+        AnglersAlmanac.LOGGER.atInfo().log("file path derp: %s", CommonAssetRegistry.getByName(soundEventId));
         AnglersAlmanac.LOGGER.atInfo().log("duration: %s", OggVorbisInfoCache.getNow(SoundEvent.getAssetMap().getPath(soundEventId).toString()).duration);
         return OggVorbisInfoCache.getNow(SoundEvent.getAssetMap().getPath(soundEventId).toString()).duration;
     }
@@ -54,20 +77,98 @@ public class AudioPlayerComponent implements Component<EntityStore> {
         return TimeUnit.SECONDS.convert(System.nanoTime() - lastPlayTime, TimeUnit.NANOSECONDS) < playNextTime;
     }
 
-    public void playRandomSound(Vector3d pos){
+    public void playRandomSound(Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
         String soundId = sounds.get(new Random().nextInt(sounds.size()));
-        playSound(soundId, pos);
+        playSound(soundId, pos, componentAccessor);
+    }
+    public void playRandomSound(@Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        String soundId = sounds.get(new Random().nextInt(sounds.size()));
+        playSound(soundId, componentAccessor);
     }
 
-    public void playSound(String soundId, Vector3d pos){
-
+    public void playSound(String soundId, Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        SoundUtil.playSoundEvent3d(SoundEvent.getAssetMap().getIndex(soundId), SoundCategory.UI, pos, componentAccessor);
         playNextTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert((long)getDurationOf(soundId), TimeUnit.SECONDS);
         lastPlayTime = System.nanoTime();
+        lastSoundIndex = sounds.indexOf(soundId);
     }
+    public void playSound(String soundId, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        SoundUtil.playSoundEvent3d(SoundEvent.getAssetMap().getIndex(soundId), SoundCategory.UI, getAudioPlayerPos(componentAccessor), componentAccessor);
+        playNextTime = System.nanoTime() + TimeUnit.NANOSECONDS.convert((long)getDurationOf(soundId), TimeUnit.SECONDS);
+        lastPlayTime = System.nanoTime();
+        lastSoundIndex = sounds.indexOf(soundId);
+    }
+
+    /// Can be run in a system tick. Will only play the next sound if the current sound has concluded.
+    public void doLoopAll(boolean pickRandom, Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        if(isCurrentlyPlaying()) return;
+        if(pickRandom){
+            playRandomSound(pos, componentAccessor);
+        }else{
+            // TODO Test this function with pickRandom false.
+            // Pick next sound or overflow.
+            int nextSoundIndex = lastSoundIndex+1;
+            if(lastSoundIndex >= sounds.size()){ nextSoundIndex = 0; }
+            playSound(sounds.get(nextSoundIndex), pos, componentAccessor);
+        }
+    }
+    public void doLoopAll(boolean pickRandom, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        doLoopAll(pickRandom, getAudioPlayerPos(componentAccessor), componentAccessor);
+    }
+
+    public void doLoopSingle(String soundEventId, Vector3d pos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        if(isCurrentlyPlaying()) return;
+        playSound(soundEventId, pos, componentAccessor);
+    }
+    public void doLoopSingle(String soundEventId, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        if(isCurrentlyPlaying()) return;
+        playSound(soundEventId, getAudioPlayerPos(componentAccessor) , componentAccessor);
+    }
+
+    private Vector3d getAudioPlayerPos(@Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        if(selfUUID == null) return Vector3d.ZERO;
+        TransformComponent transform = componentAccessor.getComponent(componentAccessor.getExternalData().getRefFromUUID(selfUUID), TransformComponent.getComponentType());
+        if(transform == null) return Vector3d.ZERO;
+        return transform.getPosition().clone();
+    }
+
+
+    public AudioPlayerComponent spawnNewAudioPlayerEntity(@Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        return spawnNewAudioPlayerEntity(Vector3d.ZERO, componentAccessor);
+    }
+    public static AudioPlayerComponent spawnNewAudioPlayerEntity(Vector3d spawnPos, @Nonnull ComponentAccessor<EntityStore> componentAccessor){
+        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+
+        UUID uuid = UUIDUtil.generateVersion3UUID();
+        holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(uuid));
+        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(spawnPos, Vector3f.ZERO));
+
+        AudioPlayerComponent apc = new AudioPlayerComponent();
+        apc.selfUUID = uuid;
+        holder.addComponent(AudioPlayerComponent.getComponentType(), apc);
+
+        componentAccessor.getExternalData().getWorld().execute(() -> {
+            componentAccessor.addEntity(holder, AddReason.SPAWN);
+        });
+
+        return apc;
+    }
+
+
 
 
     @Override
     public @Nullable Component<EntityStore> clone() {
+        AudioPlayerComponent ac = new AudioPlayerComponent();
+        ac.lastSoundIndex = this.lastSoundIndex;
+        ac.playNextTime = this.playNextTime;
+        ac.lastPlayTime = this.lastPlayTime;
+        ac.sounds = this.sounds;
+        ac.soundDurations = this.soundDurations;
         return null;
+    }
+
+    public static ComponentType<EntityStore, AudioPlayerComponent> getComponentType() {
+        return COMPONENT_TYPE;
     }
 }
