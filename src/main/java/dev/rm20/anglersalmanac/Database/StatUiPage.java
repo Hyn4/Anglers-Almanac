@@ -20,6 +20,6 @@ public class StatUiPage extends InteractiveCustomUIPage<DialEventData> {
     }
     @Override
     public void build(@Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder, @Nonnull Store<EntityStore> store) {
-        uiCommandBuilder.append("Almanac/AlmanacStats.ui");
+        uiCommandBuilder.append("Almanac/AlmanacFish.ui");
     }
 }
