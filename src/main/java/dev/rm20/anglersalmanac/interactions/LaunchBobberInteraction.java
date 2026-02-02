@@ -6,7 +6,6 @@ import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
@@ -30,13 +29,11 @@ import com.hypixel.hytale.server.core.util.TargetUtil;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
 import dev.rm20.anglersalmanac.components.BobberComponent;
-import dev.rm20.anglersalmanac.components.MinigameComponent_TensionBar;
 import dev.rm20.anglersalmanac.components.PhysicsComponent;
-import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.metadata.FishingRodData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.sound.sampled.AudioSystem;
 import java.util.UUID;
 
 

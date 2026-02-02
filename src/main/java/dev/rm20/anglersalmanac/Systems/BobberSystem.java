@@ -2,7 +2,6 @@ package dev.rm20.anglersalmanac.Systems;
 
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
@@ -19,7 +18,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.components.BobberComponent;
 import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
-import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.metadata.FishingRodData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

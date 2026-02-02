@@ -12,7 +12,6 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldMapTracker;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
@@ -20,7 +19,7 @@ import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.components.MinigameComponent_TensionBar;
 import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.models.FishingContext;
-import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.metadata.FishingRodData;
 import dev.rm20.anglersalmanac.models.ZoneInfo;
 import dev.rm20.anglersalmanac.utils.EnvironmentParser;
 import dev.rm20.anglersalmanac.utils.FishLootManager;
@@ -42,14 +41,14 @@ public class MinigameManager {
                 FishingRodData meta = player.getInventory().getActiveHotbarItem().getFromMetadataOrNull(FishingRodData.KEYED_CODEC);
                 assert meta != null;
                 Inventory inv  = player.getInventory();
-                UUID minigameID = MinigameComponent_TensionBar.spawnMinigame(commandBuffer.getStore(),player.getReference(), bobberRef);
+                UUID minigameID = MinigameComponent_TensionBar.spawnMinigame(commandBuffer,player.getReference(), bobberRef);
                 LaunchBobberInteraction.updateMetadata(inv, inv.getActiveHotbarSlot(), inv.getActiveHotbarItem(), meta.getBoundBobber(), minigameID, 1);
                 break;
             case "NoMinigame":
-                DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth), player, commandBuffer, bobberRef);
+                DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth).getItemID(), player, commandBuffer, bobberRef);
                 break;
             default: // No Minigame, just reel fish.
-                DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth), player, commandBuffer, bobberRef);
+                DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth).getItemID(), player, commandBuffer, bobberRef);
                 break;
         }
 
@@ -85,7 +84,7 @@ public class MinigameManager {
     }
 
 
-    public static String FirstRoll(Ref<EntityStore> bobberRef, Player player, CommandBuffer<EntityStore> commandBuffer, int depth) {
+    public static FishLootManager FirstRoll(Ref<EntityStore> bobberRef, Player player, CommandBuffer<EntityStore> commandBuffer, int depth) {
         AnglersAlmanac plugin = AnglersAlmanac.getInstance();
         Store<EntityStore> store = bobberRef.getStore();
 
@@ -138,7 +137,7 @@ public class MinigameManager {
 
         //TODO 2nd roll depending on minigame
 
-        return lootID;
+        return lootEntry;
 
         /*
         //Drop loot

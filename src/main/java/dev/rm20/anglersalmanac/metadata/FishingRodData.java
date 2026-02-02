@@ -1,6 +1,5 @@
-package dev.rm20.anglersalmanac.models;
+package dev.rm20.anglersalmanac.metadata;
 
-import com.google.common.flogger.MetadataKey;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -17,17 +16,14 @@ public class FishingRodData {
     public static final KeyedCodec<FishingRodData> KEYED_CODEC = new KeyedCodec<>(KEY, CODEC);
 
     private UUID boundBobber = null;
-
     public UUID getBoundBobber() {
         return this.boundBobber;
     }
-    
     public void setBoundBobber(UUID uuid) {
         this.boundBobber = uuid;
     }
 
     private UUID boundMinigame = null;
-
     public UUID getBoundMinigame() {
         return this.boundMinigame;
     }
@@ -36,15 +32,16 @@ public class FishingRodData {
     }
 
     private int mode = 0;
-
     public int getMode() {
         return this.mode;
     }
-
     public void setMode(int i) {
         this.mode = i;
     }
 
-
+    public float difficultyMultiplier =  1.2f;
+    public float staminaModifier =  -10f;
+    public float rarityBoost  =1.2f;
+    public float sizeMultiplier = 1.15f;
 
 }

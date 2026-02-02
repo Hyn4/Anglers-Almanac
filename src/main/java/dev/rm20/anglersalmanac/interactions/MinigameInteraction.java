@@ -12,7 +12,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Sim
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
-import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.metadata.FishingRodData;
 import org.jspecify.annotations.NonNull;
 
 public class MinigameInteraction extends SimpleInstantInteraction {

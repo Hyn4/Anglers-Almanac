@@ -1,25 +1,13 @@
 package dev.rm20.anglersalmanac.Systems;
 
-import com.hypixel.hytale.common.util.ArrayUtil;
-import com.hypixel.hytale.common.util.AudioUtil;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.protocol.SoundCategory;
-import com.hypixel.hytale.protocol.packets.assets.UpdateSoundEvents;
-import com.hypixel.hytale.server.core.asset.type.soundevent.SoundEventPacketGenerator;
-import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
-import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEventLayer;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.entity.component.AudioComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
-import com.hypixel.hytale.server.core.modules.entity.system.AudioSystems;
-import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.Minigame;
@@ -28,15 +16,11 @@ import dev.rm20.anglersalmanac.components.AudioPlayerComponent;
 import dev.rm20.anglersalmanac.components.BobberComponent;
 import dev.rm20.anglersalmanac.components.MinigameComponent_TensionBar;
 import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
-import dev.rm20.anglersalmanac.models.FishingRodData;
-import dev.rm20.anglersalmanac.utils.SoundUtils;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntPredicate;
+import dev.rm20.anglersalmanac.metadata.FishingRodData;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> {
     ItemStack fishingRod = null;
@@ -83,9 +67,15 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 AnglersAlmanac.LOGGER.atInfo().log("YOU WIN");
                 Minigame.PerformanceRating  rating = game.getPerformanceRating(game.getPerformancePercentage());
                 AnglersAlmanac.LOGGER.atInfo().log("Minigame performance rating = %s", rating);
+                if(rating == Minigame.PerformanceRating.FAIL) LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
+
                 // Deal rewards.
-                String lootID = MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
-                MinigameManager.DropLoot(lootID, player, commandBuffer,game.bobberRef);
+                //String lootID = MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
+                MinigameManager.DropLoot(game.fishHooked.getItemID(), player, commandBuffer,game.bobberRef);
+
+                if(rating == Minigame.PerformanceRating.PERFECT){
+                    // TODO Deal chance of bonus loot.
+                }
 
                 // Finish fishing.
                 LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
