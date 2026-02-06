@@ -1,5 +1,3 @@
-$Common = "Common.ui";
-
 @Background = PatchStyle(TexturePath: "book_2.png");
 
 Group #AlmanacStats {

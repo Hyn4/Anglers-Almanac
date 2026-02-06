@@ -43,8 +43,24 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 UUIDComponent uuidComponent = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
                 if(meta != null)
                 {
-                    slot = player.getInventory().getActiveHotbarSlot();
-                    fishingRod = heldItem;
+                    if(meta.getBoundBobber()==null||!Objects.requireNonNull(uuidComponent).getUuid().equals(meta.getBoundBobber()))
+                    {
+                        if(fishingRod == null)
+                        {
+                            commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                        }
+                        else
+                        {
+                            LaunchBobberInteraction.cancelFishing(commandBuffer,player,fishingRod,slot);
+                        }
+                        //LaunchBobberInteraction.cancelFishing(commandBuffer,player,fishingRod,slot);
+                        //commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                        return;
+                    }
+                    else{
+                        slot = player.getInventory().getActiveHotbarSlot();
+                        fishingRod = heldItem;
+                    }
                 }
                 if (meta == null || !Objects.requireNonNull(uuidComponent).getUuid().equals(meta.getBoundBobber())) {
                     //AnglersAlmanac.getInstance().getLogger().atInfo().log("Removed bobber - Rod swapped or dropped");
@@ -55,6 +71,11 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                     //AnglersAlmanac.getInstance().getLogger().atInfo().log(fishingRod.toString());
                     return;
                 }
+            }
+            else
+            {
+                commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                return;
             }
         }
 

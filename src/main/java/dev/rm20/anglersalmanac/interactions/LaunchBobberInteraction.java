@@ -222,12 +222,17 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
                 Ref<EntityStore> bobberRef = world.getEntityStore().getRefFromUUID(meta.getBoundBobber());
                 if (bobberRef != null && bobberRef.isValid()) {
                     commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+                } else if (bobberRef == null) {
+                    updateMetadata(player.getInventory(), slot, heldItem, null, null, 0);
                 }
             }
             if(meta.getBoundMinigame() != null) {
                 Ref<EntityStore> minigameRef = world.getEntityStore().getRefFromUUID(meta.getBoundMinigame());
                 if (minigameRef != null && minigameRef.isValid()) {
                     MinigameManager.CancelGame(commandBuffer, minigameRef);
+                }
+                else if (minigameRef != null && !minigameRef.isValid()) {
+                    updateMetadata(player.getInventory(), slot, heldItem, null, null, 0);
                 }
             }
         }

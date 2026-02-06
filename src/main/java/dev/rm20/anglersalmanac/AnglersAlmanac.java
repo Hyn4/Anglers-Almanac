@@ -21,6 +21,7 @@ import dev.rm20.anglersalmanac.config.MinigameConfig_TensionBar;
 import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.interactions.MinigameInteraction;
 import dev.rm20.anglersalmanac.interactions.OpenBookInteraction;
+import dev.rm20.anglersalmanac.models.BookAssetData;
 import dev.rm20.anglersalmanac.registration.RegisterManager;
 import dev.rm20.anglersalmanac.registration.SystemRegisteration;
 import dev.rm20.anglersalmanac.utils.FishLootManager;
@@ -38,6 +39,7 @@ public class AnglersAlmanac extends JavaPlugin {
     public AlmanacDatabase database;
 
     public FishLootManager fishLootManager;
+    public BookAssetData bookAssetData;
     public AnglersAlmanac(@Nonnull JavaPluginInit init) {
         super(init);
         instance = this;
@@ -60,6 +62,13 @@ public class AnglersAlmanac extends JavaPlugin {
                 .build()
         );
 
+        AssetRegistry.register(HytaleAssetStore.builder(BookAssetData.class, new DefaultAssetMap<String, BookAssetData>())
+                .setPath("AnglersAlmanacBook")
+                .setCodec(BookAssetData.CODEC)
+                .setKeyFunction(BookAssetData::getId)
+                .build()
+        );
+
         // Register Components
         bobberComponent = this.getEntityStoreRegistry().registerComponent(BobberComponent.class, BobberComponent::new);
         MinigameComponent_TensionBar.COMPONENT_TYPE = this.getEntityStoreRegistry().registerComponent(MinigameComponent_TensionBar.class, MinigameComponent_TensionBar::new);
@@ -74,12 +83,17 @@ public class AnglersAlmanac extends JavaPlugin {
         PhysicsComponent.setComponentType(type);
         SystemRegisteration.registerSystem(this);
 
-        var store = FishLootManager.getAssetStore();
-        if (store != null && store.getAssetMap() != null) {
-            int fishCount = store.getAssetMap().getAssetCount();
+        var fishLootManagerStore = FishLootManager.getAssetStore();
+        if (fishLootManagerStore != null && fishLootManagerStore.getAssetMap() != null) {
+            int fishCount = fishLootManagerStore.getAssetMap().getAssetCount();
             LOGGER.atInfo().log("FishLootManager registered. Currently " + fishCount + " assets in store (Assets load asynchronously).");
         } else {
             LOGGER.atInfo().log("FishLootManager registered via Builder. Assets will be loaded during the asset phase.");
+        }
+
+        var BookStore = BookAssetData.getAssetStore();
+        if (BookStore != null && BookStore.getAssetMap() != null) {
+            LOGGER.atInfo().log("BookAssetData registered");
         }
 
 
