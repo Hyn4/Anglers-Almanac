@@ -163,8 +163,11 @@ public class MinigameManager {
 
     public static void DropItem(ItemStack loot, Player player, CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> bobberRef) {
 
+
         assert player.getReference() != null;
-        ItemUtils.throwItem(player.getReference(), loot, 0f, commandBuffer);
+        TransformComponent transform = player.getReference().getStore().getComponent(player.getReference(), TransformComponent.getComponentType());
+
+        ItemUtils.interactivelyPickupItem(player.getReference(), loot, transform.getPosition(),commandBuffer);
 
         //TODO
         //Rework to make it look like the fish is coming from the bobber and fly to the player?
