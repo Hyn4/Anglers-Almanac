@@ -89,7 +89,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
 
 
-    public static UUID spawnMinigame(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> playerRef, Ref<EntityStore> bobberRef, String rodAssetId){
+    public static MinigameComponent_TensionBar spawnMinigame(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> playerRef, Ref<EntityStore> bobberRef, String rodAssetId){
         Vector3d bobberPos = commandBuffer.getComponent(bobberRef, TransformComponent.getComponentType()).getPosition().clone();
 
         // Set up and spawn minigame entity:
@@ -128,7 +128,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
         game.spawnMinigameAdditionals(commandBuffer);
 
-        return id;
+        return game;
     }
 
     public void despawnSelf(World world){
@@ -369,7 +369,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
                 break;
 
         }
-        AnglersAlmanac.LOGGER.atInfo().log("Applying fish behaviour!");
+        AnglersAlmanac.LOGGER.atInfo().log("Applying fish behaviour! %s", stats.behavior);
     }
 
     @Override

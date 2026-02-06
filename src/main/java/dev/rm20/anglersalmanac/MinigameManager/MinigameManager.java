@@ -46,8 +46,8 @@ public class MinigameManager {
                     break;
                 }
                 Inventory inv  = player.getInventory();
-                UUID minigameID = MinigameComponent_TensionBar.spawnMinigame(commandBuffer,player.getReference(), bobberRef, fishingRod.getItemId());
-                LaunchBobberInteraction.updateMetadata(inv, inv.getActiveHotbarSlot(), inv.getActiveHotbarItem(), meta.getBoundBobber(), minigameID, 1);
+                MinigameComponent_TensionBar minigame = MinigameComponent_TensionBar.spawnMinigame(commandBuffer,player.getReference(), bobberRef, fishingRod.getItemId());
+                LaunchBobberInteraction.updateMetadata(inv, inv.getActiveHotbarSlot(), inv.getActiveHotbarItem(), meta.getBoundBobber(), minigame.selfUUID, 1);
                 break;
             case "NoMinigame":
                 DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth).getItemID(), player, commandBuffer, bobberRef);
@@ -58,6 +58,7 @@ public class MinigameManager {
                 LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                 break;
         }
+
 
     }
 
