@@ -70,8 +70,8 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 if(game.fishHooked.getMinigameStats().behavior.equals("darting")){
                     // Toggle between max speed and stopped.
                     if(Math.abs(game.fishVelocity) >= game.gameConfig.fishMaxVeocity ){
-                        maxFishVel = game.gameConfig.fishMaxVeocity * 0.2f;
-                        minFishVel = -game.gameConfig.fishMaxVeocity * 0.2f;
+                        maxFishVel = game.gameConfig.fishMaxVeocity * 0.1f;
+                        minFishVel = -game.gameConfig.fishMaxVeocity * 0.1f;
                     }else{
                         strength = 1.0f;
                     }

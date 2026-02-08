@@ -107,7 +107,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
         assert game.fishHooked != null;
         game.applyFishModifiers(game.fishHooked.getMinigameStats());
             // Apply rod modifiers.
-        AnglersAlmanac.LOGGER.atInfo().log("RodAssetId String = %s", rodAssetId);
+        //AnglersAlmanac.LOGGER.atInfo().log("RodAssetId String = %s", rodAssetId);
         RodStats rodStats = MinigameRodStats.getRodStatsFromRodId(rodAssetId);
         game.applyRodModifiers(rodStats);
         holder.addComponent(MinigameComponent_TensionBar.COMPONENT_TYPE, game);
