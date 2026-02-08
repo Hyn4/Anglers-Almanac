@@ -98,13 +98,18 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
         UUID id = UUIDUtil.generateVersion3UUID();
         holder.addComponent(UUIDComponent.getComponentType(), new UUIDComponent(id));
 
+        Vector3d spawnPos = commandBuffer.getComponent(bobberRef, TransformComponent.getComponentType()).getPosition().clone();
+        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(spawnPos, Vector3f.ZERO));
+
+
         //  --- Minigame --------
         MinigameComponent_TensionBar game = new MinigameComponent_TensionBar(playerRef, bobberRef, id);
             // Set minigame config as defaults.
-        game.gameConfig = AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get();
+        game.gameConfig = AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().clone();
             // Assign fish and apply modifiers.
         game.fishHooked = MinigameManager.FirstRoll(bobberRef, commandBuffer.getComponent(playerRef, Player.getComponentType()),commandBuffer, commandBuffer.getComponent(bobberRef, BobberComponent.getComponentType()).getWaterDepth());
         assert game.fishHooked != null;
+        AnglersAlmanac.LOGGER.atInfo().log("Loading modifiers for fish: %s", game.fishHooked.getName());
         game.applyFishModifiers(game.fishHooked.getMinigameStats());
             // Apply rod modifiers.
         //AnglersAlmanac.LOGGER.atInfo().log("RodAssetId String = %s", rodAssetId);
@@ -256,12 +261,16 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
     public void updateMinigameModelPositions(Store<EntityStore> store){
 
+        Ref<EntityStore> game = store.getExternalData().getWorld().getEntityRef(selfUUID);
+        assert game != null;
+
         // Do fish logic.
         Ref<EntityStore> fishModelRef = store.getExternalData().getWorld().getEntityRef(minigameFishModelId);
         if(fishModelRef == null) return;
         if(!bobberRef.isValid()) return;
         // Do fish model motion.
-        Vector3d newFishPos = Objects.requireNonNull(store.getComponent(bobberRef, TransformComponent.getComponentType())).getPosition().clone();
+
+        Vector3d newFishPos = Objects.requireNonNull(store.getComponent(game, TransformComponent.getComponentType())).getPosition().clone();
 
         /*
         // Move fish to player based on progress.
@@ -290,7 +299,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
         if(barModelRef == null) return;
 
         // Do bar model motion.
-        Vector3d newBarPos = store.getComponent(bobberRef, TransformComponent.getComponentType()).getPosition().clone();
+        Vector3d newBarPos = store.getComponent(game, TransformComponent.getComponentType()).getPosition().clone();
         newBarPos = newBarPos.add(new Vector3d(0,AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().minigameModelVerticalOffset + (barPos * minigameScale) ,0));
         Vector3d playerPos = store.getComponent(ownerRef, TransformComponent.getComponentType()).getPosition().clone();
 
@@ -342,13 +351,15 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
                 gameConfig.fishMinSpeed = 1.0f;
                 break;
             case "floater":
-                gameConfig.fishBouyancy += gameConfig.fishMaxVeocity * 0.4f;
+                gameConfig.fishBouyancy += gameConfig.fishMaxVeocity * 0.6f;
                 break;
             case "sinker:":
-                gameConfig.fishBouyancy -= gameConfig.fishMaxVeocity * 0.4f;
+                gameConfig.fishBouyancy -= gameConfig.fishMaxVeocity * 0.6f;
                 break;
             case "heavy_sinker":
-                gameConfig.fishBouyancy -= gameConfig.fishMaxVeocity * 0.7f;
+                gameConfig.fishMaxVeocity *= 1.2f;
+                gameConfig.fishBouyancy -= gameConfig.fishMaxVeocity * 0.9f;
+
                 break;
             case "aggressive":
                 // Never slow, turns rapidly.
@@ -363,9 +374,9 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
                 break;
             case "steady":
                 // Rarely changes direction. Very predictable.
-                gameConfig.fishMaxVeocity *= 0.8f;
-                gameConfig.fishMinSpeed = 0.4f;
-                gameConfig.fishChangeDirectionMaxInterval += 2f;
+                gameConfig.fishMaxVeocity *= 0.7f;
+                gameConfig.fishMinSpeed = 0.5f;
+                gameConfig.fishChangeDirectionMaxInterval += 0.2f;
                 break;
 
         }
@@ -374,8 +385,10 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
     @Override
     public void applyFishStaminaModifer(FishLootManager.MinigameStats stats) {
-
-        AnglersAlmanac.LOGGER.atInfo().log("Applying fish stamina!");
+        // 30 represents standard stamina, with stats higher than 30 increasing time to catch, and stats lower than 30 reducing time to catch.
+        AnglersAlmanac.LOGGER.atInfo().log("Base reelRate = %s", gameConfig.fishReelRate);
+        gameConfig.fishReelRate *= (30f / stats.stamina);
+        AnglersAlmanac.LOGGER.atInfo().log("Applying fish stamina! stamina = %s,  reelRate = %s", stats.stamina, gameConfig.fishReelRate);
     }
 
     @Override

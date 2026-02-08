@@ -55,15 +55,17 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
 
         switch (game.stateTrigger){
             case FISHMOVE:
+
                 // Reset timers for the next move.
                 game.nextFishMoveTime = new Random().nextFloat() * game.gameConfig.fishChangeDirectionMaxInterval;
                 game.fishMoveTimer = 0f;
 
                 // Set up important maths parameters.
                 float maxFishVel = game.gameConfig.fishMaxVeocity + game.gameConfig.fishBouyancy;
-                float minFishVel = (maxFishVel*-1f) + game.gameConfig.fishBouyancy;
+                float minFishVel = (game.gameConfig.fishMaxVeocity*-1f) + game.gameConfig.fishBouyancy;
                 float strength = new Random().nextFloat();
                 strength = Math.clamp(strength, game.gameConfig.fishMinSpeed, 1.0f);
+                AnglersAlmanac.LOGGER.atInfo().log("minFishVel: %s, maxFishVel: %s, fishMinSpeed: %s, strength: %s", minFishVel, maxFishVel, game.gameConfig.fishMinSpeed, strength);
 
 
                 // Override parameters for fish with "darting" behaviour.
@@ -72,17 +74,21 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                     if(Math.abs(game.fishVelocity) >= game.gameConfig.fishMaxVeocity ){
                         maxFishVel = game.gameConfig.fishMaxVeocity * 0.1f;
                         minFishVel = -game.gameConfig.fishMaxVeocity * 0.1f;
+                        AnglersAlmanac.LOGGER.atInfo().log("Darting fish is calm");
                     }else{
                         strength = 1.0f;
+                        AnglersAlmanac.LOGGER.atInfo().log("Darting fish go brrr");
                     }
                 }
 
                 // Calculate random movement based on fish parameters.
-                game.fishVelocity = (minFishVel) + strength * (maxFishVel - (minFishVel));
+                game.fishVelocity = ((minFishVel) + strength * (maxFishVel - (minFishVel))) - game.gameConfig.fishBouyancy;
+                AnglersAlmanac.LOGGER.atInfo().log("FISHMOVE new velocity: %s", game.fishVelocity);
 
                 // Always ensure that fish moves away from edges if near top / bottom.
-                if(game.fishPos <= 5) game.fishVelocity = Math.abs(game.fishVelocity);
-                if(game.fishPos >= 95) game.fishVelocity = Math.abs(game.fishVelocity) * -1f;
+                AnglersAlmanac.LOGGER.atInfo().log("fishPos: %s", game.fishPos);
+                if(game.fishPos <= 0.1){game.fishVelocity = Math.abs(game.fishVelocity); AnglersAlmanac.LOGGER.atInfo().log("Forcing up");}
+                if(game.fishPos >= 0.9){ game.fishVelocity = Math.abs(game.fishVelocity) * -1f; AnglersAlmanac.LOGGER.atInfo().log("Forcing down");}
 
                 game.stateTrigger = MinigameComponent_TensionBar.Trigger.NOTRIGGER;
                 break;
