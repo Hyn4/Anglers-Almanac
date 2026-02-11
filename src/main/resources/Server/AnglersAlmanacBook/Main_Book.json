@@ -27,6 +27,28 @@
             }
           ],
           "UiFile": "Almanac/Fish/AlmanacFish.ui"
+        },
+        {
+          "Pages": [
+            {
+              "ContextData": "Common_minnow"
+            },
+            {
+              "ContextData": "Rare_Pufferfish"
+            }
+          ],
+          "UiFile": "Almanac/Fish/AlmanacFish.ui"
+        },
+        {
+          "Pages": [
+            {
+              "ContextData": "Rare_Salmon"
+            },
+            {
+              "ContextData": "Rare_Trout_Rainbow"
+            }
+          ],
+          "UiFile": "Almanac/Fish/AlmanacFish.ui"
         }
       ]
     }

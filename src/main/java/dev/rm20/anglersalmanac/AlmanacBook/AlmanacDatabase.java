@@ -6,7 +6,9 @@ import dev.rm20.anglersalmanac.MinigameManager.Minigame;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AlmanacDatabase {
     private static final String DB_PATH = "mods/dev.rm20_AnglersAlmanac/Data/almanac.db";
@@ -117,7 +119,7 @@ public class AlmanacDatabase {
     public PlayerStatsData getPlayerStats(String uuid) {
         PlayerStatsData data = new PlayerStatsData();
         try {
-            // 1. Get totals (Updated to include legendary_catches)
+            // 1. Get totals
             var psTotal = connection.prepareStatement("SELECT total_catches, legendary_catches FROM players WHERE uuid = ?");
             psTotal.setString(1, uuid);
             ResultSet rs1 = psTotal.executeQuery();
@@ -135,7 +137,7 @@ public class AlmanacDatabase {
                 data.topFish.add(new FishEntry(rs2.getString("fish_id"), rs2.getInt("count")));
             }
 
-            // 3. Get Performance Ratings (NEW)
+            // 3. Get Performance Ratings
             var psRatings = connection.prepareStatement(
                     "SELECT rating, count FROM performance_stats WHERE player_uuid = ?");
             psRatings.setString(1, uuid);
@@ -144,24 +146,73 @@ public class AlmanacDatabase {
                 data.ratingsMap.put(rs3.getString("rating"), rs3.getInt("count"));
             }
 
+            // 4. get all fish
+            var psAllFish = connection.prepareStatement(
+                    "SELECT fish_id, count FROM catches WHERE player_uuid = ?");
+            psAllFish.setString(1, uuid);
+            ResultSet rs4 = psAllFish.executeQuery();
+            while (rs4.next()) {
+                data.catchMap.put(rs4.getString("fish_id"), rs4.getInt("count"));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return data;
     }
 
-    // Simple POJO to hold the results
     public static class PlayerStatsData {
         public int totalCatches = 0;
         public List<FishEntry> topFish = new ArrayList<>();
         public int legendaryCount = 0;
         public java.util.HashMap<String, Integer> ratingsMap = new java.util.HashMap<>();
+        public java.util.HashMap<String, Integer> catchMap = new java.util.HashMap<>();
         public int getRatingCount(Minigame.PerformanceRating rating) {
             return ratingsMap.getOrDefault(rating.name(), 0);
         }
+        public int getFishCount(String fishId) {
+            return catchMap.getOrDefault(fishId, 0);
+        }
     }
 
+    public boolean hasPlayerCaught(String playerUUID, String fishId) {
+        if (this.connection == null) {
+            init();
+            if (this.connection == null) return false;
+        }
 
+        String sql = "SELECT 1 FROM catches WHERE player_uuid = ? AND fish_id = ? LIMIT 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, playerUUID);
+            ps.setString(2, fishId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Map<String, Integer> getAllFishCounts(String playerUUID) {
+        Map<String, Integer> counts = new HashMap<>();
+
+        String sql = "SELECT fish_id, count FROM catches WHERE player_uuid = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, playerUUID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    counts.put(rs.getString("fish_id"), rs.getInt("count"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return counts;
+    }
 
     public static record FishEntry(String name, int count) {}
 }

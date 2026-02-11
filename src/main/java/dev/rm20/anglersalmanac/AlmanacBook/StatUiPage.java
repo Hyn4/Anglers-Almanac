@@ -1,10 +1,16 @@
 package dev.rm20.anglersalmanac.AlmanacBook;
 
+import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.codec.KeyedCodec;
+import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -16,14 +22,16 @@ import dev.rm20.anglersalmanac.utils.FishLootManager;
 
 import javax.annotation.Nonnull;
 
+import static dev.rm20.anglersalmanac.AlmanacBook.BookPageManager.OpenPage;
 
-public class StatUiPage extends InteractiveCustomUIPage<DialEventData> {
+
+public class StatUiPage extends InteractiveCustomUIPage<StatUiPage.AlmanacGuiData> {
 
     private String PlayerUUID;
     private String PlayerName;
     private AlmanacDatabase.PlayerStatsData stats;
     public StatUiPage(PlayerRef playerRef, String playerUUID, String playerName,AlmanacDatabase.PlayerStatsData stats) {
-        super(playerRef, CustomPageLifetime.CanDismiss, DialEventData.CODEC);
+        super(playerRef, CustomPageLifetime.CanDismiss, AlmanacGuiData.CODEC);
         PlayerUUID = playerUUID;
         PlayerName = playerName;
         this.stats = stats;
@@ -37,6 +45,13 @@ public class StatUiPage extends InteractiveCustomUIPage<DialEventData> {
 
         //AlmanacDatabase db = AnglersAlmanac.getInstance().database;
         //AlmanacDatabase.PlayerStatsData stats = db.getPlayerStats(this.PlayerUUID);
+
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#NextPageButton",
+                EventData.of(AlmanacGuiData.KEY_BUTTON, "NextPage"),
+                false
+        );
 
         uiCommandBuilder.set("#TotalFish.TextSpans", Message.raw("Total fish: " + stats.totalCatches));
         uiCommandBuilder.set("#LegendaryCount.TextSpans", Message.raw("Legendary fish: " + stats.legendaryCount));
@@ -62,5 +77,33 @@ public class StatUiPage extends InteractiveCustomUIPage<DialEventData> {
             }
         }
 
+
+    }
+    @Override
+    public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull AlmanacGuiData data) {
+        super.handleDataEvent(ref, store, data);
+
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null || data.getButton() == null) return;
+
+        if (data.getButton().equals("NextPage")) {
+            OpenPage(player,1, PlayerUUID,PlayerName);
+        }
+    }
+    public static class AlmanacGuiData {
+        static final String KEY_BUTTON = "Button";
+
+        public static final BuilderCodec<AlmanacGuiData> CODEC = BuilderCodec.builder(AlmanacGuiData.class, AlmanacGuiData::new)
+                .append(new KeyedCodec<>(KEY_BUTTON, Codec.STRING),
+                        (data, val) -> data.button = val,
+                        data -> data.button)
+                .add()
+                .build();
+
+        private String button;
+
+        public String getButton() {
+            return button;
+        }
     }
 }

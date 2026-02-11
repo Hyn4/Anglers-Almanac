@@ -17,8 +17,23 @@ public class TextUtils {
         return scrambled.toString();
     }
 
+    public static String seededScrambleText(String input) {
+        if (input == null) return "";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+        StringBuilder scrambled = new StringBuilder();
+        long seed = input.hashCode();
+        java.util.Random random = new java.util.Random(seed);
 
-    public String formatDisplayName(String input) {
+        for (char c : input.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                scrambled.append(c);
+            } else {
+                scrambled.append(characters.charAt(random.nextInt(characters.length())));
+            }
+        }
+        return scrambled.toString();
+    }
+    public static String formatDisplayName(String input) {
         if (input == null || input.isEmpty()) return "";
 
         // Split by underscore
