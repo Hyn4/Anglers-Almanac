@@ -20,6 +20,12 @@ import java.util.*;
 public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap<String, FishLootManager>> {
 
     // Codecs
+
+    public static final BuilderCodec<BookInfo> Book_CODEC = BuilderCodec.builder(BookInfo.class, BookInfo::new)
+            .append(new KeyedCodec<>("Image_Path", Codec.STRING), (h, v) -> h.image_file = v, h -> h.image_file).add()
+            .append(new KeyedCodec<>("Habitat_Info", Codec.STRING), (h, v) -> h.habitat_info = v, h -> h.habitat_info).add()
+            .build();
+
     public static final BuilderCodec<Quantity> Quantity_CODEC = BuilderCodec.builder(Quantity.class, Quantity::new)
             .append(new KeyedCodec<>("Min", Codec.INTEGER), (h, v) -> h.min_amount = v, h -> h.min_amount).add()
             .append(new KeyedCodec<>("Max", Codec.INTEGER), (h, v) -> h.max_amount = v, h -> h.max_amount).add()
@@ -76,6 +82,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             .appendInherited(new KeyedCodec<>("IsGlobal", Codec.BOOLEAN), (t, v) -> t.isGlobal = v, t -> t.isGlobal, (t, p) -> t.isGlobal = p.isGlobal).add()
             .appendInherited(new KeyedCodec<>("Habitats", HABITATS_CODEC), (t, v) -> t.habitats = v, t -> t.habitats, (t, p) -> t.habitats = p.habitats).add()
             .appendInherited(new KeyedCodec<>("Minigame_stats", STATS_CODEC), (t, v) -> t.minigameStats = v, t -> t.minigameStats, (t, p) -> t.minigameStats = p.minigameStats).add()
+            .appendInherited(new KeyedCodec<>("Book_info", Book_CODEC), (t, v) -> t.bookInfo = v, t -> t.bookInfo, (t, p) -> t.bookInfo = p.bookInfo).add()
             .build();
 
     private static AssetStore<String, FishLootManager, DefaultAssetMap<String, FishLootManager>> ASSET_STORE;

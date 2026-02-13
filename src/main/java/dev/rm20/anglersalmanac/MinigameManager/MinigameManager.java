@@ -31,6 +31,7 @@ import dev.rm20.anglersalmanac.utils.TimeUtils;
 import org.jspecify.annotations.NonNull;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.hypixel.hytale.server.core.universe.world.WorldConfig.formatDisplayName;
@@ -187,8 +188,22 @@ public class MinigameManager {
         if(loot.getItemID() == null) return;
         ItemStack fishStack;
         fishStack = InventoryHelper.createItem(loot.getItemID());
+
         if (fishStack == null) {
             return;
+        }
+        if(loot.getQuantity()!=null)
+        {
+            int min = loot.getQuantity().min_amount;
+            int max = loot.getQuantity().max_amount;
+
+            if (max <= min) {
+                fishStack.withQuantity(min);
+            } else {
+                int quantity = new Random().nextInt(min,max + 1);
+                fishStack.withQuantity(quantity);
+                // No idea if the thing above works need testing
+            }
         }
         DropItem(fishStack, player, commandBuffer, bobberRef);
         SaveLoot(player,loot, rating);
