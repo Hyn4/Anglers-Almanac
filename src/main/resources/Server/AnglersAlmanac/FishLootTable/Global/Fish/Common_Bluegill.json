@@ -37,5 +37,8 @@
     "Difficulty": 3,
     "Behavior": "steady",
     "Stamina": 20
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere|  Expect Oceans"
   }
 }

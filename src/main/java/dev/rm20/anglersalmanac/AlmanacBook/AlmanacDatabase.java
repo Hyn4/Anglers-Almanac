@@ -214,5 +214,5 @@ public class AlmanacDatabase {
         return counts;
     }
 
-    public static record FishEntry(String name, int count) {}
+    public record FishEntry(String name, int count) {}
 }

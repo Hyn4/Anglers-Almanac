@@ -16,10 +16,10 @@ import javax.annotation.Nonnull;
 public class SkillCheckPage extends InteractiveCustomUIPage<DialEventData> {
 
     // Difficulty
-    private float currentRPM = 40.0f;
-    private float zoneCenter = 180.0f;
+    private final float currentRPM = 40.0f;
+    private final float zoneCenter = 180.0f;
     // Behavior
-    private float zoneWidth = 20.0f;
+    private final float zoneWidth = 20.0f;
     // Stamina
     private int requiredHits = 3;
 

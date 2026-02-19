@@ -75,7 +75,7 @@ Group #AlmanacStats {
     }
 
     Group #HabitatSection {
-      Anchor: (Top: 10, Left: 275, Width: 300);
+      Anchor: (Top: 10, Left: 275, Width: 200);
       Label #HabitatTitle {
         Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
         Text: "Habitat:";
@@ -140,7 +140,7 @@ Group #AlmanacStats {
     }
 
     Group #HabitatSection2 {
-      Anchor: (Top: 10, Left: 275, Width: 300);
+      Anchor: (Top: 10, Left: 275, Width: 200);
       Label #HabitatTitle2 {
         Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
         Text: "Habitat:";

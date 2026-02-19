@@ -1,15 +1,12 @@
 $Common = "Common.ui";
 
-@Background = PatchStyle(TexturePath: "../book_2.png");
-@FishTexture = PatchStyle(TexturePath: "Fish1.png");
-@Fish2Texture = PatchStyle(TexturePath: "Fish2.png");
-@Fish1Stamp = PatchStyle(TexturePath: "Stamps/Fish1_stamp.png");
-@Fish2Stamp = PatchStyle(TexturePath: "Stamps/Fish2_stamp.png");
-
+@BookBackground = PatchStyle(TexturePath: "../book_2.png");
+@FishMissing = "Info/FishMissing.png";
+@FishBorder = "Info/FishBorder.png";
 Group #AlmanacStats {
   Anchor: (Width: 1200, Height: 872);
   Group #background {
-    Background: @Background;
+    Background: @BookBackground;
   }
 
   Group #BookNav
@@ -38,24 +35,24 @@ Group #AlmanacStats {
 
     Group #ProgressContainer {
       Anchor: (Top: 10, Left: 0, Width: 300, Height: 300);
-      Group #Background {
+      Group #ProgressBackground {
         Anchor: (Width: 300, Height: 300);
         Background: "Assets/BackgroundSignatureAbilityNotReady.png";
-      }
-
-      Group #SignatureIcon {
-        Anchor: (Width: 150, Height: 150);
-        Background: (TexturePath: "Assets/Earth_Temp.png", Color: #ffffff);
       }
       CircularProgressBar #FishProgress {
         Value: 1;
         Color: #2A5A82;
         MaskTexturePath: "Assets/ProgressBarMask.png";
       }
+
+      Group #ZoneIcon {
+        Anchor: (Width: 250, Height: 250,Left:15, Top:20);
+        AssetImage #ZoneIconImage {}
+      }
     }
     Group #ZoneInfo {
       Anchor: (Top: 60, Left: 275, Width: 200, Height: 300);
-      Label #Header {
+      Label #ZoneHeader {
         Style: (TextColor: #2A2A2A, FontSize: 20, Wrap: true);
         Text: "Those fish can be found in most body of water around orbis.";
       }
@@ -63,130 +60,162 @@ Group #AlmanacStats {
     Group #FishItemss {
       LayoutMode: Top;
       Anchor: (Top: 300, Left: 10);
-      Group #FishItems1{
+
+      Group #FishItems1 {
         LayoutMode: Left;
         Anchor: (Top: 10, Left: 10);
-        ItemIcon #ItemIcon0 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Bluegill_Item";
+        Group #ItemIcon0BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon0Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon0 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Bluegill_Item";
+          }
         }
-        ItemIcon #ItemIcon1 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Catfish_Item";
+
+        Group #ItemIcon1BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon1Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon1 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Catfish_Item";
+          }
         }
-        ItemIcon #ItemIcon2 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Minnow_Item";
+
+        Group #ItemIcon2BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon2Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon2 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Minnow_Item";
+          }
         }
-        ItemIcon #ItemIcon3 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Pufferfish_Item";
+
+        Group #ItemIcon3BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon3Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon3 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Pufferfish_Item";
+          }
         }
-        ItemIcon #ItemIcon4 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Salmon_Item";
+
+        Group #ItemIcon4BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon4Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon4 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Salmon_Item";
+          }
         }
       }
-      Group #FishItems2{
+
+      Group #FishItems2 {
         LayoutMode: Left;
         Anchor: (Top: 10, Left: 10);
-        ItemIcon #ItemIcon5 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "Fish_Trout_Rainbow_Item";
+
+        Group #ItemIcon5BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Group #ItemIcon5Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: false;
+          }
+          ItemIcon #ItemIcon5 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "Fish_Trout_Rainbow_Item";
+          }
         }
-        ItemIcon #ItemIcon6 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
+
+        Group #ItemIcon6BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Visible: false;
+          Group #ItemIcon6Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: true;
+          }
+          ItemIcon #ItemIcon6 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "";
+          }
         }
-        ItemIcon #ItemIcon7 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
+
+        Group #ItemIcon7BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Visible: false;
+          Group #ItemIcon7Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: true;
+          }
+          ItemIcon #ItemIcon7 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "";
+          }
         }
-        ItemIcon #ItemIcon8 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
+
+        Group #ItemIcon8BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Visible: false;
+          Group #ItemIcon8Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: true;
+          }
+          ItemIcon #ItemIcon8 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "";
+          }
         }
-        ItemIcon #ItemIcon9 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-      }
-      Group #FishItems3{
-        LayoutMode: Left;
-        Anchor: (Top: 10, Left: 10);
-        ItemIcon #ItemIcon10 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon11 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon12 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon13 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon14 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-      }
-      Group #FishItems4{
-        LayoutMode: Left;
-        Anchor: (Top: 10, Left: 10);
-        ItemIcon #ItemIcon15 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon16 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon17 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon18 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon19 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-      }
-      Group #FishItems5{
-        LayoutMode: Left;
-        Anchor: (Top: 10, Left: 10);
-        ItemIcon #ItemIcon20 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon21 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon22 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon23 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
-        }
-        ItemIcon #ItemIcon24 {
-          Anchor: (Width: 75, Height: 75, Left: 10);
-          ItemId: "";
+
+        Group #ItemIcon9BG {
+          Anchor: (Width: 70, Height: 70, Left: 10);
+          Background: @FishBorder;
+          Visible: false;
+          Group #ItemIcon9Missing {
+            Anchor: (Width: 70, Height: 70);
+            Background: @FishMissing;
+            Visible: true;
+          }
+          ItemIcon #ItemIcon9 {
+            Anchor: (Width: 65, Height: 65);
+            ItemId: "";
+          }
         }
       }
     }
-
-
   }
+
 
   // RIGHT PAGE
   Group #RightPage {

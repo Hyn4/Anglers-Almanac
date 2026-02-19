@@ -111,19 +111,54 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     private Habitats habitats;
     private MinigameStats minigameStats;
     private BookInfo bookInfo;
-    public FishLootManager() {}
+
+    public FishLootManager() {
+    }
 
     @Override
-    public String getId() { return id; }
-    public String getItemID() { return itemID; }
-    public Habitats getHabitats() { return habitats; }
-    public int getWeight() { return weight; }
-    public boolean isGlobal() { return isGlobal; }
-    public String getName() {return name;}
-    public String getDescription() {return description;}
-    public String getFamilyId() {return familyId;}
-    public String getRarity() {return rarity;}
-    public Quantity getQuantity() {return quantity;}
+    public String getId() {
+        return id;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public Habitats getHabitats() {
+        return habitats;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getFamilyId() {
+        return familyId;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
     // Classes used by BuilderCodec
 
     public static class Habitats {
@@ -146,7 +181,11 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     public static class Height {
         public int min_y;
         public int max_y;
-        public Height(int min, int max) { this.min_y = min; this.max_y = max; }
+
+        public Height(int min, int max) {
+            this.min_y = min;
+            this.max_y = max;
+        }
     }
 
     public static class MinigameStats {
@@ -159,10 +198,12 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         public int min_amount;
         public int max_amount;
     }
-    public static class BookInfo{
+
+    public static class BookInfo {
         public String image_file;
         public String habitat_info;
     }
+
     // Reward logic
     public static Collection<FishLootManager> getAllLoot() {
         return getAssetStore().getAssetMap().getAssetMap().values();
@@ -171,7 +212,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     public static FishLootManager getRandomWeightedLoot(FishingContext ctx) {
         List<FishLootManager> possibleLoot = getAllLoot().stream()
                 .filter(loot -> isEligible(loot, ctx))
-                .filter(loot -> loot.getExclusionWeight(loot,ctx) > 0)
+                .filter(loot -> loot.getExclusionWeight(loot, ctx) > 0)
                 .toList();
 
         if (possibleLoot.isEmpty()) {
@@ -180,14 +221,14 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         }
 
 //        int totalWeight = possibleLoot.stream().mapToInt(FishLootManager::getWeight).sum();
-        int totalWeight = possibleLoot.stream().mapToInt(l -> l.getExclusionWeight(l,ctx)).sum();
+        int totalWeight = possibleLoot.stream().mapToInt(l -> l.getExclusionWeight(l, ctx)).sum();
         if (totalWeight <= 0) return possibleLoot.getFirst();
 
         int randomIndex = new Random().nextInt(totalWeight);
         int currentSum = 0;
 
         for (FishLootManager entry : possibleLoot) {
-            currentSum += entry.getExclusionWeight(entry,ctx);
+            currentSum += entry.getExclusionWeight(entry, ctx);
             if (randomIndex < currentSum) {
                 return entry;
             }
@@ -195,8 +236,8 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         return possibleLoot.get(0);
     }
 
-    public static FishLootManager getFishData(String id)
-    {
+    public static FishLootManager getFishData(String id) {
+        if (id == null) return null;
         return getAllLoot().stream()
                 .filter(loot -> loot.id.equalsIgnoreCase(id)).toList().getFirst();
 
@@ -252,13 +293,13 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         if (ctx.waterDepth() < hab.min_depth) return false;
         if (hab.height != null) {
             if (ctx.yPos() < hab.height.min_y) return false;
-            if (hab.height.max_y != -1 && ctx.yPos() > hab.height.max_y) return false;
+            return hab.height.max_y == -1 || !(ctx.yPos() > hab.height.max_y);
         }
 
         return true;
     }
 
-    public int getExclusionWeight(FishLootManager loot,FishingContext ctx) {
+    public int getExclusionWeight(FishLootManager loot, FishingContext ctx) {
         if (loot.habitats == null) return this.weight;
 
         boolean isExcluded = false;
@@ -276,7 +317,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             isExcluded = true;
         }
         // Check Tier
-        else if (loot.habitats.exclude_tiers != null && Arrays.stream(loot.habitats.exclude_tiers).anyMatch(t -> t != null && t == ctx.tier())){
+        else if (loot.habitats.exclude_tiers != null && Arrays.stream(loot.habitats.exclude_tiers).anyMatch(t -> t != null && t == ctx.tier())) {
             isExcluded = true;
         }
 
@@ -287,7 +328,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         return this.weight;
     }
 
-    public MinigameStats getMinigameStats(){
+    public MinigameStats getMinigameStats() {
         return minigameStats;
     }
 }

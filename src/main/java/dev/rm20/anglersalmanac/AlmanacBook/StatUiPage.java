@@ -27,9 +27,9 @@ import static dev.rm20.anglersalmanac.AlmanacBook.BookPageManager.OpenPage;
 
 public class StatUiPage extends InteractiveCustomUIPage<StatUiPage.AlmanacGuiData> {
 
-    private String PlayerUUID;
-    private String PlayerName;
-    private AlmanacDatabase.PlayerStatsData stats;
+    private final String PlayerUUID;
+    private final String PlayerName;
+    private final AlmanacDatabase.PlayerStatsData stats;
     public StatUiPage(PlayerRef playerRef, String playerUUID, String playerName,AlmanacDatabase.PlayerStatsData stats) {
         super(playerRef, CustomPageLifetime.CanDismiss, AlmanacGuiData.CODEC);
         PlayerUUID = playerUUID;

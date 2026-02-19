@@ -79,7 +79,7 @@ Group #AlmanacStats {
       Anchor: (Top: 540, Left: 40, Width: 380);
       Label #HabitatTitle {
         Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
-        Text: "LURKS WITHIN:";
+        Text: "Lurks Within:";
       }
 
       Label #HabitatList {
@@ -142,7 +142,7 @@ Group #AlmanacStats {
     }
 
     Group #HabitatSection2 {
-      Anchor: (Top: 10, Left: 275, Width: 300);
+      Anchor: (Top: 10, Left: 275, Width: 200);
       Label #HabitatTitle2 {
         Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
         Text: "Habitat:";

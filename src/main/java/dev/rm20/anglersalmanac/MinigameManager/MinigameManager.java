@@ -245,7 +245,6 @@ public class MinigameManager {
             );
             //Play sound
 
-            return;
         }
     }
 
