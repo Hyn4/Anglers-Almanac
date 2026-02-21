@@ -144,6 +144,14 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
         return cache.getOrDefault(habitatName.toLowerCase(), List.of());
     }
 
+    public List<FishEntry> getAllFish() {
+        Map<String, List<FishEntry>> cache = habitatCache.get("all_habitats", k -> buildCache());
+        if (cache == null) return List.of();
+        return cache.values().stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
     private Map<String, List<FishEntry>> buildCache() {
         if (habitats == null) return Collections.emptyMap();
         Map<String, List<FishEntry>> newCache = new LinkedHashMap<>();
@@ -287,7 +295,8 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
             case "almanacstats" -> 0;
             case "global" -> 1;
             case "ocean" -> 2;
-            default -> 99;
+            case "alamanacglossary" -> 99;
+            default -> 98;
         };
     }
 

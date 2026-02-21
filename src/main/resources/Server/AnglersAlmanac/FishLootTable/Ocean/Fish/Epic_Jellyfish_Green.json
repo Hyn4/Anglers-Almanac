@@ -5,14 +5,16 @@
     "saltwater"
   ],
   "Name": "Green Jellyfish",
-  "Description": "Its glow is mesmerizing.",
-  "FamilyId": "Jellyfish_family",
+  "Description": "This emerald beauty glows with a strange, organic fire that’ll light up the side of your boat. It’s a master of bioluminescence, making its own light out of nothing to confuse anything that tries to take a bite.",
+  "FamilyId": "Ulmaridae",
   "Rarity": "Epic",
   "IsGlobal": false,
   "Weight": 75,
   "Size": 50,
   "Habitats": {
-    "Zones": ["Ocean"],
+    "Zones": [
+      "Ocean"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
@@ -33,5 +35,8 @@
     "Difficulty": 7,
     "Behavior": "erratic",
     "Stamina": 120
+  },
+  "Book_info": {
+    "Habitat_Info": "• Ocean:|• Night"
   }
 }

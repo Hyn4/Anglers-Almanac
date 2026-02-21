@@ -1,0 +1,40 @@
+
+@BookBackground = PatchStyle(TexturePath: "../book_2.png");
+@FishMissing = "Info/FishMissing.png";
+@FishBorder = "Info/FishBorder.png";
+Group #AlmanacStats {
+  Anchor: (Width: 1200, Height: 872);
+  Group #background {
+    Background: @BookBackground;
+  }
+
+  Group #BookNav
+  {
+    Anchor:(Bottom: 40);
+  }
+
+  // LEFT PAGE
+  Group #LeftPage {
+    Anchor: (Left: 100, Top: 60, Width: 450, Height: 750);
+
+    Label #Header {
+      Anchor: (Top: 0, Left: 50);
+      Style: (TextColor: #3A3A3A, FontSize: 32, RenderBold: true);
+      Text: "Fish Glossary";
+    }
+
+    Group #LeftFishGridContainer {
+      LayoutMode: Top;
+      Anchor: (Top: 50, Left: 10);
+    }
+  }
+
+
+  // RIGHT PAGE
+  Group #RightPage {
+    Group #RightFishGridContainer {
+      LayoutMode: Top;
+      Anchor: (Top: 50, Left: 10);
+    }
+  }
+}

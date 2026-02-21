@@ -74,13 +74,13 @@ Group #AlmanacStats {
     Anchor: (Right: 120, Top: 60, Width: 450, Height: 750);
 
     Label #CollectionHeader {
-      Anchor: (Top: 0, Left: 120);
-      Style: (TextColor: #494950, FontSize: 30);
+      Anchor: (Top: 5, Left: 120);
+      Style: (TextColor: #494950, FontSize: 30, RenderBold: true);
       Text: "Collection Progress";
     }
 
     Group #ProgressContainer {
-      Anchor: (Top: 10, Left: 100, Width: 300, Height: 300);
+      Anchor: (Top: 10, Left: 120, Width: 300, Height: 300);
       Group #ProgressBackground {
         Anchor: (Width: 300, Height: 300);
         Background: "Fish/Assets/BackgroundSignatureAbilityNotReady.png";
@@ -94,6 +94,10 @@ Group #AlmanacStats {
       Group #ZoneIcon {
         Anchor: (Width: 250, Height: 250,Left:15, Top:20);
         Background: (TexturePath: "Fish/Assets/Orbis_2.png", Color: #ffffff);
+      }
+      Button #GlossaryButton {
+        Anchor: (Width: 300, Height: 300);
+        TooltipText: "Click to go to Glossary";
       }
     }
 

@@ -4,15 +4,17 @@
       "ZoneName": "almanacstats",
       "Spread": [
         {
-          "Pages": [
-            {
-              "ContextData": "DO NOT TOUCH Stats"
-            },
-            {
-              "ContextData": "DO NOT TOUCH Stats"
-            }
-          ],
           "UiFile": "Almanac/AlmanacStats.ui",
+          "LeftPage": "DO NOT TOUCH Stats",
+          "RightPage": "DO NOT TOUCH Stats"
+        }
+      ]
+    },
+    {
+      "ZoneName": "alamanacglossary",
+      "Spread": [
+        {
+          "UiFile": "Almanac/Fish/AlamanacGlossary.ui",
           "LeftPage": "DO NOT TOUCH Stats",
           "RightPage": "DO NOT TOUCH Stats"
         }

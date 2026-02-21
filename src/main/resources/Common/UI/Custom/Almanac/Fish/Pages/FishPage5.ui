@@ -44,7 +44,7 @@ Group #PageContent {
   }
 
   Group #HabitatSection {
-    Anchor: (Top: 540, Left: 40, Width: 380);
+    Anchor: (Top: 600, Left: 40, Width: 380);
     Label #HabitatTitle {
       Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
       Text: "Lurks Within:";
@@ -58,7 +58,7 @@ Group #PageContent {
   }
 
   Group #Stamp {
-    Anchor: (Bottom: 50, Right: 0, Width: 180, Height: 180);
+    Anchor: (Bottom: 0, Right: 0, Width: 180, Height: 180);
     AssetImage #StampImage {}
   }
 }

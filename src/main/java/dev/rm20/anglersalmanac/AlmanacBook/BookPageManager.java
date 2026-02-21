@@ -7,6 +7,7 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AlmanacBook.Pages.FishDataUiPage;
 import dev.rm20.anglersalmanac.AlmanacBook.Pages.FishZoneUiPage;
+import dev.rm20.anglersalmanac.AlmanacBook.Pages.GlossaryPage;
 import dev.rm20.anglersalmanac.AlmanacBook.Pages.StatUiPage;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.models.BookAssetData;
@@ -54,6 +55,10 @@ public class BookPageManager {
             String uiFile = pages.get(page).uiFile;
             FishDataUiPage fishDataUiPage = new FishDataUiPage(playerRef1, playerUUID, playerName, stats, FishDataLeft, FishDataRight, page, uiFile);
             pageManager.openCustomPage(playerRef, playerRef.getStore(), fishDataUiPage);
+        } else if (UiFile.startsWith("Almanac/Fish/AlamanacGlossary"))
+        {
+            GlossaryPage glossaryPage = new GlossaryPage(playerRef1, playerUUID, playerName, page);
+            pageManager.openCustomPage(playerRef, playerRef.getStore(), glossaryPage);
         } else {
             AnglersAlmanac.getInstance().getLogger().atSevere().log("Error getting UI with page: "+page+" @ "+UiFile);
         }
@@ -70,6 +75,7 @@ public class BookPageManager {
         }
         return currentPage;
     }
+
 
     public static BookAssetData.ZoneInfo getCurrentZoneInfo(BookAssetData.habitatsInfo[] allHabitats, int page) {
         int TotalPageIndex = 0;
@@ -89,7 +95,7 @@ public class BookPageManager {
         BookAssetData bookAsset = BookAssetData.getMasterMergedBook();
         int pageIndex = 0;
         for (BookAssetData.habitatsInfo habitat : bookAsset.getHabitats()) {
-            if (habitat.zoneInfo != null && habitat.ZoneName.equalsIgnoreCase(zoneName)) {
+            if (habitat.ZoneName.equalsIgnoreCase(zoneName)) {
                 return pageIndex;
             }
             pageIndex += habitat.pages.length;

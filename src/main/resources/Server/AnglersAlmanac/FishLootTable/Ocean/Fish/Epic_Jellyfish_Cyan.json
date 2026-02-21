@@ -5,14 +5,16 @@
     "saltwater"
   ],
   "Name": "Cyan Jellyfish",
-  "Description": "Its glow is mesmerizing.",
-  "FamilyId": "Jellyfish_family",
+  "Description": "A ghostly, pale drifter that is difficult to spot until you are right on top of it. You can see four little clover-shaped rings right through its skin—that is where it starts its next generation of little stingers.",
+  "FamilyId": "Ulmaridae",
   "Rarity": "Epic",
   "IsGlobal": false,
   "Weight": 75,
   "Size": 50,
   "Habitats": {
-    "Zones": ["Ocean"],
+    "Zones": [
+      "Ocean"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
@@ -33,5 +35,8 @@
     "Difficulty": 7,
     "Behavior": "erratic",
     "Stamina": 120
+  },
+  "Book_info": {
+    "Habitat_Info": "• Ocean:|• Night"
   }
 }

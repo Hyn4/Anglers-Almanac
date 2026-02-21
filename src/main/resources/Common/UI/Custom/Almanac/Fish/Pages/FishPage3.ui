@@ -8,7 +8,7 @@ Group #FPageContent {
   }
 
   Group #HabitatSection {
-    Anchor: (Top: 10, Left: 240, Width: 255);
+    Anchor: (Top: 10, Left: 250, Width: 255);
     Label #HabitatTitle {
       Style: (TextColor: #2A5A82, FontSize: 18, RenderBold: true);
       Text: "Habitat:";
@@ -42,7 +42,7 @@ Group #FPageContent {
   }
 
   Group #FamilyGroup {
-    Anchor: (Top: 125, Left: 280, Width: 200, Height: 60);
+    Anchor: (Top: 90, Left: 280, Width: 200, Height: 60);
     Label #FamilyLabel {
       Anchor: (Top: 0);
       Style: (TextColor: #7A6652, FontSize: 18, RenderBold: true);
@@ -62,7 +62,7 @@ Group #FPageContent {
   }
 
   Group #Stamp {
-    Anchor: (Bottom: 10, Right: 0, Width: 180, Height: 180);
+    Anchor: (Top: 140, Right: 0, Width: 180, Height: 180);
     AssetImage #StampImage {
     }
   }

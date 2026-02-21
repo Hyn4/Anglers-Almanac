@@ -5,8 +5,8 @@
     "saltwater"
   ],
   "Name": "Crab",
-  "Description": "Crab",
-  "FamilyId": "Crab_family",
+  "Description": "This is no ordinary beachcomber; this is a heavily armored titan with claws strong enough to break a high-test line like so much thread. With its glowing blue eyes and spiky back, it’s no longer a crustacean but more like a living part of the reef itself. Fact: Crabs have a unique exoskeleton that is a kind of armor, which forces them to molt their entire shell just to grow a few inches.",
+  "FamilyId": "Crustacean",
   "Rarity": "Legendary",
   "IsGlobal": false,
   "Weight": 45,
@@ -37,5 +37,9 @@
     "Difficulty": 12,
     "Behavior": "heavy_sinker",
     "Stamina": 150
+  },
+  "Book_info": {
+    "Habitat_Info": "•Shores and Beaches|•Trenches",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage3.ui"
   }
 }

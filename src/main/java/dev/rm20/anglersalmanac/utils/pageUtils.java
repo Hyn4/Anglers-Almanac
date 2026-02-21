@@ -62,7 +62,7 @@ public class pageUtils {
                     ? data.getBookInfo().image_file
                     : "UI/Custom/Almanac/Fish/FishAssets/" + cleanName + "_Missing.png";
             ui.set(slotPath + "#Header" + ".TextSpans", Message.raw(TextUtils.seededScrambleText(data.getName())));
-            ui.set(slotPath + "#CountNumber" + ".TextSpans", Message.raw("Not found"));
+            ui.set(slotPath + "#CountNumber" + ".TextSpans", Message.raw(" Not found"));
             ui.set(slotPath + "#Family"  + ".TextSpans", Message.raw(TextUtils.seededScrambleText(data.getFamilyId())));
             ui.set(slotPath + "#Description"  + ".TextSpans", Message.raw(TextUtils.seededScrambleText(data.getDescription())));
             ui.set(slotPath + "#FishImage"  + ".AssetPath", imagePath);

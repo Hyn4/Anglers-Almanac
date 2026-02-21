@@ -54,6 +54,13 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
 
         uiCommandBuilder.append("Almanac/AlmanacStats.ui");
 
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#GlossaryButton",
+                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "Glossary"),
+                false
+        );
+
         //AlmanacDatabase db = AnglersAlmanac.getInstance().database;
         //AlmanacDatabase.PlayerStatsData stats = db.getPlayerStats(this.PlayerUUID);
 
@@ -103,6 +110,10 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
         if (data.getButton().equals("NextPage")) {
             OpenPage(player, 1, PlayerUUID, PlayerName);
         }
+        if(data.getButton().equals("Glossary"))
+        {
+            OpenPage(player, getPageIndexForZone("alamanacglossary"), PlayerUUID, PlayerName);
+        }
         // Zone click
         else if (data.getButton().startsWith("OpenZone:")) {
             String zoneName = data.getButton().split(":")[1];
@@ -138,7 +149,7 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
                 .toList();
         int index = 0;
         for (String zoneName : sortedZones) {
-            if (Objects.equals(zoneName, "almanacstats")) {
+            if (Objects.equals(zoneName, "almanacstats") || Objects.equals(zoneName, "alamanacglossary") ) {
                 continue;
             }
             BookAssetData.habitatsInfo habitatData = Arrays.stream(bookAsset.getHabitats())
@@ -173,7 +184,6 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
                     EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:" + zoneName),
                     false
             );
-
             index++;
         }
     }

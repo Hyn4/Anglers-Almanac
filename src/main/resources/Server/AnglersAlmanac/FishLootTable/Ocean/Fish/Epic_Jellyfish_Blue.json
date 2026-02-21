@@ -5,14 +5,16 @@
     "saltwater"
   ],
   "Name": "Blue Jellyfish",
-  "Description": "Its glow is mesmerizing.",
-  "FamilyId": "Jellyfish_family",
+  "Description": "A translucent, pulsating cube of cobalt light that drifts aimlessly through the deep. Its intense bioluminescent glow is a mesmerizing trap for deep-sea prey. It has no brain or heart and simply operates through a nerve net, making it much more of a living, stinging curtain than a predator.",
+  "FamilyId": "Ulmaridae",
   "Rarity": "Epic",
   "IsGlobal": false,
   "Weight": 75,
   "Size": 50,
   "Habitats": {
-    "Zones": ["Ocean"],
+    "Zones": [
+      "Ocean"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
@@ -33,5 +35,8 @@
     "Difficulty": 7,
     "Behavior": "erratic",
     "Stamina": 120
+  },
+  "Book_info": {
+    "Habitat_Info": "• Ocean:|• Night"
   }
 }

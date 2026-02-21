@@ -17,5 +17,5 @@ Group #AlmanacStats {
   }
 
   Group #LeftPageSlot { Anchor: (Left: 100, Top: 60, Width: 450, Height: 750); }
-  Group #RightPageSlot { Anchor: (Right: 120, Top: 60, Width: 450, Height: 750); }
+  Group #RightPageSlot { Anchor: (Right: 100, Top: 60, Width: 450, Height: 750); }
 }
