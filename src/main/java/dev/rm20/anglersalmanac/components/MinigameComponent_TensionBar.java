@@ -73,6 +73,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
     public String[] reelInSounds = {"AA_Fishing_Reel_Slow0", "AA_Fishing_Reel_Slow1", "AA_Fishing_Reel_Slow2", "AA_Fishing_Reel_Slow3"};
     public String[] escapeSounds = {"AA_Fishing_Line_Tension0", "AA_Fishing_Line_Tension1", "AA_Fishing_Line_Tension2", "AA_Fishing_Line_Tension3"};
+    public String[] barMidSectionModels = {"AA_TensionBar_Mid0", "AA_TensionBar_Mid1", "AA_TensionBar_Mid2"};
     public List<UUID> barModelEntityIds = new ArrayList<>();
 
     public MinigameConfig_TensionBar gameConfig;
@@ -262,8 +263,9 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
 
             // Add model.
-            String modelName = "AA_TensionBar_Mid";
+            String modelName = barMidSectionModels[new Random().nextInt(barMidSectionModels.length)];
             if(i == 0 || i == numSections - 1){ modelName = "AA_TensionBar_End"; }
+
             ModelAsset barModelAsset = ModelAsset.getAssetMap().getAsset(modelName);
             if (barModelAsset == null) barModelAsset = ModelAsset.DEBUG;
             Model barModel = Model.createScaledModel(barModelAsset, minigameScale);
