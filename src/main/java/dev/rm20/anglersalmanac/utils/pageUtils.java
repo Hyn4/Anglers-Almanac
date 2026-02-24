@@ -5,6 +5,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -103,24 +105,23 @@ public class pageUtils {
 
     }
 
-    public static void buildTabs(UICommandBuilder ui, UIEventBuilder events, int currentPageIndex) {
+    public static void buildTabs(UICommandBuilder uiCommandBuilder, UIEventBuilder events, int currentPageIndex) {
         BookAssetData bookAsset = BookAssetData.getMasterMergedBook();
         List<BookAssetData.BookTab> tabs = bookAsset.getTabsForCurrentPage(currentPageIndex);
-        ui.clear("#LeftTabGutter");
-        ui.clear("#RightTabGutter");
-        ui.clear("#LeftTabActive");
+        uiCommandBuilder.clear("#LeftTabGutter");
+        uiCommandBuilder.clear("#RightTabGutter");
 
         int leftCount = 0;
         int rightCount = 0;
 
         for (BookAssetData.BookTab tab : tabs) {
             String name = tab.zoneName();
-            if (name.equalsIgnoreCase("almanacstats") || name.equalsIgnoreCase("almanacglossary")) {
+            AnglersAlmanac.getInstance().getLogger().atInfo().log(name);
+            if (name.equalsIgnoreCase("almanacstats") || name.equalsIgnoreCase("alamanacglossary")) {
                 continue;
             }
             String targetGutter;
             String template;
-
             if (tab.isActive()) {
                 targetGutter = "#LeftTabActive";
                 template = "Almanac/Utils/LeftBookTabsSlot.ui";
@@ -135,14 +136,31 @@ public class pageUtils {
                 rightCount++;
             }
 
-            ui.append(targetGutter, template);
-            String tabPath = targetGutter + "[" + (tab.isToTheLeft() ? (leftCount-1) : (rightCount-1)) + "] ";
-//            events.addEventBinding(
-//                    CustomUIEventBindingType.Activating,
-//                    tabPath + "#TabIcon",
-//                    EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:" + tab.zoneName()),
-//                    false
-//            );
+            uiCommandBuilder.append(targetGutter, template);
+            String tabPath = targetGutter + "[" + (tab.isToTheLeft() ? (leftCount - 1) : (rightCount - 1)) + "]";
+            if(targetGutter.equals("#LeftTabActive"))
+            {
+                tabPath = targetGutter+ "[0]";
+            }
+            uiCommandBuilder.set(tabPath + " #TabImage.AssetPath", tab.icon());
+            uiCommandBuilder.set(tabPath + " #TabBackground.Background", tab.colour());
+            int tabSpacing = 70;
+            Anchor anchor = new Anchor();
+            anchor.setTop(Value.of(((leftCount + rightCount) * tabSpacing)));
+            anchor.setWidth(Value.of(120));
+            anchor.setHeight(Value.of(50));
+            uiCommandBuilder.setObject(tabPath + ".Anchor", anchor);
+
+            //event
+            if(!targetGutter.equals("#LeftTabActive"))
+            {
+                events.addEventBinding(
+                        CustomUIEventBindingType.Activating,
+                        tabPath + " #TabIcon",
+                        EventData.of(AlmanacGuiData.KEY_BUTTON, "OpenZone:" + tab.zoneName()),
+                        false
+                );
+            }
         }
     }
 

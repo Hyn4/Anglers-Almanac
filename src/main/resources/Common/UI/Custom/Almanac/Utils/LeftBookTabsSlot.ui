@@ -4,8 +4,12 @@ Group #LeftTabTemplate {
     Background: #ffffff;
   }
 
+  Group #TabImageGroup{
+    Anchor: (Left:5, Width: 45, Height:45);
+    AssetImage #TabImage {}
+  }
+
   Button #TabIcon {
     Anchor: (Left:0, Width: 50);
-    Background: #ff5962;
   }
 }

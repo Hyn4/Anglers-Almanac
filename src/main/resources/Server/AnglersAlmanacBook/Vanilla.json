@@ -5,8 +5,10 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water around Global.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
-        "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Global Fish"
+        "ProgressBarColour": "#b5d06e",
+        "DisplayName": "Global Fish",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Global_Tab.png",
+        "TabColour": "#b5d06e"
       },
       "Spread": [
         {
@@ -36,7 +38,9 @@
         "ZoneDescription": "Those fish can be found in most bodies of water around Ocean.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Ocean.png",
         "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Ocean"
+        "DisplayName": "Ocean",
+        "TabColour": "#2A5A82",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Ocean_tab.png"
       },
       "Spread": [
         {
@@ -86,8 +90,10 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Emerald Wilds.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Zone_1.png",
-        "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Emerald Wilds"
+        "ProgressBarColour": "#385d4c",
+        "DisplayName": "Emerald Wilds",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_1_Tab.png",
+        "TabColour": "#385d4c"
       },
       "Spread": [
         {
@@ -106,8 +112,10 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water around Zone2.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
-        "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Howling Sands"
+        "ProgressBarColour": "#66a0a2",
+        "DisplayName": "Howling Sands",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_2_Tab.png",
+        "TabColour": "#66a0a2"
       },
       "Spread": [
         {
@@ -122,8 +130,10 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Whisperfrost Frontiers.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
-        "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Whisperfrost Frontiers"
+        "ProgressBarColour": "#435da7",
+        "DisplayName": "Whisperfrost Frontiers",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_3_Tab.png",
+        "TabColour": "#435da7"
       },
       "Spread": [
         {
@@ -142,8 +152,10 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Devastated Lands.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
-        "ProgressBarColour": "#2A5A82",
-        "DisplayName": "Devastated Lands"
+        "ProgressBarColour": "#673338",
+        "DisplayName": "Devastated Lands",
+        "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_4_Tab.png",
+        "TabColour": "#673338"
       },
       "Spread": [
         {

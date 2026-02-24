@@ -217,6 +217,7 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .build();
     private static final String MASTER_KEY = "master_almanac_merged";
+
     public static BookAssetData getMasterMergedBook() {
         return MasterMergeCache.get(MASTER_KEY, k -> buildMasterMergedBook());
     }
@@ -298,10 +299,13 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
     public record BookTab(
             String zoneName,
             String icon,
+            String colour,
             int startPage,
             boolean isToTheLeft,
             boolean isActive
-    ) {}
+    ) {
+    }
+
     public List<BookTab> getTabsForCurrentPage(int currentPageIndex) {
         List<BookTab> tabs = new ArrayList<>();
         int pageCounter = 0;
@@ -309,12 +313,12 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
         for (habitatsInfo habitat : habitats) {
             if (habitat.pages == null || habitat.pages.length == 0) continue;
             int habitatStartPage = pageCounter;
-            int habitatEndPage = pageCounter + habitat.pages.length - 1;
-            boolean isActive = (currentPageIndex >= habitatStartPage && currentPageIndex <= habitatEndPage);
-            boolean isToTheLeft = currentPageIndex > habitatEndPage;
+            boolean isActive = (currentPageIndex == habitatStartPage);
+            boolean isToTheLeft = currentPageIndex > habitatStartPage;
             tabs.add(new BookTab(
                     habitat.ZoneName,
                     habitat.zoneInfo != null ? habitat.zoneInfo.tabIcon : "",
+                    habitat.zoneInfo != null ? habitat.zoneInfo.tabColour : "",
                     habitatStartPage,
                     isToTheLeft,
                     isActive
@@ -324,6 +328,7 @@ public class BookAssetData implements JsonAssetWithMap<String, DefaultAssetMap<S
         }
         return tabs;
     }
+
     public static int getZoneRank(String name) {
         return switch (name.toLowerCase()) {
             case "almanacstats" -> 0;
