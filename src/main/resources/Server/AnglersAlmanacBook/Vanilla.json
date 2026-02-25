@@ -37,7 +37,7 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water around Ocean.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Ocean.png",
-        "ProgressBarColour": "#2A5A82",
+        "ProgressBarColour": "#0059b6",
         "DisplayName": "Ocean",
         "TabColour": "#2A5A82",
         "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Ocean_tab.png"
@@ -90,7 +90,7 @@
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Emerald Wilds.",
         "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Zone_1.png",
-        "ProgressBarColour": "#385d4c",
+        "ProgressBarColour": "#4f836b",
         "DisplayName": "Emerald Wilds",
         "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_1_Tab.png",
         "TabColour": "#385d4c"

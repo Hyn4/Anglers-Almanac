@@ -92,14 +92,30 @@ public class FishZoneUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGui
             }
             pageUtils.FillPage(uiCommandBuilder, "#RightPageSlot", FishDataRight, PlayerUUID, Stats);
         }
+
+
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#StatsTabIcon",
+                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:almanacstats"),
+                false
+        );
+
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#GlossaryTabIcon",
+                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:alamanacglossary"),
+                false
+        );
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull pageUtils.AlmanacGuiData data) {
         super.handleDataEvent(ref, store, data);
-
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null || data.getButton() == null) return;
+
+        //AnglersAlmanac.getInstance().getLogger().atInfo().log(data.getButton());
         if (data.getButton().equals("PrevPage")) {
             OpenPage(player, (Page - 1), PlayerUUID, PlayerName);
         }
@@ -120,7 +136,7 @@ public class FishZoneUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGui
         }
 
         // Zone click
-        else if (data.getButton().startsWith("OpenZone:")) {
+        if (data.getButton().startsWith("OpenZone:")) {
             String zoneName = data.getButton().split(":")[1];
             OpenPage(player, getPageIndexForZone(zoneName), PlayerUUID, PlayerName);
         }

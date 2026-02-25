@@ -6,6 +6,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.PatchStyle;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -116,7 +117,6 @@ public class pageUtils {
 
         for (BookAssetData.BookTab tab : tabs) {
             String name = tab.zoneName();
-            AnglersAlmanac.getInstance().getLogger().atInfo().log(name);
             if (name.equalsIgnoreCase("almanacstats") || name.equalsIgnoreCase("alamanacglossary")) {
                 continue;
             }
@@ -150,6 +150,7 @@ public class pageUtils {
             anchor.setWidth(Value.of(120));
             anchor.setHeight(Value.of(50));
             uiCommandBuilder.setObject(tabPath + ".Anchor", anchor);
+            //uiCommandBuilder.set(tabPath + " #TabIcon.MaskTexturePath", tab.icon().replace("UI/Custom/Almanac/Utils/", ""));
 
             //event
             if(!targetGutter.equals("#LeftTabActive"))

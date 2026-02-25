@@ -1,3 +1,13 @@
+$C = "../../Common.ui";
+
+@TabButtonStyle = ButtonStyle(
+  //Default: (Background: #ffffff),
+  //Hovered: (Background: #56dbff),
+  //Pressed: (Background: #ffffff),
+  //Disabled: (Background: #252525),
+  Sounds: $C.@ButtonSounds,
+);
+
 Group #RightTabTemplate {
   Anchor: (Width: 120, Height: 50,Top: 10);
   Group #TabBackground {
@@ -7,9 +17,10 @@ Group #RightTabTemplate {
   Group #TabImageGroup{
     Anchor: (Right:5, Width: 45, Height:45);
     AssetImage #TabImage {}
-
   }
+
   Button #TabIcon {
-    Anchor: (Right:0, Width: 50);
+    Anchor: (Right:0, Width: 60, Height: 50);
+    Style: @TabButtonStyle;
   }
 }

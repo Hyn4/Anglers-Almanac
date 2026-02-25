@@ -48,6 +48,21 @@ public class GlossaryPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiDa
                 .filter(BookAssetData.FishEntry::isItem)
                 .toList();
         buildDynamicFishGrid(validFishItems, PlayerUUID, uiCommandBuilder, uiEventBuilder);
+
+
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#StatsTabIcon",
+                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:almanacstats"),
+                false
+        );
+
+//        uiEventBuilder.addEventBinding(
+//                CustomUIEventBindingType.Activating,
+//                "#GlossaryTabIcon",
+//                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:alamanacglossary"),
+//                false
+//        );
     }
 
     private void buildDynamicFishGrid(List<BookAssetData.FishEntry> validFishItems, String playerUUID, @Nonnull UICommandBuilder uiCommandBuilder, @Nonnull UIEventBuilder uiEventBuilder) {
@@ -120,8 +135,9 @@ public class GlossaryPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiDa
             }
         }
 
+
         // Zone click
-        else if (data.getButton().startsWith("OpenZone:")) {
+        if (data.getButton().startsWith("OpenZone:")) {
             String zoneName = data.getButton().split(":")[1];
             OpenPage(player, getPageIndexForZone(zoneName), PlayerUUID, PlayerName);
         }

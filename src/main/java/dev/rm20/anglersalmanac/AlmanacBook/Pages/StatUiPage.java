@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AlmanacBook.AlmanacDatabase;
+import dev.rm20.anglersalmanac.AlmanacBook.BookPageManager;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.Minigame;
 import dev.rm20.anglersalmanac.models.BookAssetData;
@@ -99,6 +100,22 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
         float globalPercent = (globalTotal > 0) ? (float) globalCaught / globalTotal : 0;
         uiCommandBuilder.set("#FishProgress.Value", globalPercent);
         CreateList(uiCommandBuilder, uiEventBuilder, bookAsset);
+
+
+
+//        uiEventBuilder.addEventBinding(
+//                CustomUIEventBindingType.Activating,
+//                "#StatsTabIcon",
+//                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:almanacstats"),
+//                false
+//        );
+
+        uiEventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#GlossaryTabIcon",
+                EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:alamanacglossary"),
+                false
+        );
     }
 
     @Override
@@ -115,7 +132,7 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
             OpenPage(player, getPageIndexForZone("alamanacglossary"), PlayerUUID, PlayerName);
         }
         // Zone click
-        else if (data.getButton().startsWith("OpenZone:")) {
+        if (data.getButton().startsWith("OpenZone:")) {
             String zoneName = data.getButton().split(":")[1];
             OpenPage(player, getPageIndexForZone(zoneName), PlayerUUID, PlayerName);
         }

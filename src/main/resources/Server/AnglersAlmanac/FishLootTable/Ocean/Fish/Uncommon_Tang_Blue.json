@@ -2,8 +2,8 @@
   "ItemId": "Fish_Tang_Blue_Item",
   "Category": ["fish", "saltwater"],
   "Name": "Blue Tang",
-  "Description": "Tang",
-  "FamilyId": "Tang_family",
+  "Description": "A colourful, royal blue beauty with a yellow tail that appears to have been painted by hand. It is a busy little worker that spends its day grazing on the reef, but do not let its appearance fool you—it has a sharp, hidden spine near the tail to ward off bullies.",
+  "FamilyId": "Acanthuridae",
   "Rarity": "Uncommon",
   "IsGlobal": false,
   "Weight": 150,
@@ -32,5 +32,8 @@
     "Difficulty": 4,
     "Behavior": "darting",
     "Stamina": 40
+  },
+  "Book_info": {
+    "Habitat_Info": "• Oceans|• Shores and Beaches|• Active at all hours"
   }
 }

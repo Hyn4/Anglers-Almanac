@@ -76,6 +76,20 @@
                 }
                 pageUtils.FillPage(uiCommandBuilder, "#RightPageSlot", FishDataRight, PlayerUUID, Stats);
             }
+
+            uiEventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#StatsTabIcon",
+                    EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:almanacstats"),
+                    false
+            );
+
+            uiEventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#GlossaryTabIcon",
+                    EventData.of(pageUtils.AlmanacGuiData.KEY_BUTTON, "OpenZone:alamanacglossary"),
+                    false
+            );
         }
 
         @Override
@@ -95,8 +109,16 @@
                 OpenPage(player, newPage, PlayerUUID, PlayerName);
             }
 
+            if (data.getButton().startsWith("OpenFish:")) {
+                String fishId = data.getButton().split(":")[1];
+                int targetPage = BookPageManager.getPageIndexForFish(fishId);
+                if (targetPage != -1) {
+                    BookPageManager.OpenPage(player, targetPage, PlayerUUID, PlayerName);
+                }
+            }
+
             // Zone click
-            else if (data.getButton().startsWith("OpenZone:")) {
+            if (data.getButton().startsWith("OpenZone:")) {
                 String zoneName = data.getButton().split(":")[1];
                 OpenPage(player, getPageIndexForZone(zoneName), PlayerUUID, PlayerName);
             }
