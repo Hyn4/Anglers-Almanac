@@ -28,6 +28,7 @@ import dev.rm20.anglersalmanac.metadata.ZoneInfo;
 import dev.rm20.anglersalmanac.utils.EnvironmentParser;
 import dev.rm20.anglersalmanac.utils.FishLootManager;
 import dev.rm20.anglersalmanac.utils.TimeUtils;
+import dev.rm20.anglersalmanac.utils.Validator.TimePeriod;
 import org.jspecify.annotations.NonNull;
 
 import java.awt.*;
@@ -132,7 +133,7 @@ public class MinigameManager {
 
         // Combine
         FishingContext LocationInfo = new FishingContext(
-                timeKeyword,
+                TimeUtils.getTimePeriod(gameTime),
                 moonPhase,
                 zone,
                 tier,

@@ -16,13 +16,8 @@
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "day"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
+
+   
     "Min_depth": 2,
     "Height": {
       "Miny": 0,

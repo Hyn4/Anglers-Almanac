@@ -1,9 +1,10 @@
 package dev.rm20.anglersalmanac.metadata;
 
 import dev.rm20.anglersalmanac.AnglersAlmanac;
+import dev.rm20.anglersalmanac.utils.Validator.TimePeriod;
 
 public record FishingContext(
-        String time,
+        TimePeriod time,
         int moonPhase,
         String zone,
         int tier,

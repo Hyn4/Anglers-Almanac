@@ -18,6 +18,7 @@ import dev.rm20.anglersalmanac.metadata.ZoneInfo;
 import dev.rm20.anglersalmanac.registration.CommandInfo;
 import dev.rm20.anglersalmanac.utils.EnvironmentParser;
 import dev.rm20.anglersalmanac.utils.TimeUtils;
+import dev.rm20.anglersalmanac.utils.Validator.TimePeriod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,7 +50,7 @@ public class HabitatCommand extends AbstractPlayerCommand {
             // Time & Moon Info
             WorldTimeResource timeResource = store.getResource(WorldTimeResource.getResourceType());
             String gameTime = timeResource.getGameTime().toString();
-            String timeKeyword = TimeUtils.getTimeKeyword(gameTime);
+            TimePeriod timeKeyword = TimeUtils.getTimePeriod(gameTime);
             int moonPhase = timeResource.getMoonPhase();
 
             // Zone/Biome/Region Info
@@ -77,7 +78,7 @@ public class HabitatCommand extends AbstractPlayerCommand {
 
             // 5. Output
             context.sendMessage(Message.raw("--- Habitat info ---"));
-            context.sendMessage(Message.raw("Time: " + locationInfo.time()));
+            context.sendMessage(Message.raw("Time: " + locationInfo.time().getKeyword()));
             context.sendMessage(Message.raw("Moon Phase: " + locationInfo.moonPhase()));
             context.sendMessage(Message.raw("Zone: " + locationInfo.zone() + " (Tier " + locationInfo.tier() + ")"));
             context.sendMessage(Message.raw("Region/Biome: " + locationInfo.region() + " / " + locationInfo.biome()));

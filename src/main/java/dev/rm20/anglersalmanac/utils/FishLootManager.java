@@ -11,10 +11,12 @@ import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
+import com.hypixel.hytale.codec.validation.Validators;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.metadata.FishingContext;
-import dev.rm20.anglersalmanac.registration.HytaleAsset;
+import dev.rm20.anglersalmanac.utils.Validator.TimePeriod;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap<String, FishLootManager>> {
 
     // Codecs
-
     public static final BuilderCodec<BookInfo> Book_CODEC = BuilderCodec.builder(BookInfo.class, BookInfo::new)
             .append(new KeyedCodec<>("Image_Path", Codec.STRING), (h, v) -> h.image_file = v, h -> h.image_file).add()
             .append(new KeyedCodec<>("Habitat_Info", Codec.STRING), (h, v) -> h.habitat_info = v, h -> h.habitat_info).add()
@@ -36,31 +37,57 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             .build();
 
     public static final BuilderCodec<Quantity> Quantity_CODEC = BuilderCodec.builder(Quantity.class, Quantity::new)
-            .append(new KeyedCodec<>("Min", Codec.INTEGER), (h, v) -> h.min_amount = v, h -> h.min_amount).add()
-            .append(new KeyedCodec<>("Max", Codec.INTEGER), (h, v) -> h.max_amount = v, h -> h.max_amount).add()
+            .documentation("Defines the range of items dropped. If Max is left at default or lower than Min, the amount will be exactly Min.")
+            .append(new KeyedCodec<>("Min", Codec.INTEGER), (h, v) -> h.min_amount = v, h -> h.min_amount)
+            .documentation("Setting min will set the least amount of items to give")
+            .addValidator(Validators.min(1)).add()
+            .append(new KeyedCodec<>("Max", Codec.INTEGER), (h, v) -> h.max_amount = v, h -> h.max_amount)
+            .documentation("Enables random amount of items to give from min to max").add()
             .build();
 
     public static final BuilderCodec<Height> HEIGHT_CODEC = BuilderCodec.builder(Height.class, () -> new Height(0, -1))
-            .append(new KeyedCodec<>("Min_y", Codec.INTEGER), (h, v) -> h.min_y = v, h -> h.min_y).add()
-            .append(new KeyedCodec<>("Max_y", Codec.INTEGER), (h, v) -> h.max_y = v, h -> h.max_y).add()
+            .documentation("Defines the vertical range (Y-level) where this fish can be caught.")
+            .append(new KeyedCodec<>("Min_y", Codec.INTEGER), (h, v) -> h.min_y = v, h -> h.min_y)
+            .documentation("The fish will not spawn below this height.")
+            .addValidator(Validators.min(0)).add()
+            .append(new KeyedCodec<>("Max_y", Codec.INTEGER), (h, v) -> h.max_y = v, h -> h.max_y)
+            .documentation("The maximum Y-level requirement. Set to -1 to disable the upper limit (infinity).")
+            .addValidator(Validators.min(-1)).add()
             .build();
 
 
+//    public static final BuilderCodec<ExcludeHabitats> EXHABITATS_CODEC = BuilderCodec.builder(ExcludeHabitats.class, ExcludeHabitats::new)
+//            .append(new KeyedCodec<>("Exclude_zones", new MapCodec<>(Codec.FLOAT, HashMap::new )),(h, map) -> h.exclude_zones = map, h -> h.exclude_zones).add()
+//            .build();
+
     public static final BuilderCodec<Habitats> HABITATS_CODEC = BuilderCodec.builder(Habitats.class, Habitats::new)
-            .append(new KeyedCodec<>("Zones", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.zones = v, h -> h.zones).add()
-            .append(new KeyedCodec<>("Tiers", new ArrayCodec<>(Codec.INTEGER, Integer[]::new)), (h, v) -> h.tier = v, h -> h.tier).add()
-            .append(new KeyedCodec<>("Regions", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.regions = v, h -> h.regions).add()
-            .append(new KeyedCodec<>("Biomes", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.biomes = v, h -> h.biomes).add()
-            .append(new KeyedCodec<>("Time_of_day", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.time_of_day = v, h -> h.time_of_day).add()
-            .append(new KeyedCodec<>("Required_weather", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.required_weather = v, h -> h.required_weather).add()
-            .append(new KeyedCodec<>("Moon_phase", Codec.INTEGER), (h, v) -> h.moon_phase = v, h -> h.moon_phase).add()
-            .append(new KeyedCodec<>("Min_depth", Codec.INTEGER), (h, v) -> h.min_depth = v, h -> h.min_depth).add()
+            .append(new KeyedCodec<>("Zones", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.zones = v, h -> h.zones)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Tiers", new ArrayCodec<>(Codec.INTEGER, Integer[]::new)), (h, v) -> h.tier = v, h -> h.tier)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Regions", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.regions = v, h -> h.regions)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Biomes", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.biomes = v, h -> h.biomes)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Time_of_day", new ArrayCodec<>(new EnumCodec<>(TimePeriod.class), TimePeriod[]::new)), (h, v) -> h.time_of_day = v, h -> h.time_of_day)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Moon_phase", new ArrayCodec<>(Codec.INTEGER, Integer[]::new)), (h, v) -> h.moon_phase = v, h -> h.moon_phase)
+            .documentation("If a value of -1 is selected then it be disabled")
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Min_depth", Codec.INTEGER), (h, v) -> h.min_depth = v, h -> h.min_depth)
+            .addValidator(Validators.min(0)).add()
             .append(new KeyedCodec<>("Height", HEIGHT_CODEC), (h, v) -> h.height = v, h -> h.height).add()
-            .append(new KeyedCodec<>("Exclude_zones", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_zones = v, h -> h.exclude_zones).add()
-            .append(new KeyedCodec<>("Exclude_tiers", new ArrayCodec<>(Codec.INTEGER, Integer[]::new)), (h, v) -> h.exclude_tiers = v, h -> h.exclude_tiers).add()
-            .append(new KeyedCodec<>("Exclude_biomes", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_biomes = v, h -> h.exclude_biomes).add()
-            .append(new KeyedCodec<>("Exclude_regions", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_regions = v, h -> h.exclude_regions).add()
-            .append(new KeyedCodec<>("Weight_multiplier", Codec.FLOAT), (h, v) -> h.weight_multiplier = v, h -> h.weight_multiplier).add()
+            .append(new KeyedCodec<>("Exclude_zones", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_zones = v, h -> h.exclude_zones)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Exclude_tiers", new ArrayCodec<>(Codec.INTEGER, Integer[]::new)), (h, v) -> h.exclude_tiers = v, h -> h.exclude_tiers)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Exclude_biomes", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_biomes = v, h -> h.exclude_biomes)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Exclude_regions", new ArrayCodec<>(Codec.STRING, String[]::new)), (h, v) -> h.exclude_regions = v, h -> h.exclude_regions)
+            .addValidator(Validators.uniqueInArray()).add()
+            .append(new KeyedCodec<>("Weight_multiplier", Codec.FLOAT), (h, v) -> h.weight_multiplier = v, h -> h.weight_multiplier)
+            .add()
+            //.append(new KeyedCodec<>("Exclude_Habitats", EXHABITATS_CODEC), (h, v) -> h.excludeHabitats = v, h -> h.excludeHabitats).add()
             .build();
 
 
@@ -80,12 +107,16 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
                     (t, data) -> t.data = data,
                     t -> t.data
             )
-            .appendInherited(new KeyedCodec<>("ItemId", Codec.STRING), (t, v) -> t.itemID = v, t -> t.itemID, (t, p) -> t.itemID = p.itemID).add()
-            .appendInherited(new KeyedCodec<>("Name", Codec.STRING), (t, v) -> t.name = v, t -> t.name, (t, p) -> t.name = p.name).add()
+            .appendInherited(new KeyedCodec<>("ItemId", Codec.STRING), (t, v) -> t.itemID = v, t -> t.itemID, (t, p) -> t.itemID = p.itemID)
+            .addValidator(Validators.nonEmptyString()).add()
+            .appendInherited(new KeyedCodec<>("Name", Codec.STRING), (t, v) -> t.name = v, t -> t.name, (t, p) -> t.name = p.name)
+            .addValidator(Validators.nonEmptyString()).add()
             .appendInherited(new KeyedCodec<>("Description", Codec.STRING), (t, v) -> t.description = v, t -> t.description, (t, p) -> t.description = p.description).add()
             .appendInherited(new KeyedCodec<>("FamilyId", Codec.STRING), (t, v) -> t.familyId = v, t -> t.familyId, (t, p) -> t.familyId = p.familyId).add()
-            .appendInherited(new KeyedCodec<>("Rarity", Codec.STRING), (t, v) -> t.rarity = v, t -> t.rarity, (t, p) -> t.rarity = p.rarity).add()
-            .appendInherited(new KeyedCodec<>("Weight", Codec.INTEGER), (t, v) -> t.weight = v, t -> t.weight, (t, p) -> t.weight = p.weight).add()
+            .appendInherited(new KeyedCodec<>("Rarity", Codec.STRING), (t, v) -> t.rarity = v, t -> t.rarity, (t, p) -> t.rarity = p.rarity)
+            .addValidator(Validators.nonEmptyString()).add()
+            .appendInherited(new KeyedCodec<>("Weight", Codec.INTEGER), (t, v) -> t.weight = v, t -> t.weight, (t, p) -> t.weight = p.weight)
+            .addValidator(Validators.min(0)).add()
             .appendInherited(new KeyedCodec<>("Size", Codec.INTEGER), (t, v) -> t.size = v, t -> t.size, (t, p) -> t.size = p.size).add()
             .appendInherited(new KeyedCodec<>("Quantity", Quantity_CODEC), (t, v) -> t.quantity = v, t -> t.quantity, (t, p) -> t.quantity = p.quantity).add()
             .appendInherited(new KeyedCodec<>("IsGlobal", Codec.BOOLEAN), (t, v) -> t.isGlobal = v, t -> t.isGlobal, (t, p) -> t.isGlobal = p.isGlobal).add()
@@ -175,17 +206,23 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         public Integer[] tier = new Integer[0];
         public String[] regions = new String[0];
         public String[] biomes = new String[0];
-        public String[] time_of_day = new String[0];
+        public TimePeriod[] time_of_day = new TimePeriod[0];
         public String[] required_weather = new String[0];
-        public int moon_phase = -1;
+        public Integer[] moon_phase = new Integer[0];
         public int min_depth = 0;
         public Height height = new Height(0, -1);
         public String[] exclude_zones = new String[0];
         public Integer[] exclude_tiers = new Integer[0];
         public String[] exclude_biomes = new String[0];
         public String[] exclude_regions = new String[0];
+        //public ExcludeHabitats excludeHabitats;
         public float weight_multiplier = 0.0f;
     }
+
+    public static class ExcludeHabitats {
+        Map<String, Float> exclude_zones = new HashMap<>();
+    }
+
 
     public static class Height {
         public int min_y;
@@ -204,8 +241,8 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     }
 
     public static class Quantity {
-        public int min_amount;
-        public int max_amount;
+        public int min_amount = 1;
+        public int max_amount = 1;
     }
 
     public static class BookInfo {
@@ -213,6 +250,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         public String habitat_info;
         public String PageFileUI;
     }
+
 
     // Reward logic
     public static Collection<FishLootManager> getAllLoot() {
@@ -224,9 +262,10 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     public record GeoKey(String biome, String region, String zone, int tier) {
     }
 
-    private static final LoadingCache<GeoKey, List<FishLootManager>> geoLootCache = Caffeine.newBuilder().expireAfterAccess(15, TimeUnit.MINUTES).softValues().build(key -> {
-        return getAllLoot().stream().filter(loot -> isEligible(loot, key)).toList();
-    });
+    private static final LoadingCache<GeoKey, List<FishLootManager>> geoLootCache = Caffeine.newBuilder()
+            .expireAfterAccess(15, TimeUnit.MINUTES)
+            .softValues()
+            .build(key -> getAllLoot().stream().filter(loot -> isEligible(loot, key)).toList());
 
     public static void invalidateCache() {
         geoLootCache.invalidateAll();
@@ -238,7 +277,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
 
         List<FishLootManager> possibleLoot = new ArrayList<>();
         int totalWeight = 0;
-        for (FishLootManager loot : geoPossible) {
+        for (FishLootManager loot : Objects.requireNonNull(geoPossible)) {
             if (checkEnvironment(loot, ctx)) {
                 int w = loot.getExclusionWeight(loot, ctx);
                 if (w > 0) {
@@ -260,7 +299,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             currentSum += loot.getExclusionWeight(loot, ctx);
             if (randomIndex < currentSum) return loot;
         }
-        return possibleLoot.get(0);
+        return possibleLoot.getFirst();
     }
 
     public static List<FishLootManager> getFishInArea(FishingContext ctx) {
@@ -343,19 +382,26 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     private static boolean checkEnvironment(FishLootManager loot, FishingContext ctx) {
         Habitats hab = loot.getHabitats();
         if (hab == null) return true;
+
+
         // Time of day
         if (hab.time_of_day != null && hab.time_of_day.length > 0) {
-            boolean match = Arrays.stream(hab.time_of_day).anyMatch(t -> t != null && (t.equalsIgnoreCase("any") || t.equalsIgnoreCase(ctx.time())));
+            boolean match = Arrays.stream(hab.time_of_day).anyMatch(t -> t != null && (t.equals(TimePeriod.ANY) || t.equals(ctx.time())));
             if (!match) return false;
         }
-        // Weather
+        // Weather TODO: READD To CODEC
         if (hab.required_weather != null && hab.required_weather.length > 0) {
             boolean match = Arrays.stream(hab.required_weather).anyMatch(w -> w != null && (w.equalsIgnoreCase("any") || w.equalsIgnoreCase(ctx.weather())));
             if (!match) return false;
         }
 
         // Moon phase
-        if (hab.moon_phase != -1 && hab.moon_phase != ctx.moonPhase()) return false;
+        if (hab.moon_phase != null && hab.moon_phase.length > 0) {
+            boolean match = Arrays.stream(hab.moon_phase)
+                    .anyMatch(p -> p == -1 || p == ctx.moonPhase());
+
+            if (!match) return false;
+        }
         // Water
         if (ctx.waterDepth() < hab.min_depth) return false;
         // Y level

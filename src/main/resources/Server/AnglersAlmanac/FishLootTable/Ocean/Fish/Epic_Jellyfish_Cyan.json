@@ -19,12 +19,10 @@
     "Regions": [],
     "Biomes": [],
     "Time_of_day": [
-      "night"
+      "Night"
     ],
-    "Required_weather": [
-      "Any"
-    ],
-    "Moon_phase": -1,
+
+   
     "Min_depth": 5,
     "Height": {
       "Min_y": 0,
