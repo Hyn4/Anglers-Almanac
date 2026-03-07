@@ -21,6 +21,16 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
 
     // Codecs
 
+    public static final BuilderCodec<BookInfo> Book_CODEC = BuilderCodec.builder(BookInfo.class, BookInfo::new)
+            .append(new KeyedCodec<>("Image_Path", Codec.STRING), (h, v) -> h.image_file = v, h -> h.image_file).add()
+            .append(new KeyedCodec<>("Habitat_Info", Codec.STRING), (h, v) -> h.habitat_info = v, h -> h.habitat_info).add()
+            .build();
+
+    public static final BuilderCodec<Quantity> Quantity_CODEC = BuilderCodec.builder(Quantity.class, Quantity::new)
+            .append(new KeyedCodec<>("Min", Codec.INTEGER), (h, v) -> h.min_amount = v, h -> h.min_amount).add()
+            .append(new KeyedCodec<>("Max", Codec.INTEGER), (h, v) -> h.max_amount = v, h -> h.max_amount).add()
+            .build();
+
     public static final BuilderCodec<Height> HEIGHT_CODEC = BuilderCodec.builder(Height.class, () -> new Height(0, -1))
             .append(new KeyedCodec<>("Min_y", Codec.INTEGER), (h, v) -> h.min_y = v, h -> h.min_y).add()
             .append(new KeyedCodec<>("Max_y", Codec.INTEGER), (h, v) -> h.max_y = v, h -> h.max_y).add()
@@ -68,9 +78,11 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             .appendInherited(new KeyedCodec<>("Rarity", Codec.STRING), (t, v) -> t.rarity = v, t -> t.rarity, (t, p) -> t.rarity = p.rarity).add()
             .appendInherited(new KeyedCodec<>("Weight", Codec.INTEGER), (t, v) -> t.weight = v, t -> t.weight, (t, p) -> t.weight = p.weight).add()
             .appendInherited(new KeyedCodec<>("Size", Codec.INTEGER), (t, v) -> t.size = v, t -> t.size, (t, p) -> t.size = p.size).add()
+            .appendInherited(new KeyedCodec<>("Quantity", Quantity_CODEC), (t, v) -> t.quantity = v, t -> t.quantity, (t, p) -> t.quantity = p.quantity).add()
             .appendInherited(new KeyedCodec<>("IsGlobal", Codec.BOOLEAN), (t, v) -> t.isGlobal = v, t -> t.isGlobal, (t, p) -> t.isGlobal = p.isGlobal).add()
             .appendInherited(new KeyedCodec<>("Habitats", HABITATS_CODEC), (t, v) -> t.habitats = v, t -> t.habitats, (t, p) -> t.habitats = p.habitats).add()
             .appendInherited(new KeyedCodec<>("Minigame_stats", STATS_CODEC), (t, v) -> t.minigameStats = v, t -> t.minigameStats, (t, p) -> t.minigameStats = p.minigameStats).add()
+            .appendInherited(new KeyedCodec<>("Book_info", Book_CODEC), (t, v) -> t.bookInfo = v, t -> t.bookInfo, (t, p) -> t.bookInfo = p.bookInfo).add()
             .build();
 
     private static AssetStore<String, FishLootManager, DefaultAssetMap<String, FishLootManager>> ASSET_STORE;
@@ -95,18 +107,58 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     private int weight;
     private int size;
     private boolean isGlobal;
+    private Quantity quantity;
     private Habitats habitats;
     private MinigameStats minigameStats;
+    private BookInfo bookInfo;
 
-    public FishLootManager() {}
+    public FishLootManager() {
+    }
 
     @Override
-    public String getId() { return id; }
-    public String getItemID() { return itemID; }
-    public Habitats getHabitats() { return habitats; }
-    public int getWeight() { return weight; }
-    public boolean isGlobal() { return isGlobal; }
-    public String getName() {return name;}
+    public String getId() {
+        return id;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public Habitats getHabitats() {
+        return habitats;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public boolean isGlobal() {
+        return isGlobal;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getFamilyId() {
+        return familyId;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+
+    public Quantity getQuantity() {
+        return quantity;
+    }
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
     // Classes used by BuilderCodec
 
     public static class Habitats {
@@ -129,13 +181,27 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     public static class Height {
         public int min_y;
         public int max_y;
-        public Height(int min, int max) { this.min_y = min; this.max_y = max; }
+
+        public Height(int min, int max) {
+            this.min_y = min;
+            this.max_y = max;
+        }
     }
 
     public static class MinigameStats {
         public int difficulty;
         public String behavior = "normal";
         public int stamina;
+    }
+
+    public static class Quantity {
+        public int min_amount;
+        public int max_amount;
+    }
+
+    public static class BookInfo {
+        public String image_file;
+        public String habitat_info;
     }
 
     // Reward logic
@@ -146,7 +212,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
     public static FishLootManager getRandomWeightedLoot(FishingContext ctx) {
         List<FishLootManager> possibleLoot = getAllLoot().stream()
                 .filter(loot -> isEligible(loot, ctx))
-                .filter(loot -> loot.getExclusionWeight(loot,ctx) > 0)
+                .filter(loot -> loot.getExclusionWeight(loot, ctx) > 0)
                 .toList();
 
         if (possibleLoot.isEmpty()) {
@@ -155,14 +221,14 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         }
 
 //        int totalWeight = possibleLoot.stream().mapToInt(FishLootManager::getWeight).sum();
-        int totalWeight = possibleLoot.stream().mapToInt(l -> l.getExclusionWeight(l,ctx)).sum();
+        int totalWeight = possibleLoot.stream().mapToInt(l -> l.getExclusionWeight(l, ctx)).sum();
         if (totalWeight <= 0) return possibleLoot.getFirst();
 
         int randomIndex = new Random().nextInt(totalWeight);
         int currentSum = 0;
 
         for (FishLootManager entry : possibleLoot) {
-            currentSum += entry.getExclusionWeight(entry,ctx);
+            currentSum += entry.getExclusionWeight(entry, ctx);
             if (randomIndex < currentSum) {
                 return entry;
             }
@@ -170,8 +236,8 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         return possibleLoot.get(0);
     }
 
-    public static FishLootManager getFishData(String id)
-    {
+    public static FishLootManager getFishData(String id) {
+        if (id == null) return null;
         return getAllLoot().stream()
                 .filter(loot -> loot.id.equalsIgnoreCase(id)).toList().getFirst();
 
@@ -227,13 +293,13 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         if (ctx.waterDepth() < hab.min_depth) return false;
         if (hab.height != null) {
             if (ctx.yPos() < hab.height.min_y) return false;
-            if (hab.height.max_y != -1 && ctx.yPos() > hab.height.max_y) return false;
+            return hab.height.max_y == -1 || !(ctx.yPos() > hab.height.max_y);
         }
 
         return true;
     }
 
-    public int getExclusionWeight(FishLootManager loot,FishingContext ctx) {
+    public int getExclusionWeight(FishLootManager loot, FishingContext ctx) {
         if (loot.habitats == null) return this.weight;
 
         boolean isExcluded = false;
@@ -251,7 +317,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
             isExcluded = true;
         }
         // Check Tier
-        else if (loot.habitats.exclude_tiers != null && Arrays.stream(loot.habitats.exclude_tiers).anyMatch(t -> t != null && t == ctx.tier())){
+        else if (loot.habitats.exclude_tiers != null && Arrays.stream(loot.habitats.exclude_tiers).anyMatch(t -> t != null && t == ctx.tier())) {
             isExcluded = true;
         }
 
@@ -262,7 +328,7 @@ public class FishLootManager implements JsonAssetWithMap<String, DefaultAssetMap
         return this.weight;
     }
 
-    public MinigameStats getMinigameStats(){
+    public MinigameStats getMinigameStats() {
         return minigameStats;
     }
 }

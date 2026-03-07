@@ -4,13 +4,13 @@
     "fish",
     "bottom_feeder"
   ],
-  "Name": "channel catfish",
-  "Description": "A fish with prominent whiskers",
+  "Name": "Catfish",
+  "Description": "The Catfish is easily spotted by its iconic sensory barbels those whiskers that act as taste buds for the water. This fish is a global specialist at navigating the water by touch. It’s essentially a living vacuum cleaner with a purple armor set, using its sensitive face to sniff out snacks hidden deep in the silt where other fish are blind.",
   "FamilyId": "catfish_family",
   "Rarity": "Common",
   "IsGlobal": true,
   "Weight": 200,
-  "Size": 45,
+  "Size": 40,
   "Habitats": {
     "Zones": [],
     "Tiers": [],
@@ -37,5 +37,8 @@
     "Difficulty": 5,
     "Behavior": "aggressive",
     "Stamina": 40
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere|  Expect Oceans"
   }
 }

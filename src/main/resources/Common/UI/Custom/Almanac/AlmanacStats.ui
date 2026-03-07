@@ -6,53 +6,183 @@ Group #AlmanacStats {
   Group #background {
     Background: @Background;
   }
+  // --- NAVIGATION BUTTONS ---
+
+  Button  #NextPageButton {
+    Anchor: (Bottom: 45, Right: 65, Width: 60, Height: 30);
+    Background: #3A3A3A;
+  }
+
   // --- LEFT PAGE CONTENT ---
+  Group #LeftPage {
+    Anchor: (Left: 100, Top: 60, Width: 450, Height: 750);
 
-  Label #Header {
-    Anchor: (Top: 60, Left: 120);
-    Style: (TextColor: #494950, FontSize: 30, RenderBold: true);
-    Text: "Player Stats:";
+    Label #Header {
+      Anchor: (Top: 0, Left: 30);
+      Style: (TextColor: #494950, FontSize: 30, RenderBold: true);
+      Text: "Player Stats:";
+    }
+
+    Label #TotalFish {
+      Anchor: (Top: 50, Left: 30);
+      Style: (TextColor: #494950, FontSize: 25);
+      Text: "Total fish: {total_catches}";
+    }
+
+    Label #MostFound {
+      Anchor: (Top: 85, Left: 30);
+      Style: (TextColor: #494950, FontSize: 25);
+      Text: "Most found: {top_fish_name}";
+    }
+
+    Label #LegendaryCount {
+      Anchor: (Top: 120, Left: 30);
+      Style: (TextColor: #494950, FontSize: 25);
+      Text: "Legendary fish: {legendary_count}";
+    }
+
+    Label #PerfectCount {
+      Anchor: (Top: 160, Left: 30);
+      Style: (TextColor: #9b7e00, FontSize: 20);
+      Text: "Perfect: {Perfect_count}";
+    }
+
+    Label #GreatCount {
+      Anchor: (Top: 190, Left: 30);
+      Style: (TextColor: #0d689d, FontSize: 20);
+      Text: "Great: {Great_count}";
+    }
+
+    Label #ListHeader {
+      Anchor: (Top: 240, Left: 30);
+      Style: (TextColor: #494950, FontSize: 25);
+      Text: "Top 10 Catches:";
+    }
+
+    Label #Fish1  { Anchor: (Top: 280, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_1} : {fish_1_count}"; }
+    Label #Fish2  { Anchor: (Top: 310, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_2} : {fish_2_count}"; }
+    Label #Fish3  { Anchor: (Top: 340, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_3} : {fish_3_count}"; }
+    Label #Fish4  { Anchor: (Top: 370, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_4} : {fish_4_count}"; }
+    Label #Fish5  { Anchor: (Top: 400, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_5} : {fish_5_count}"; }
+    Label #Fish6  { Anchor: (Top: 430, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_6} : {fish_6_count}"; }
+    Label #Fish7  { Anchor: (Top: 460, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_7} : {fish_7_count}"; }
+    Label #Fish8  { Anchor: (Top: 490, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_8} : {fish_8_count}"; }
+    Label #Fish9  { Anchor: (Top: 520, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_9} : {fish_9_count}"; }
+    Label #Fish10 { Anchor: (Top: 550, Left: 30); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_10} : {fish_10_count}"; }
+
+    Label #OwnerInfo {
+      Anchor: (Top: 725, Right:0 );
+      Style: (TextColor: #1c1c25, FontSize: 18, HorizontalAlignment: End);
+      Text: "Property of: {owner_name}";
+    }
   }
 
-  Label #TotalFish {
-    Anchor: (Top: 120, Left: 120);
-    Style: (TextColor: #494950, FontSize: 25);
-    Text: "Total fish: {total_catches}";
-  }
+  Group #RightPage {
+    Anchor: (Right: 120, Top: 60, Width: 450, Height: 750);
 
-  Label #MostFound {
-    Anchor: (Top: 160, Left: 120);
-    Style: (TextColor: #494950, FontSize: 25);
-    Text: "Most found: {top_fish_name}";
-  }
+    Label #CollectionHeader {
+      Anchor: (Top: 0, Left: 120);
+      Style: (TextColor: #494950, FontSize: 30);
+      Text: "Collection Progress";
+    }
+    Group #ProgressContainer {
+      Anchor: (Top: 10, Left: 120, Width: 300, Height: 300);
+      Group #Background {
+        Anchor: (Width: 300, Height: 300);
+        Background: "Assets/BackgroundSignatureAbilityNotReady.png";
+      }
 
-  Label #LegendaryCount {
-    Anchor: (Top: 200, Left: 120);
-    Style: (TextColor: #494950, FontSize: 25);
-    Text: "Legendary fish: {legendary_count}";
-  }
+      Group #SignatureIcon {
+        Anchor: (Width: 150, Height: 150);
+        Background: (TexturePath: "Assets/Earth_Temp.png", Color: #ffffff);
+      }
+      CircularProgressBar #FishProgress {
+        Value: 1;
+        Color: #2A5A82;
+        MaskTexturePath: "Assets/ProgressBarMask.png";
+      }
+    }
 
-  Label #ListHeader {
-    Anchor: (Top: 300, Left: 120);
-    Style: (TextColor: #494950, FontSize: 25);
-    Text: "Top 10 Catches:";
-  }
+    Group #Global {
+      Anchor: (Top: 280, Left:40);
 
-  Label #Fish1 { Anchor: (Top: 330, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_1} : {fish_1_count}"; }
-  Label #Fish2 { Anchor: (Top: 365, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_2} : {fish_2_count}"; }
-  Label #Fish3 { Anchor: (Top: 400, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_3} : {fish_3_count}"; }
-  Label #Fish4 { Anchor: (Top: 435, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_4} : {fish_4_count}"; }
-  Label #Fish5 { Anchor: (Top: 470, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_5} : {fish_5_count}"; }
-  Label #Fish6 { Anchor: (Top: 505, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_6} : {fish_6_count}"; }
-  Label #Fish7 { Anchor: (Top: 540, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_7} : {fish_7_count}"; }
-  Label #Fish8 { Anchor: (Top: 575, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_8} : {fish_8_count}"; }
-  Label #Fish9 { Anchor: (Top: 610, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_9} : {fish_9_count}"; }
-  Label #Fish10 { Anchor: (Top: 645, Left: 120); Style: (TextColor: #494950, FontSize: 22); Text: "- {fish_10} : {fish_10_count}"; }
+      Label #GlobalHeader {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Global Fish Progress";
+      }
+      Label #GlobalHeader {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{GlobalFish}/{GlobalFishTotal}";
+      }
+    }
+    Group #Ocean {
+      Anchor: (Top: 350, Left:40);
 
+      Label #OceanHeader {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Ocean Fish Progress";
+      }
+      Label #OceanHeader {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{OceanFish}/{OceanFishTotal}";
+      }
+    }
+    Group #Zone1 {
+      Anchor: (Top: 420, Left:40);
 
-  Label #OwnerInfo {
-    Anchor: (Top: 780, Left: 120, Width: 450);
-    Style: (TextColor: #1c1c25, FontSize: 18, HorizontalAlignment:End);
-    Text: "Property of: {owner_name}";
+      Label #Zone1Header {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Zone1 Fish Progress";
+      }
+      Label #Zone1Header {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{Zone1Fish}/{Zone1FishTotal}";
+      }
+    }
+
+    Group #Zone2 {
+      Anchor: (Top: 490, Left:40);
+
+      Label #Zone1Header {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Zone2 Fish Progress";
+      }
+      Label #Zone2Header {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{Zone2Fish}/{Zone2FishTotal}";
+      }
+    }
+
+    Group #Zone3 {
+      Anchor: (Top: 560, Left:40);
+
+      Label #Zone3Header {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Zone3 Fish Progress";
+      }
+      Label #Zone1Header {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{Zone3Fish}/{Zone3FishTotal}";
+      }
+    }
+
+    Group #Zone4 {
+      Anchor: (Top: 630, Left:40);
+
+      Label #Zone4Header {
+        Style: (TextColor: #494950, FontSize: 25);
+        Text: "Zone4 Fish Progress";
+      }
+      Label #Zone2Header {
+        Anchor: (Top: 30);
+        Style: (TextColor: #494950, FontSize: 20);
+        Text: "{Zone4Fish}/{Zone4FishTotal}";
+      }
+    }
   }
 }
