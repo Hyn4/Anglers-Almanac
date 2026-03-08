@@ -168,9 +168,17 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
                     cancelFishing(commandBuffer, player, player.getInventory().getActiveHotbarItem());
                 }
             }
+            else
+            {
+                AnglersAlmanac.LOGGER.atWarning().log("Failed to reel in" + bobberId);
+                AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata");
+                cancelFishing(commandBuffer, player, heldItem);
+            }
 
         } else {
-            //HytaleLogger.getLogger().atInfo().log("Failed to reel in" + bobberId);
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to reel in" + bobberId);
+            AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata");
+            cancelFishing(commandBuffer, player, heldItem);
         }
 
 
