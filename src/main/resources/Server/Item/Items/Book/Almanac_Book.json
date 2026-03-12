@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "almanac.book.name",
-    "Description": "almanac.book.description"
+    "Name": "Angler's Almanac",
+    "Description": "Right click the bind to you"
   },
   "Categories": [
     "Items.Tools"
@@ -72,5 +72,30 @@
       ]
     }
   },
-  "Icon": "Icons/ItemsGenerated/Almanac_Book.png"
+  "Icon": "Icons/ItemsGenerated/Almanac_Book.png",
+  "Recipe": {
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fabric_Scrap_Linen",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 1
+      },
+      {
+        "ResourceTypeId": "Fish",
+        "Quantity": 2
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Workbench",
+        "Categories": [
+          "Workbench_Tools"
+        ]
+      }
+    ],
+    "TimeSeconds": 2
+  }
 }

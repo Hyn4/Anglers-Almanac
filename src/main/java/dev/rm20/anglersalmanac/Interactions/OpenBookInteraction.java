@@ -7,6 +7,7 @@ import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.ItemBase;
 import com.hypixel.hytale.protocol.ItemTranslationProperties;
 import com.hypixel.hytale.protocol.UpdateType;
+import com.hypixel.hytale.protocol.packets.assets.UpdateItems;
 import com.hypixel.hytale.protocol.packets.assets.UpdateTranslations;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
@@ -23,6 +24,9 @@ import dev.rm20.anglersalmanac.Metadata.BookData;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+
+import static dev.rm20.anglersalmanac.AlmanacBook.AlmanacBook.registerItemOnServer;
+import static dev.rm20.anglersalmanac.AlmanacBook.AlmanacBook.syncCustomBookDisplay;
 
 
 public class OpenBookInteraction extends SimpleInstantInteraction {
@@ -76,35 +80,5 @@ public class OpenBookInteraction extends SimpleInstantInteraction {
             );
         }
 
-    }
-
-
-    //todo
-    public static void syncCustomBookDisplay(PlayerRef playerRef, String playerUuid, String playerName) {
-        Item baseItem = Item.getAssetMap().getAsset("Almanac_Book");
-        String customId = "Almanac_Book_" + playerUuid;
-        //registerItemOnServer(customId, baseItem);
-
-        ItemBase definition = baseItem.toPacket().clone();
-
-        definition.id = customId;
-        definition.translationProperties = new ItemTranslationProperties(
-                "almanac.book."+playerName+".name",
-                "almanac.book."+playerName+".description"
-        );
-
-        Map<String, String> translations = new HashMap<>();
-        translations.put("almanac.book."+playerName+".name", playerName + "'s Angler's Almanac");
-        translations.put("almanac.book."+playerName+".description", "<color is=\"#AAAAAA\">Bound to ID:</color>\n<i>" + playerUuid + "</i>");
-
-        UpdateTranslations packet = new UpdateTranslations();
-        packet.type = UpdateType.AddOrUpdate;
-        packet.translations = translations;
-        playerRef.getPacketHandler().writeNoCache(packet);
-
-//        UpdateItems itemPacket = new UpdateItems();
-//        itemPacket.items = new HashMap<>();
-//        itemPacket.items.put(customId, definition);
-//        playerRef.getPacketHandler().writeNoCache(itemPacket);
     }
 }
