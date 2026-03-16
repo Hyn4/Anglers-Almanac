@@ -10,6 +10,7 @@ import com.hypixel.hytale.server.core.entity.ItemUtils;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.Inventory;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
@@ -41,8 +42,18 @@ import static dev.rm20.anglersalmanac.MinigameManager.Minigame.PerformanceRating
 public class MinigameManager {
     public static void StartGame(Ref<EntityStore> bobberRef, Player player, CommandBuffer<EntityStore> commandBuffer, int depth) {
 
+        InventoryComponent.Hotbar hotbarComp = player.getReference().getStore().getComponent(player.getReference(), InventoryComponent.Hotbar.getComponentType());
         //Assuming active hotbar item has not changed.
-        ItemStack fishingRod = player.getInventory().getActiveHotbarItem();
+        if(hotbarComp ==null)
+        {
+            return;
+        }
+
+        ItemStack fishingRod = hotbarComp.getActiveItem();
+        if(fishingRod==null)
+        {
+            return;
+        }
 
 
         // Select which minigame to use from the config and set it up.
@@ -53,9 +64,9 @@ public class MinigameManager {
                     LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                     break;
                 }
-                Inventory inv = player.getInventory();
                 MinigameComponent_TensionBar minigame = MinigameComponent_TensionBar.spawnMinigame(commandBuffer, player.getReference(), bobberRef, fishingRod.getItemId());
-                LaunchBobberInteraction.updateMetadata(inv, inv.getActiveHotbarSlot(), inv.getActiveHotbarItem(), meta.getBoundBobber(), minigame.selfUUID, 1);
+                LaunchBobberInteraction.updateMetadata(hotbarComp, hotbarComp.getActiveSlot(), hotbarComp.getActiveItem(), meta.getBoundBobber(), minigame.selfUUID, 1);
+
                 break;
             case "NoMinigame":
                 DropLoot(FirstRoll(bobberRef, player, commandBuffer, depth), player, commandBuffer, bobberRef, NIL);
