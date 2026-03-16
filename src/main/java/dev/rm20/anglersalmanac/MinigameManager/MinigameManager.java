@@ -240,7 +240,7 @@ public class MinigameManager {
             }
             BookPageManager.invalidateCache(String.valueOf(playerRef1.getUuid()));
         }).exceptionally(ex -> {
-            ex.printStackTrace();
+            AnglersAlmanac.LOGGER.atSevere().withCause(ex).log("Database error");
             return null;
         });
     }

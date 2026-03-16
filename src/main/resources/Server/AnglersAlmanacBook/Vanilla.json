@@ -111,7 +111,7 @@
       "ZoneName": "Zone2",
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water around Zone2.",
-        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
+        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Zone_2.png",
         "ProgressBarColour": "#66a0a2",
         "DisplayName": "Howling Sands",
         "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_2_Tab.png",
@@ -129,7 +129,7 @@
       "ZoneName": "Zone3",
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Whisperfrost Frontiers.",
-        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
+        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Zone_3.png",
         "ProgressBarColour": "#435da7",
         "DisplayName": "Whisperfrost Frontiers",
         "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_3_Tab.png",
@@ -151,7 +151,7 @@
       "ZoneName": "Zone4",
       "ZoneInfo": {
         "ZoneDescription": "Those fish can be found in most bodies of water in Devastated Lands.",
-        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Orbis_2.png",
+        "ZoneImage": "UI/Custom/Almanac/Fish/Assets/Zone_4.png",
         "ProgressBarColour": "#673338",
         "DisplayName": "Devastated Lands",
         "TabIcon": "UI/Custom/Almanac/Utils/Assets/Tabs/Zone_4_Tab.png",

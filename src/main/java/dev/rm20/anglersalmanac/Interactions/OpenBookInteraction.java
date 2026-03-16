@@ -13,7 +13,9 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.rm20.anglersalmanac.AlmanacBook.AlmanacRepository;
 import dev.rm20.anglersalmanac.AlmanacBook.BookPageManager;
+import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Metadata.BookData;
 
 import javax.annotation.Nonnull;
@@ -53,18 +55,36 @@ public class OpenBookInteraction extends SimpleInstantInteraction {
         }
 
         BookData data = heldItem.getFromMetadataOrNull(BookData.KEY, BookData.CODEC);
+        if(isInitializedBook)
+        {
+            if(data == null)
+            {
+                BookData newData = new BookData();
+                String UUID = itemId.replace(INITIALIZED_PREFIX, "");
+                AlmanacRepository.BookEntry bookEntry = AlmanacRepository.getBookData(UUID);
+                if(bookEntry!=null)
+                {
+                    newData.setPlayerUUID(UUID);
+                    newData.setPlayerName(bookEntry.playerName);
+                    newData.setPageNumber(0);
+                    openAndSyncBook(playerRef, player, newData);
+                    return;
+                }
 
-        if (isRawBook || data == null || data.getPlayerUUID().isEmpty()) {
-            if (data != null) {
-                data = upgradeToInitializedBook(playerRef, player, heldItem, data);
-            } else {
-                data = initializeNewBook(playerRef, player, heldItem);
             }
-            if (data == null) {
-                return;
-            }
+            openAndSyncBook(playerRef, player, data);
+            return;
         }
 
+        if (data != null) {
+            data = upgradeToInitializedBook(playerRef, player, heldItem, data);
+        } else {
+            data = initializeNewBook(playerRef, player, heldItem);
+        }
+
+        if (data == null) {
+            return;
+        }
 
         // 3. Centralized Execution
         openAndSyncBook(playerRef, player, data);

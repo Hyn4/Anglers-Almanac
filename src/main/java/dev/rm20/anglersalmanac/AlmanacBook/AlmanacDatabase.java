@@ -211,7 +211,7 @@ public class AlmanacDatabase {
         public java.util.HashMap<String, Integer> ratingsMap = new java.util.HashMap<>();
         public java.util.HashMap<String, Integer> catchMap = new java.util.HashMap<>();
         public boolean hasCaught(String fishId) {
-            return catchMap.containsKey(fishId) && catchMap.get(fishId) > 0;
+            return catchMap.containsKey(fishId);
         }
 
         public int getRatingCount(Minigame.PerformanceRating rating) {

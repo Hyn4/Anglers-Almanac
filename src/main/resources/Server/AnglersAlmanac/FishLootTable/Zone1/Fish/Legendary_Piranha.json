@@ -10,7 +10,7 @@
   "Rarity": "Legendary",
   "IsGlobal": false,
   "Weight": 35,
-  "Size": 35,
+  "Size": 30,
   "Habitats": {
     "Zones": [],
     "Tiers": [],
@@ -18,9 +18,6 @@
     "Biomes": [
       "Forest_Swamp"
     ],
-
-
-   
     "Min_depth": 3,
     "Height": {
       "Min_y": 0,

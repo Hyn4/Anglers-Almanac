@@ -5,20 +5,19 @@
     "saltwater"
   ],
   "Name": "Black Trilobite",
-  "Description": "A living fossil from an age long forgotten.",
-  "FamilyId": "Trilobite_family",
+  "Description": "This shadow-colored crawler is like the common variety, except it has a shell that’s blacker than the darkest caves in the jungle. It crawls across the muddy silt of the underground jungle with its heavy obsidian-like shell to keep it safe from the massive predators in the jungle. Just like its cousin, landing this catch will be a slow, heavy fight against a living tank that’s been around since the dawn of time.",
+  "FamilyId": "Asaphidae",
   "Rarity": "Legendary",
   "IsGlobal": false,
-  "Weight": 35,
-  "Size": 35,
+  "Weight": 25,
+  "Size": 45,
   "Habitats": {
-    "Zones": ["4"],
+    "Zones": [
+      "4"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-
-
-   
     "Min_depth": 3,
     "Height": {
       "Min_y": 0,
@@ -29,5 +28,9 @@
     "Difficulty": 11,
     "Behavior": "heavy_sinker",
     "Stamina": 220
+  },
+  "Book_info": {
+    "Habitat_Info": "• Devastated Lands's Underground Jungle",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage9.ui"
   }
 }

@@ -415,6 +415,10 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
     }
 
+    final Cache<UUID, TransformComponent> transformCache = Caffeine.newBuilder()
+            .expireAfterAccess(1, TimeUnit.SECONDS) // Auto-cleanup if minigame ends
+            .build();
+
     public void updateMinigameModelPositions(CommandBuffer<EntityStore> commandBuffer, float deltaTime){
 
         World world = commandBuffer.getExternalData().getWorld();
@@ -450,9 +454,6 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
 
         // -------- TENSION BAR --------------------------------
 
-        final Cache<UUID, TransformComponent> transformCache = Caffeine.newBuilder()
-                .expireAfterAccess(5, TimeUnit.SECONDS) // Auto-cleanup if minigame ends
-                .build();
 
 
         float sectionHeight = 0.015625f * minigameScale;  //0.015625 = 1/64  (0-1 range to block texel size)

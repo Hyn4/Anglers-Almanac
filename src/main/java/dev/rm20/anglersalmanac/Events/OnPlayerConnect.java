@@ -2,6 +2,7 @@ package dev.rm20.anglersalmanac.Events;
 
 
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.event.events.player.PlayerConnectEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;

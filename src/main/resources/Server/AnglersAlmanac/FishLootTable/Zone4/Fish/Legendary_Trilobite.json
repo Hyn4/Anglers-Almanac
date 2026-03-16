@@ -5,20 +5,19 @@
     "saltwater"
   ],
   "Name": "Trilobite",
-  "Description": "A living fossil from an age long forgotten.",
-  "FamilyId": "Trilobite_family",
+  "Description": "This hard-shelled crawler is a living fossil from an era when the world was still in its youth. It crawls through the muddy floor of the underground jungle, protected by its segmented plating, which is strong enough to withstand the stomp of a dinosaur. Hooking one of these is like snagging a heavy stone, and you'll need a good line to haul this fossilized tank out of the dark jungle mud.",
+  "FamilyId": "Asaphidae",
   "Rarity": "Legendary",
   "IsGlobal": false,
   "Weight": 35,
-  "Size": 35,
+  "Size": 45,
   "Habitats": {
-    "Zones": ["4"],
+    "Zones": [
+      "4"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-
-
-   
     "Min_depth": 3,
     "Height": {
       "Min_y": 0,
@@ -29,5 +28,9 @@
     "Difficulty": 11,
     "Behavior": "heavy_sinker",
     "Stamina": 220
+  },
+  "Book_info": {
+    "Habitat_Info": "• Devastated Lands's Underground Jungle",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage10.ui"
   }
 }

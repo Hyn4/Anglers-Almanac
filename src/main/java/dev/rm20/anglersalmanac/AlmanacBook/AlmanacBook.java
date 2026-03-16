@@ -63,7 +63,8 @@ public class AlmanacBook {
             idField.setAccessible(true);
             idField.set(newItem, newId);
         } catch (Exception e) {
-            e.printStackTrace();
+            AnglersAlmanac.LOGGER.atSevere().withCause(e).log("Failed to clone item for "+newId);
+
             return null;
         }
 
@@ -90,7 +91,7 @@ public class AlmanacBook {
                 lock.unlockWrite(stamp);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            AnglersAlmanac.LOGGER.atSevere().withCause(e).log("Failed to register "+customId+ " on to the server");
         }
     }
 
@@ -162,6 +163,11 @@ public class AlmanacBook {
             .maximumSize(1000)
             .expireAfterAccess(1, TimeUnit.HOURS)
             .build();
+
+    public static void invalidateCache()
+    {
+        DEFINITION_CACHE.invalidateAll();
+    }
 
     private static void sendSingleBookSync(PlayerRef recipient, String targetUuid, String targetName, String customId) {
         ItemBase definition = DEFINITION_CACHE.get(customId, k -> {
