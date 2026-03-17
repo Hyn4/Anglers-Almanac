@@ -175,7 +175,7 @@ public class MinigameManager {
         assert player.getReference() != null;
         TransformComponent transform = player.getReference().getStore().getComponent(player.getReference(), TransformComponent.getComponentType());
 
-        ItemUtils.interactivelyPickupItem(player.getReference(), loot, transform.getPosition(), commandBuffer);
+        ItemUtils.interactivelyPickupItem(player.getReference(), loot, transform.getPosition(),commandBuffer);
 
         //TODO
         //Rework to make it look like the fish is coming from the bobber and fly to the player?

@@ -56,8 +56,6 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 }
                 return;
             }
-            slot = player.getInventory().getActiveHotbarSlot();
-            fishingRod = heldItem;
         }
 
         if (component == null || !component.InWater()) return;
