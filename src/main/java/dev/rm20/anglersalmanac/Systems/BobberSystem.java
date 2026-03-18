@@ -16,15 +16,15 @@ import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.rm20.anglersalmanac.AnglersAlmanac;
-import dev.rm20.anglersalmanac.components.BobberComponent;
-import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
-import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.Components.BobberComponent;
+import dev.rm20.anglersalmanac.Interactions.LaunchBobberInteraction;
+import dev.rm20.anglersalmanac.Metadata.FishingRodData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 public class BobberSystem extends EntityTickingSystem<EntityStore> {
     private final Random random = new Random();
@@ -34,49 +34,33 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
     public void tick(float v, int i, @Nonnull ArchetypeChunk<EntityStore> archetypeChunk, @Nonnull Store<EntityStore> store, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
         BobberComponent component = archetypeChunk.getComponent(i, BobberComponent.getComponentType());
         TransformComponent transform = archetypeChunk.getComponent(i, TransformComponent.getComponentType());
+        Player player;
         if(component !=null)
         {
-            Player player = component.getPlayer();
-            if (player != null) {
-                ItemStack heldItem = player.getInventory().getItemInHand();
-                FishingRodData meta = (heldItem != null) ? heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC) : null;
-                UUIDComponent uuidComponent = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
-                if(meta != null)
-                {
-                    if(meta.getBoundBobber()==null||!Objects.requireNonNull(uuidComponent).getUuid().equals(meta.getBoundBobber()))
-                    {
-                        if(fishingRod == null)
-                        {
-                            commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
-                        }
-                        else
-                        {
-                            LaunchBobberInteraction.cancelFishing(commandBuffer,player,fishingRod,slot);
-                        }
-                        //LaunchBobberInteraction.cancelFishing(commandBuffer,player,fishingRod,slot);
-                        //commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
-                        return;
-                    }
-                    else{
-                        slot = player.getInventory().getActiveHotbarSlot();
-                        fishingRod = heldItem;
-                    }
-                }
-                if (meta == null || !Objects.requireNonNull(uuidComponent).getUuid().equals(meta.getBoundBobber())) {
-                    //AnglersAlmanac.getInstance().getLogger().atInfo().log("Removed bobber - Rod swapped or dropped");
-                    //commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
-                    assert fishingRod != null;
-                    //AnglersAlmanac.getInstance().getLogger().atInfo().log(fishingRod.toString());
-                    LaunchBobberInteraction.cancelFishing(commandBuffer,player,fishingRod,slot);
-                    //AnglersAlmanac.getInstance().getLogger().atInfo().log(fishingRod.toString());
-                    return;
-                }
-            }
-            else
-            {
+            player = component.getPlayer();
+            if (player == null) {
                 commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
                 return;
             }
+
+            ItemStack heldItem = player.getInventory().getItemInHand();
+            FishingRodData meta = (heldItem != null) ? heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC) : null;
+            UUIDComponent uuidComp = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+            UUID bobberUuid = (uuidComp != null) ? uuidComp.getUuid() : null;
+            boolean isLinked = meta != null && bobberUuid != null && bobberUuid.equals(meta.getBoundBobber());
+
+            if (!isLinked) {
+                if (fishingRod == null) {
+                    commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                } else {
+                    LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod, slot);
+                }
+                return;
+            }
+            slot = player.getInventory().getActiveHotbarSlot();
+            fishingRod = heldItem;
+        } else {
+            player = null;
         }
 
         if (component == null || !component.InWater()) return;
@@ -106,7 +90,7 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 World world = store.getExternalData().getWorld();
                 EntityStore store2 = world.getEntityStore();
                 world.execute(() -> {
-                    SoundUtil.playSoundEvent3d(audio, SoundCategory.SFX, transform.getPosition(), store2.getStore());
+                    SoundUtil.playSoundEvent3dToPlayer(player.getReference(), audio, SoundCategory.SFX, transform.getPosition(), store2.getStore());
                 });
                 // Reaction window: How long the player has to click.
                 // Making this slightly more random (e.g., 0.8s to 3.0s)

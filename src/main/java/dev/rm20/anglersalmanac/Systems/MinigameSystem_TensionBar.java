@@ -1,41 +1,30 @@
 package dev.rm20.anglersalmanac.Systems;
 
-import com.hypixel.hytale.common.util.ArrayUtil;
-import com.hypixel.hytale.common.util.AudioUtil;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.protocol.SoundCategory;
-import com.hypixel.hytale.protocol.packets.assets.UpdateSoundEvents;
-import com.hypixel.hytale.server.core.asset.type.soundevent.SoundEventPacketGenerator;
-import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
-import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEventLayer;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.modules.entity.component.AudioComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.entity.damage.Damage;
-import com.hypixel.hytale.server.core.modules.entity.system.AudioSystems;
-import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
+import dev.rm20.anglersalmanac.MinigameManager.Minigame;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
-import dev.rm20.anglersalmanac.components.AudioPlayerComponent;
-import dev.rm20.anglersalmanac.components.BobberComponent;
-import dev.rm20.anglersalmanac.components.MinigameComponent_TensionBar;
-import dev.rm20.anglersalmanac.interactions.LaunchBobberInteraction;
-import dev.rm20.anglersalmanac.models.FishingRodData;
-import dev.rm20.anglersalmanac.utils.SoundUtils;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntPredicate;
+import dev.rm20.anglersalmanac.Components.AudioPlayerComponent;
+import dev.rm20.anglersalmanac.Components.BobberComponent;
+import dev.rm20.anglersalmanac.Components.MinigameComponent_TensionBar;
+import dev.rm20.anglersalmanac.Interactions.LaunchBobberInteraction;
+//import dev.rm20.anglersalmanac.models.FishingRodData;
+import dev.rm20.anglersalmanac.Models.FishLootManager;
+import dev.rm20.anglersalmanac.Utils.TransformUtils;
+import dev.rm20.anglersalmanac.Metadata.FishingRodData;
+import dev.rm20.anglersalmanac.Utils.Validator.MinigameBehaviour;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> {
     ItemStack fishingRod = null;
@@ -45,15 +34,17 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
     @Override
     public void tick(float deltaTime, int i, @NonNull ArchetypeChunk<EntityStore> archetypeChunk, @NonNull Store<EntityStore> store, @NonNull CommandBuffer<EntityStore> commandBuffer) {
 
-        MinigameComponent_TensionBar game = store.getComponent(archetypeChunk.getReferenceTo(i), MinigameComponent_TensionBar.COMPONENT_TYPE);
+        MinigameComponent_TensionBar game = commandBuffer.getComponent(archetypeChunk.getReferenceTo(i), MinigameComponent_TensionBar.COMPONENT_TYPE);
 
         Ref<EntityStore> playerRef = game.ownerRef;
-        Player player = store.getComponent(playerRef, Player.getComponentType());
+
+        Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
         ItemStack rodItem = player.getInventory().getActiveHotbarItem(); // TODO ensure that this is always actually the rod. (cancel minigame if switched off)
-        Vector3d playerPos = store.getComponent(playerRef, TransformComponent.getComponentType()).getPosition().clone();
+        Vector3d playerPos = commandBuffer.getComponent(playerRef, TransformComponent.getComponentType()).getPosition().clone();
 
         if(rodItem == null)
         {
+            AnglersAlmanac.LOGGER.atWarning().log("rodItem is null");
             return;
         }
         FishingRodData rodMeta = rodItem.getFromMetadataOrNull(FishingRodData.KEYED_CODEC);
@@ -65,12 +56,45 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
 
         switch (game.stateTrigger){
             case FISHMOVE:
-                game.nextFishMoveTime = new Random().nextFloat() * 3f;
+
+                // Reset timers for the next move.
+                game.nextFishMoveTime = new Random().nextFloat() * game.gameConfig.fishChangeDirectionMaxInterval;
                 game.fishMoveTimer = 0f;
-                float maxFishVel = AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishMaxVeocity;
-                game.fishVelocity = (maxFishVel*-1f) + new Random().nextFloat() * (maxFishVel - (maxFishVel*-1f));
-                if(game.fishPos <= 5) game.fishVelocity = Math.abs(game.fishVelocity); // Always ensure that fish moves away from edges if near top / bottom.
-                if(game.fishPos >= 95) game.fishVelocity = Math.abs(game.fishVelocity) * -1f; //  ^
+
+                // Set up important maths parameters.
+                float maxFishVel = game.gameConfig.fishMaxVeocity + game.gameConfig.fishBouyancy;
+                float minFishVel = (game.gameConfig.fishMaxVeocity*-1f) + game.gameConfig.fishBouyancy;
+                float strength = new Random().nextFloat();
+                // Apply minSpeed by pushing strength further away from 0.5 by factor of minSpeed/2.
+                if(strength > 0.5f - (game.gameConfig.fishMinSpeed / 2f) && strength <= 0.5f) strength = 0.5f - (game.gameConfig.fishMinSpeed / 2f);
+                if(strength < 0.5f + game.gameConfig.fishMinSpeed / 2f && strength > 0.5f) strength = 0.5f + (game.gameConfig.fishMinSpeed / 2f);
+
+                //strength = Math.clamp(strength, game.gameConfig.fishMinSpeed, 1.0f);
+                //AnglersAlmanac.LOGGER.atInfo().log("minFishVel: %s, maxFishVel: %s, fishMinSpeed: %s, strength: %s", minFishVel, maxFishVel, game.gameConfig.fishMinSpeed, strength);
+
+
+                // Override parameters for fish with "darting" behaviour.
+                if(game.fishHooked.getMinigameStats().behavior == MinigameBehaviour.DARTING){
+                    // Toggle between max speed and stopped.
+                    if(Math.abs(game.fishTargetVelocity) >= game.gameConfig.fishMaxVeocity ){
+                        maxFishVel = game.gameConfig.fishMaxVeocity * 0.1f;
+                        minFishVel = -game.gameConfig.fishMaxVeocity * 0.1f;
+                        //AnglersAlmanac.LOGGER.atInfo().log("Darting fish is calm");
+                    }else{
+                        strength = 1.0f;
+                        //AnglersAlmanac.LOGGER.atInfo().log("Darting fish go brrr");
+                    }
+                }
+
+                // Calculate random movement based on fish parameters.
+                game.fishTargetVelocity = ((minFishVel) + strength * (maxFishVel - minFishVel));
+                //AnglersAlmanac.LOGGER.atInfo().log("FISHMOVE new velocity: %s", game.fishTargetVelocity);
+
+                // Always ensure that fish moves away from edges if near top / bottom.
+                //AnglersAlmanac.LOGGER.atInfo().log("fishPos: %s", game.fishPos);
+                if(game.fishPos <= 0.1){game.fishTargetVelocity = Math.abs(game.fishTargetVelocity); }
+                if(game.fishPos >= 0.9){ game.fishTargetVelocity = Math.abs(game.fishTargetVelocity) * -1f; }
+
                 game.stateTrigger = MinigameComponent_TensionBar.Trigger.NOTRIGGER;
                 break;
             case FAIL:
@@ -80,9 +104,22 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 break;
             case SUCCESS:
                 //AnglersAlmanac.LOGGER.atInfo().log("YOU WIN");
+                Minigame.PerformanceRating  rating = game.getPerformanceRating(game.getPerformancePercentage());
+                //AnglersAlmanac.LOGGER.atInfo().log("Minigame performance rating = %s", rating);
+                if(rating == Minigame.PerformanceRating.FAIL) LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
                 // Deal rewards.
-                String lootID = MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
-                MinigameManager.DropLoot(lootID, player, commandBuffer,game.bobberRef);
+
+                if(game.fishHooked!=null)
+                {
+                    MinigameManager.DropLoot(game.fishHooked, player, commandBuffer,game.bobberRef,rating);
+                }
+                else {
+                    FishLootManager lootID = MinigameManager.FirstRoll(game.bobberRef, player, commandBuffer, store.getComponent(game.bobberRef, BobberComponent.getComponentType()).getWaterDepth());
+                    MinigameManager.DropLoot(lootID, player, commandBuffer,game.bobberRef,rating);
+                }
+                if(rating == Minigame.PerformanceRating.PERFECT){
+                    // TODO Deal chance of bonus loot.
+                }
 
                 // Finish fishing.
                 LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod);
@@ -92,13 +129,13 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
 
         // Do minigame logic.
 
-        PlayerRef playerRefObj = store.getComponent(playerRef, PlayerRef.getComponentType());
-        AudioPlayerComponent apc = store.getComponent(store.getExternalData().getRefFromUUID(game.audioPlayerId), AudioPlayerComponent.getComponentType());
+        PlayerRef playerRefObj = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+        AudioPlayerComponent apc = commandBuffer.getComponent(commandBuffer.getExternalData().getRefFromUUID(game.audioPlayerId), AudioPlayerComponent.getComponentType());
         apc.autoplayAsRandom = true;
 
         // Check if bar is over the fish and check win state.
-        if(game.fishPos < game.barPos +  AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius && game.fishPos > game.barPos - AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barRadius){
-            game.fightProgress += AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishReelRate * deltaTime;
+        if(game.fishPos < game.barPos +  game.gameConfig.barRadius && game.fishPos > game.barPos - game.gameConfig.barRadius){
+            game.fightProgress += game.gameConfig.fishReelRate * deltaTime;
 
             // Remove escape audio
             if(apc.hasSound(game.escapeSounds[0])) {
@@ -111,6 +148,8 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 apc.addSounds(game.reelInSounds);
             }
 
+            // Increment tick tracker.
+            game.ticksReeling++;
 
             // Check win condition.
             if(game.fightProgress >= 1.0f){
@@ -118,7 +157,7 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 return;
             }
         }else{
-            game.fightProgress -= AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().fishEscapeRate * deltaTime;
+            game.fightProgress -= game.gameConfig.fishEscapeRate * deltaTime;
 
             // Remove escape audio
             if(apc.hasSound(game.reelInSounds[0])) {
@@ -131,6 +170,8 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 apc.addSounds(game.escapeSounds);
             }
 
+            // Increment tick tracker.
+            game.ticksEscaping++;
 
             // Check lose condition.
             if(game.fightProgress <= 0f){
@@ -144,14 +185,20 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
             game.stateTrigger = MinigameComponent_TensionBar.Trigger.FISHMOVE;
         }
 
-        // Apply bar motion. (Rising is computed in MinigameInteraction by changing barVelocity)
-        game.barVelocity = Math.clamp(game.barVelocity - (AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barGravity*AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barAcceleration), -AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barGravity, AnglersAlmanac.MINIGAME_CONFIG_TENSIONBAR.get().barSpeed);
-        game.barPos = Math.clamp(game.barPos + (game.barVelocity * deltaTime), 0f, 1.0f);
+        // Apply bar gravity motion. (Rising is computed in MinigameInteraction by changing barVelocity)
+        game.barVelocity = Math.clamp(game.barVelocity - (game.gameConfig.barGravity*game.gameConfig.barAcceleration), -game.gameConfig.barGravity, game.gameConfig.barSpeed);
+        game.barPos = Math.clamp(game.barPos + (game.barVelocity * deltaTime), game.gameConfig.barRadius * 0.5f, 1.0f - (game.gameConfig.barRadius * 0.5f));
 
         // Apply fish movement.
+        float fishAccelStep = game.gameConfig.fishAcceleration * deltaTime * 10f;
+        game.fishVelocity = TransformUtils.lerp(game.fishVelocity, game.fishTargetVelocity, fishAccelStep);
         game.fishPos = Math.clamp(game.fishPos + (game.fishVelocity*deltaTime), 0f, 1.0f);
 
-        game.updateMinigameModelPositions(store);
+        // DEBUG
+        //game.fightProgress = 0.5f;
+        //game.fishPos = 0.5f;
+
+        game.updateMinigameModelPositions(commandBuffer, deltaTime);
         game.fishMoveTimer += deltaTime;
 
     }

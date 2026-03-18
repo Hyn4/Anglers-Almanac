@@ -3,7 +3,6 @@ package dev.rm20.anglersalmanac.Systems;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
-import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.shape.Box;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.SoundCategory;
@@ -13,14 +12,12 @@ import com.hypixel.hytale.server.core.modules.collision.CollisionModule;
 import com.hypixel.hytale.server.core.modules.collision.CollisionResult;
 import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.modules.physics.component.PhysicsValues;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import dev.rm20.anglersalmanac.AnglersAlmanac;
-import dev.rm20.anglersalmanac.components.PhysicsComponent;
-import dev.rm20.anglersalmanac.components.BobberComponent;
+import dev.rm20.anglersalmanac.Components.PhysicsComponent;
+import dev.rm20.anglersalmanac.Components.BobberComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -137,7 +134,7 @@ public class CustomPhysicsSystem extends EntityTickingSystem<EntityStore> {
     private void applyWaterForces(float dt, Vector3d position, Vector3d velocity, BobberComponent bobber, World world) {
         double waterTop = getWaterSurfaceLevel(world,position);
         bobber.setWaterDepth(calculateWaterDepth(world,position,waterTop));
-//        AnglersAlmanac.getInstance().getLogger().atInfo().log(String.valueOf(bobber.getWaterDepth()));
+//        AnglersAlmanac.LOGGER.atInfo().log(String.valueOf(bobber.getWaterDepth()));
         double targetY = waterTop - 0.25;
 
         double depthError = targetY - position.y;

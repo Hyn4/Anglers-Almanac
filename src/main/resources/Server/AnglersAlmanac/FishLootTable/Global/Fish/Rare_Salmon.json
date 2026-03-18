@@ -4,9 +4,9 @@
     "fish",
     "freshwater"
   ],
-  "Name": "Atlantic Salmon",
-  "Description": "A powerful swimmer prized for its rich flavor and acrobatic leaps.",
-  "FamilyId": "Salmon_family",
+  "Name": "Salmon",
+  "Description": "Acrobatic leaps are its hallmark, and this silver scaled fisherman is a true expert in the art of endurance. Though it avoids the Ocean, it is found all over the world in rivers and lakes, employing its muscular body to fight against the currents that would easily wash away other fish. Landing one is a true challenge to the skills of a fisherman.",
+  "FamilyId": "Salmonids",
   "Rarity": "Rare",
   "IsGlobal": true,
   "Weight": 115,
@@ -16,13 +16,9 @@
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
+
+
+   
     "Min_depth": 2,
     "Height": {
       "Min_y": 0,
@@ -35,7 +31,11 @@
   },
   "Minigame_stats": {
     "Difficulty": 7,
-    "Behavior": "sinker",
+    "Behavior": "Sinker",
     "Stamina": 60
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere:|    Except Oceans",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage7.ui"
   }
 }

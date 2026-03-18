@@ -5,33 +5,31 @@
     "Lava"
   ],
   "Name": "Lava Shellfish",
-  "Description": "A legendary terror.",
-  "FamilyId": "Shellfish_family",
+  "Description": "A living molten drill that thrives in the white-hot currents of the Devastated Lands. Its body is encased in cooling volcanic rock, and its single eye glows as it tracks movement through thick magma. Attempting to land one is like trying to reel in a jagged piece of the planet’s core – it’s heavy, hot, and mean.",
+  "FamilyId": "Dinichthyidae",
   "Rarity": "Legendary",
   "IsGlobal": false,
   "Weight": 35,
-  "Size": 35,
+  "Size": 70,
   "Habitats": {
-    "Zones": ["4"],
+    "Zones": [
+      "4"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
     "Min_depth": 3,
     "Height": {
-      "Min_y": 0,
+      "Min_y": 45,
       "Max_y": -1
     }
   },
   "Minigame_stats": {
     "Difficulty": 10,
-    "Behavior": "aggressive",
+    "Behavior": "Aggressive",
     "Stamina": 85
+  },
+  "Book_info": {
+    "Habitat_Info": "• Devastated Lands"
   }
 }

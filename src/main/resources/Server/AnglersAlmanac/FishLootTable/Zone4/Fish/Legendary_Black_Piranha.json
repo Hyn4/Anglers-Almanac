@@ -1,28 +1,23 @@
 {
-  "ItemId": "Fish_Black_Piranha_Item",
+  "ItemId": "Fish_Piranha_Black_Item",
   "Category": [
     "fish",
     "freshwater"
   ],
   "Name": "Piranha",
-  "Description": "A legendary terror of the murky depths.",
-  "FamilyId": "Piranha_family",
+  "Description": "This is no longer just a swamp-dweller, but something that’s been feasting on things from the void. It’s been eating creatures that are comprised of darkness, and so its scales are an obsidian color and its face is a mask of bone-white. It does not hunt for food, but for an unnatural aggression that’ll have it snapping at your line just to spread the void’s chill.",
+  "FamilyId": "Serrasalmidae",
   "Rarity": "Legendary",
   "IsGlobal": false,
   "Weight": 35,
   "Size": 35,
   "Habitats": {
-    "Zones": ["4"],
+    "Zones": [
+      "4"
+    ],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
     "Min_depth": 3,
     "Height": {
       "Min_y": 0,
@@ -31,7 +26,11 @@
   },
   "Minigame_stats": {
     "Difficulty": 10,
-    "Behavior": "aggressive",
+    "Behavior": "Aggressive",
     "Stamina": 85
+  },
+  "Book_info": {
+    "Habitat_Info": "• Devastated Lands",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage3.ui"
   }
 }

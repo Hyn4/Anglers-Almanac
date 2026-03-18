@@ -5,24 +5,19 @@
     "saltwater"
   ],
   "Name": "Pufferfish",
-  "Description": "Inflates into a prickly ball when threatened. Dangerous if handled poorly.",
-  "FamilyId": "Pufferfish_family",
+  "Description": "A spotted, wide-eyed box that turns into a prickly ball of self-defense. By gulping water to inflate, it turns into a high-risk discovery that commands respect. Handle this cute danger with caution, or you will soon learn why it is the most dangerous balloon in the sea.n in the sea. ",
+  "FamilyId": "tetraodontidae",
   "Rarity": "Rare",
   "IsGlobal": false,
   "Weight": 110,
-  "Size": 30,
+  "Size": 13,
   "Habitats": {
     "Zones": [],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
+
+   
     "Min_depth": 2,
     "Height": {
       "Min_y": 100,
@@ -31,7 +26,11 @@
   },
   "Minigame_stats": {
     "Difficulty": 8,
-    "Behavior": "floater",
+    "Behavior": "Floater",
     "Stamina": 35
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage2.ui"
   }
 }

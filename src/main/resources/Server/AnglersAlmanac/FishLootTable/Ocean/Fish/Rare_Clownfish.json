@@ -1,9 +1,12 @@
 {
-  "ItemId": "Fish_Tang_Blue_Item",
-  "Category": ["fish", "saltwater"],
-  "Name": "A small, bright orange fish with white bands.",
-  "Description": "Tang",
-  "FamilyId": "Clownfish_family",
+  "ItemId": "Fish_Clownfish_Item",
+  "Category": [
+    "fish",
+    "saltwater"
+  ],
+  "Name": "Clownfish",
+  "Description": "This little orange spark is a feisty one, flitting in and out of stinging anemones as if it owned the place. It has a special coating on its scales that prevents it from getting stung by its hosts—a useful trait for a fish that’s essentially a neon sign for predators. Spotting one is a good indication that a reef is nearby, and trouble won’t be far behind.",
+  "FamilyId": "Pomacentridae",
   "Rarity": "Rare",
   "IsGlobal": false,
   "Weight": 110,
@@ -19,9 +22,9 @@
       "Shore",
       "Beach"
     ],
-    "Time_of_day": ["Any"],
-    "Required_weather": ["Any"],
-    "Moon_phase": -1,
+
+
+   
     "Min_depth": 3,
     "Height": {
       "Min_y": 0,
@@ -30,7 +33,11 @@
   },
   "Minigame_stats": {
     "Difficulty": 8,
-    "Behavior": "darting",
+    "Behavior": "Darting",
     "Stamina": 80
+  },
+  "Book_info": {
+    "Habitat_Info": "• Oceans|• Shores and Beaches",
+    "Page_File_Ui": "Almanac/Fish/Pages/FishPage2.ui"
   }
 }

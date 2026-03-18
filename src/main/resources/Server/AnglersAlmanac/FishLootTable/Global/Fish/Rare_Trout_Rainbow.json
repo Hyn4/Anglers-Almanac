@@ -5,24 +5,17 @@
     "freshwater"
   ],
   "Name": "Rainbow Trout",
-  "Description": "A prize catch for any angler.",
-  "FamilyId": "Trout_family",
+  "Description": "A prize catch for any fisherman, the Rainbow Trout is a work of art in water design. It gets its name from the bright, multi-coloured stripe that shines along its sides like a new oil slick on the water's surface.",
+  "FamilyId": "salmonids",
   "Rarity": "Rare",
   "IsGlobal": true,
   "Weight": 110,
-  "Size": 45,
+  "Size": 60,
   "Habitats": {
     "Zones": [],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
     "Min_depth": 2,
     "Height": {
       "Min_y": 0,
@@ -31,7 +24,10 @@
   },
   "Minigame_stats": {
     "Difficulty": 5,
-    "Behavior": "darting",
+    "Behavior": "Darting",
     "Stamina": 45
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere"
   }
 }

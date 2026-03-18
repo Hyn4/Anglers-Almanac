@@ -4,25 +4,21 @@
     "fish",
     "freshwater"
   ],
-  "Name": "Common Minnow",
-  "Description": "A small, silver-scaled fish found in almost any body of water.",
-  "FamilyId": "minnow_family",
+  "Name": "Minnow",
+  "Description": "A small fish with scales of silver, found in any body of water, it is the ultimate world traveler of the shallows. Its sleek, metallic finish glints in the sunlight as it moves through the reeds.",
+  "FamilyId": "cyprinidae",
   "Rarity": "Common",
   "IsGlobal": true,
   "Weight": 200,
-  "Size": 15,
+  "Size": 5,
   "Habitats": {
     "Zones": [],
     "Tiers": [],
     "Regions": [],
     "Biomes": [],
-    "Time_of_day": [
-      "any"
-    ],
-    "Required_weather": [
-      "any"
-    ],
-    "Moon_phase": -1,
+
+
+   
     "Min_depth": 2,
     "Height": {
       "Min_y": 0,
@@ -35,7 +31,10 @@
   },
   "Minigame_stats": {
     "Difficulty": 2,
-    "Behavior": "steady",
+    "Behavior": "Steady",
     "Stamina": 15
+  },
+  "Book_info": {
+    "Habitat_Info": "• Everywhere:|    Except Oceans"
   }
 }
