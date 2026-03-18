@@ -1,19 +1,18 @@
 {
-  "ItemId": "Ingredient_Ice_Essence",
-  "Category": [
-    "material",
-    "ingredient"
-  ],
-  "Name": "Essence of Ice",
-  "Description": "A stick",
-  "FamilyId": "Essences",
+  "ItemId": "Plant_Fruit_Coconut",
+  "Name": "Coconut",
+  "FamilyId": "Fruit",
   "Rarity": "Junk",
   "IsGlobal": false,
   "Weight": 75,
-  "Size": 30,
   "Habitats": {
-    "Zones": [
-      "3"
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [
+      "Trenches",
+      "Shore",
+      "Beach"
     ],
     "Min_depth": 3,
     "Height": {

@@ -1,20 +1,17 @@
 {
-  "ItemId": "Ingredient_Water_Essence",
-  "Category": [
-    "material",
-    "ingredient"
-  ],
-  "Name": "Essence of Water",
-  "FamilyId": "Essences",
+  "ItemId": "Ingredient_Fabric_Scrap_Linen",
+  "Name": "Stick",
+  "FamilyId": "Junk_Global",
   "Rarity": "Junk",
-  "IsGlobal": false,
-  "Weight": 75,
+  "IsGlobal": true,
+  "Weight": 70,
   "Size": 30,
   "Habitats": {
-    "Zones": [
-      "1"
-    ],
-    "Min_depth": 3,
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [],
+    "Min_depth": 1,
     "Height": {
       "Min_y": 0,
       "Max_y": -1
@@ -26,6 +23,7 @@
     "Stamina": 0
   },
   "Quantity": {
+    "Min": 2,
     "Max": 4
   }
 }

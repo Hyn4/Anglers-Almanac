@@ -6,8 +6,8 @@
   ],
   "Name": "Essence of Fire",
   "Description": "A stick",
-  "FamilyId": "Junk",
-  "Rarity": "Essences",
+  "FamilyId": "Essences",
+  "Rarity": "Junk",
   "IsGlobal": false,
   "Weight": 75,
   "Size": 30,
@@ -25,5 +25,8 @@
     "Difficulty": 0,
     "Behavior": "None",
     "Stamina": 0
+  },
+  "Quantity": {
+    "Max": 4
   }
 }

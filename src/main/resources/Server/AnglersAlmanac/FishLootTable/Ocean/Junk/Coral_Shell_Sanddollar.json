@@ -1,19 +1,18 @@
 {
-  "ItemId": "Ingredient_Ice_Essence",
-  "Category": [
-    "material",
-    "ingredient"
-  ],
-  "Name": "Essence of Ice",
-  "Description": "A stick",
-  "FamilyId": "Essences",
+  "ItemId": "Deco_Coral_Shell_Sanddollar",
+  "Name": "Coral Shell Sanddollar",
+  "FamilyId": "Shell",
   "Rarity": "Junk",
   "IsGlobal": false,
-  "Weight": 75,
-  "Size": 30,
+  "Weight": 25,
   "Habitats": {
-    "Zones": [
-      "3"
+    "Zones": [],
+    "Tiers": [],
+    "Regions": [],
+    "Biomes": [
+      "Trenches",
+      "Shore",
+      "Beach"
     ],
     "Min_depth": 3,
     "Height": {

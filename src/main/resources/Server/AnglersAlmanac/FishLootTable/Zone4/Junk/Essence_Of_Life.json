@@ -25,5 +25,8 @@
     "Difficulty": 0,
     "Behavior": "None",
     "Stamina": 0
+  },
+  "Quantity": {
+    "Max": 4
   }
 }
