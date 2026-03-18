@@ -80,7 +80,16 @@ public class MinigameManager {
         switch (AnglersAlmanac.MOD_CONFIG.get().getMinigameToUse()) {
             case "TensionBar":
                 AnglersAlmanac.LOGGER.atInfo().log("Canceling TensionBar Minigame");
-                commandBuffer.getComponent(minigameRef, MinigameComponent_TensionBar.COMPONENT_TYPE).despawnSelf(commandBuffer.getExternalData().getWorld());
+                MinigameComponent_TensionBar minigame = commandBuffer.getComponent(minigameRef, MinigameComponent_TensionBar.COMPONENT_TYPE);
+                if(minigame == null)
+                {
+                    AnglersAlmanac.LOGGER.atWarning().log("Missing ref for minigame");
+                    return;
+                }
+                else
+                {
+                    minigame.despawnSelf(commandBuffer.getExternalData().getWorld());
+                }
                 break;
             case "NoMinigame":
                 break;
@@ -91,22 +100,33 @@ public class MinigameManager {
     }
 
 
-    public static void DoMinigameInteraction(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> minigameRef, @NonNull InteractionType interactionType, @NonNull InteractionContext context, @NonNull CooldownHandler cooldownHandler) {
+    public static boolean DoMinigameInteraction(CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> minigameRef, @NonNull InteractionType interactionType, @NonNull InteractionContext context, @NonNull CooldownHandler cooldownHandler) {
         switch (AnglersAlmanac.MOD_CONFIG.get().getMinigameToUse()) {
             case "TensionBar":
-                commandBuffer.getComponent(minigameRef, MinigameComponent_TensionBar.COMPONENT_TYPE).DoInteraction(interactionType, context, cooldownHandler);
+                MinigameComponent_TensionBar minigame = commandBuffer.getComponent(minigameRef, MinigameComponent_TensionBar.COMPONENT_TYPE);
+                if(minigame == null)
+                {
+                    CancelGame(commandBuffer,minigameRef);
+                    AnglersAlmanac.LOGGER.atWarning().log("Missing ref for minigame");
+                    return false;
+                }
+                else
+                {
+                    minigame.DoInteraction(interactionType, context, cooldownHandler);
+                }
                 break;
             case "NoMinigame":
                 break;
             default:
                 break;
         }
+        return true;
     }
 
 
     public static FishLootManager FirstRoll(Ref<EntityStore> bobberRef, Player player, CommandBuffer<EntityStore> commandBuffer, int depth) {
-        AnglersAlmanac.LOGGER.atInfo().log("Doing first roll");
-        AnglersAlmanac plugin = AnglersAlmanac.getInstance();
+        //AnglersAlmanac.LOGGER.atInfo().log("Doing first roll");
+        //AnglersAlmanac plugin = AnglersAlmanac.getInstance();
         Store<EntityStore> store = bobberRef.getStore();
 
         // Location
