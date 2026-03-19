@@ -1,5 +1,6 @@
 package dev.rm20.anglersalmanac;
 
+import com.al3x.HStats;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
