@@ -7,6 +7,7 @@ import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
@@ -53,7 +54,12 @@ public class MinigameInteraction extends SimpleInstantInteraction {
         {
             Player player = commandBuffer.getComponent(playerRef, Player.getComponentType());
             if (player == null) return;
-            LaunchBobberInteraction.updateMetadata(player.getInventory(), player.getInventory().getActiveHotbarSlot(), heldItem, null, null, 0);
+            InventoryComponent.Hotbar inv = player.getReference().getStore().getComponent(player.getReference(), InventoryComponent.Hotbar.getComponentType());
+            if(inv ==null)
+            {
+                return;
+            }
+            LaunchBobberInteraction.updateMetadata(inv, inv.getActiveSlot(), heldItem, null, null, 0);
             AnglersAlmanac.LOGGER.atInfo().log("Fixing busted rod for: "+player.getDisplayName());
         }
 

@@ -18,7 +18,7 @@ public class OnPlayerConnect {
         //AnglersAlmanac.LOGGER.atInfo().log("Player joined");
         PlayerRef playerRef1 = event.getPlayerRef();
         AlmanacBook.sendTranslations(playerRef1);
-        event.getPlayer().getInventory().markChanged();
+        //event.getPlayer().getInventory().markChanged();
         //AlmanacBook.syncOwnBookOnJoin(playerRef1);
     }
 }
