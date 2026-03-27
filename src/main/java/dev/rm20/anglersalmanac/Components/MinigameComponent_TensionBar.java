@@ -627,7 +627,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
     public void applyRodControlModifer(RodStats rodStats) {
         gameConfig.barSpeed *= rodStats.control;
         gameConfig.barGravity *= rodStats.control;
-        gameConfig.barAcceleration *= rodStats.control/2f;
+        gameConfig.barAcceleration *= rodStats.control/4f;
         //AnglersAlmanac.LOGGER.atInfo().log("Applying rod control! barSpeed = %s, barGravity = %s, barAccel = %s", gameConfig.barSpeed, gameConfig.barGravity, gameConfig.barAcceleration);
     }
 
