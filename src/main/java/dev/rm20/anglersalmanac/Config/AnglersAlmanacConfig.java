@@ -21,7 +21,7 @@ public class AnglersAlmanacConfig {
     public static final KeyedCodec<AnglersAlmanacConfig> KEYED_CODEC = new KeyedCodec<>(KEY, CODEC);
 
     private String minigameToUse = "TensionBar";
-    private Boolean ShouldUseBait = true;
+    private Boolean ShouldUseBait = false;
     public AnglersAlmanacConfig() {
     }
 

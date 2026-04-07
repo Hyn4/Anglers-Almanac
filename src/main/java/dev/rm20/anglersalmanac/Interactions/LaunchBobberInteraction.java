@@ -127,9 +127,14 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
         BobberComponent bobberComp = new BobberComponent();
         bobberComp.setPlayer(player);
         ItemStack bait = BaitUtils.findBait(player.getReference().getStore(), player.getReference());
+
         if (bait != null) {
             BaitUtils.removeBait(player,bait.getItemId());
             bobberComp.setBaitName(bait.getItemId());
+        }
+        else
+        {
+            BaitUtils.SendBaitNotification(player);
         }
         bobberHolder.addComponent(BobberComponent.getComponentType(), bobberComp);
         ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset("Bobber");
