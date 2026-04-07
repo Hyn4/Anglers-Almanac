@@ -41,31 +41,50 @@ public class FishingModifier {
 
     public static Modifiers mergeModifiers(FishingModifier.Modifiers... modifiers) {
         FishingModifier.Modifiers master = new FishingModifier.Modifiers();
-
-        java.util.List<FishingModifier> biomes = new java.util.ArrayList<>();
-        java.util.List<FishingModifier> zones = new java.util.ArrayList<>();
-        java.util.List<FishingModifier> regions = new java.util.ArrayList<>();
-        java.util.List<FishingModifier> families = new java.util.ArrayList<>();
-        java.util.List<FishingModifier> items = new java.util.ArrayList<>();
+        java.util.Map<String, Float> biomeMap = new java.util.HashMap<>();
+        java.util.Map<String, Float> zoneMap = new java.util.HashMap<>();
+        java.util.Map<String, Float> regionMap = new java.util.HashMap<>();
+        java.util.Map<String, Float> familyMap = new java.util.HashMap<>();
+        java.util.Map<String, Float> itemMap = new java.util.HashMap<>();
         float combinedDefault = 1.0f;
 
         for (FishingModifier.Modifiers mod : modifiers) {
             if (mod == null) continue;
-            if (mod.biomeModifiers != null) java.util.Collections.addAll(biomes, mod.biomeModifiers);
-            if (mod.zoneModifiers != null) java.util.Collections.addAll(zones, mod.zoneModifiers);
-            if (mod.regionModifiers != null) java.util.Collections.addAll(regions, mod.regionModifiers);
-            if (mod.familyModifiers != null) java.util.Collections.addAll(families, mod.familyModifiers);
-            if (mod.itemModifiers != null) java.util.Collections.addAll(items, mod.itemModifiers);
+
+            mergeIntoMap(biomeMap, mod.biomeModifiers);
+            mergeIntoMap(zoneMap, mod.zoneModifiers);
+            mergeIntoMap(regionMap, mod.regionModifiers);
+            mergeIntoMap(familyMap, mod.familyModifiers);
+            mergeIntoMap(itemMap, mod.itemModifiers);
+
             combinedDefault *= mod.defaultMultiplier;
         }
 
-        master.biomeModifiers = biomes.toArray(new FishingModifier[0]);
-        master.zoneModifiers = zones.toArray(new FishingModifier[0]);
-        master.regionModifiers = regions.toArray(new FishingModifier[0]);
-        master.familyModifiers = families.toArray(new FishingModifier[0]);
-        master.itemModifiers = items.toArray(new FishingModifier[0]);
+        master.biomeModifiers = mapToArray(biomeMap);
+        master.zoneModifiers = mapToArray(zoneMap);
+        master.regionModifiers = mapToArray(regionMap);
+        master.familyModifiers = mapToArray(familyMap);
+        master.itemModifiers = mapToArray(itemMap);
         master.defaultMultiplier = combinedDefault;
 
         return master;
+    }
+
+    private static void mergeIntoMap(java.util.Map<String, Float> map, FishingModifier[] mods) {
+        if (mods == null) return;
+        for (FishingModifier mod : mods) {
+            if (mod == null || mod.targetId == null) continue;
+            //if traget id matches then multiples the vaules
+            map.merge(mod.targetId, mod.chanceMultiplier, (oldVal, newVal) -> oldVal * newVal);
+        }
+    }
+
+    private static FishingModifier[] mapToArray(java.util.Map<String, Float> map) {
+        return map.entrySet().stream().map(entry -> {
+            FishingModifier fm = new FishingModifier();
+            fm.targetId = entry.getKey();
+            fm.chanceMultiplier = entry.getValue();
+            return fm;
+        }).toArray(FishingModifier[]::new);
     }
 }
