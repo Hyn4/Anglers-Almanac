@@ -147,6 +147,7 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
         ItemStack heldItem = interactionContext.getHeldItem();
 //        FishingRodData meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
         InventoryComponent.Hotbar inv = player.getReference().getStore().getComponent(player.getReference(), InventoryComponent.Hotbar.getComponentType());
+
         updateMetadata(inv, interactionContext.getHeldItemSlot(), heldItem, bobberId, null, 0);
         //play sound here
         int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Reel");
