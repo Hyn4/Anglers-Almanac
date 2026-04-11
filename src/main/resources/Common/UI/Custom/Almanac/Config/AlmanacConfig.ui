@@ -27,7 +27,7 @@ Group #Group {
       }
       $C.@CheckBoxWithLabel #XpEnabled {
         @Text = "XP from fishing";
-        TooltipText: "Requires a XP mod";
+        TooltipText: "[WIP] get xp from fishing if you have a XP mod";
         Padding: (Top: 10);
       }
     }
