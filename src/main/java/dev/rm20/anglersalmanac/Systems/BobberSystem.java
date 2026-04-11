@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Components.BobberComponent;
 import dev.rm20.anglersalmanac.Interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.Metadata.FishingRodData;
@@ -25,6 +26,8 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+
+import static dev.rm20.anglersalmanac.Utils.BaitUtils.SendBaitNotification;
 
 public class BobberSystem extends EntityTickingSystem<EntityStore> {
     private final Random random = new Random();
@@ -75,6 +78,7 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
             if (catchTime <= 0) {
                 // Fish escaped
                 component.setCanCatch(false);
+                component.setBaitName(null);
                 resetWaitTimer(component);
             } else {
                 component.setCatchTimer(catchTime);
@@ -82,6 +86,15 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
         } else {
             float timeUntilCatch = component.getTimeUntilCatch();
             if (timeUntilCatch <= 0) {
+                boolean requiresBait = AnglersAlmanac.MOD_CONFIG.get().getShouldUseBait();
+                String baitName = component.getBaitName();
+                if (requiresBait && (baitName == null || baitName.isEmpty())) {
+                    SendBaitNotification(player);
+                    AnglersAlmanac.LOGGER.atInfo().log("No bait on rod");
+                    resetWaitTimer(component);
+                    return;
+                }
+                AnglersAlmanac.LOGGER.atInfo().log(baitName);
                 // Fish bite logic
                 component.setCanCatch(true);
                 ParticleUtil.spawnParticleEffect("Fish_Alert", transform.getPosition().clone().add(0, 0.5, 0), store);
