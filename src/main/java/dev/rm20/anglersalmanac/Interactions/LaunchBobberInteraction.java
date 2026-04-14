@@ -218,7 +218,11 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
             if(meta.getBoundBobber() != null) {
                 Ref<EntityStore> bobberRef = world.getEntityStore().getRefFromUUID(meta.getBoundBobber());
                 if (bobberRef != null && bobberRef.isValid()) {
-                    commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+                    try {
+                        commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+                    } catch (RuntimeException e) {
+                        AnglersAlmanac.LOGGER.atWarning().withCause(e).log("Failed to remove bobber");
+                    }
                 }
                 meta.setBoundBobber(null);
             }
@@ -250,7 +254,11 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
             if(meta.getBoundBobber() != null) {
                 Ref<EntityStore> bobberRef = world.getEntityStore().getRefFromUUID(meta.getBoundBobber());
                 if (bobberRef != null && bobberRef.isValid()) {
-                    commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+                    try {
+                        commandBuffer.removeEntity(bobberRef, RemoveReason.REMOVE);
+                    } catch (RuntimeException e) {
+                        AnglersAlmanac.LOGGER.atWarning().withCause(e).log("Failed to remove bobber");
+                    }
                 } else if (bobberRef == null) {
                     updateMetadata(inv, inv.getActiveSlot(), heldItem, null, null, 0);
                 }

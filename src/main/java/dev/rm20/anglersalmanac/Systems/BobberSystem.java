@@ -42,7 +42,11 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
         {
             player = component.getPlayer();
             if (player == null) {
-                commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                try {
+                    commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                } catch (RuntimeException e) {
+                    AnglersAlmanac.LOGGER.atWarning().withCause(e).log("Failed to remove bobber");
+                }
                 return;
             }
 
@@ -54,7 +58,11 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
 
             if (!isLinked) {
                 if (fishingRod == null) {
-                    commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                    try {
+                        commandBuffer.removeEntity(archetypeChunk.getReferenceTo(i), RemoveReason.REMOVE);
+                    } catch (RuntimeException e) {
+                        AnglersAlmanac.LOGGER.atWarning().withCause(e).log("Failed to remove bobber");
+                    }
                 } else {
                     LaunchBobberInteraction.cancelFishing(commandBuffer, player, fishingRod, slot);
                 }

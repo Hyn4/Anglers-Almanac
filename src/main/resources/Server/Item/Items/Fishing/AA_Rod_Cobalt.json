@@ -11,34 +11,6 @@
   "Quality": "Uncommon",
   "MaxStack": 1,
   "ItemLevel": 1,
-  "Recipe": {
-    "TimeSeconds": 1.0,
-    "Input": [
-      {
-        "ResourceTypeId": "Ingredient_Bar_Cobalt",
-        "Quantity": 4
-      },
-      {
-        "Quantity": 3,
-        "ItemId": "Ingredient_Fabric_Scrap_Linen"
-      }
-    ],
-    "BenchRequirement": [
-      {
-        "Type": "Crafting",
-        "Categories": [
-          "Farming"
-        ],
-        "Id": "Farmingbench"
-      },
-      {
-        "Id": "Workbench",
-        "Categories": [
-          "Workbench_Tools"
-        ]
-      }
-    ]
-  },
   "Interactions": {
     "Secondary": {
       "Interactions": [
