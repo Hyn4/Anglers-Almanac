@@ -641,6 +641,7 @@ public class MinigameComponent_TensionBar  extends Minigame implements Component
     @Override
     public void applyRodForgivenessModifer(RodStats rodStats) {
         //AnglersAlmanac.LOGGER.atInfo().log("Applying rod forgiveness");
+        gameConfig.fishReelRate *= rodStats.forgiveness / 5f;
     }
 
     @Override
