@@ -45,7 +45,7 @@ public class HabitatCommand extends AbstractPlayerCommand {
             // Position Info
             var transform = store.getComponent(ref, TransformComponent.getComponentType());
             if (transform == null) return;
-            double y = transform.getPosition().getY();
+            double y = transform.getPosition().y;
 
             // Time & Moon Info
             WorldTimeResource timeResource = store.getResource(WorldTimeResource.getResourceType());

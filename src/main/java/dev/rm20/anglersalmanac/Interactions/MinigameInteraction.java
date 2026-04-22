@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
@@ -60,7 +61,10 @@ public class MinigameInteraction extends SimpleInstantInteraction {
                 return;
             }
             LaunchBobberInteraction.updateMetadata(inv, inv.getActiveSlot(), heldItem, null, null, 0);
-            AnglersAlmanac.LOGGER.atInfo().log("Fixing busted rod for: "+player.getDisplayName());
+            PlayerRef playerRefComp = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
+            if(playerRefComp !=null) {
+                AnglersAlmanac.LOGGER.atInfo().log("Fixing busted rod for: "+playerRefComp.getUsername());
+            }
         }
 
     }

@@ -20,6 +20,7 @@ import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Components.BobberComponent;
 import dev.rm20.anglersalmanac.Interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.Metadata.FishingRodData;
+import org.joml.Vector3d;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -105,7 +106,7 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 AnglersAlmanac.LOGGER.atInfo().log(baitName);
                 // Fish bite logic
                 component.setCanCatch(true);
-                ParticleUtil.spawnParticleEffect("Fish_Alert", transform.getPosition().clone().add(0, 0.5, 0), store);
+                ParticleUtil.spawnParticleEffect("Fish_Alert", new Vector3d(transform.getPosition()).add(0, 0.5, 0), store);
                 //Audio
                 int audio = SoundEvent.getAssetMap().getIndex("AA_Fishing_Bubble");
                 World world = store.getExternalData().getWorld();

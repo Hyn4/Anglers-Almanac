@@ -165,7 +165,7 @@ public class MinigameManager {
         if (transform == null) return null;
 
 //        double x = transform.getPosition().getX();
-        double y = transform.getPosition().getY();
+        double y = transform.getPosition().y;
 //        double z = transform.getPosition().getZ();
 
         // time info

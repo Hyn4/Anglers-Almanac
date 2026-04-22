@@ -37,7 +37,7 @@ public class SimulateFishingCommand extends AbstractPlayerCommand {
     protected void execute(@Nonnull CommandContext commandContext, @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull PlayerRef playerRef, @Nonnull World world) {
         if (!(commandContext.sender() instanceof Player player)) return;
         var transform = store.getComponent(ref, TransformComponent.getComponentType());
-        double y = (transform != null) ? transform.getPosition().getY() : 0;
+        double y = (transform != null) ? transform.getPosition().y : 0;
 
         WorldTimeResource timeResource = store.getResource(WorldTimeResource.getResourceType());
         TimePeriod timeKeyword = TimeUtils.getTimePeriod(timeResource.getGameTime().toString());

@@ -92,19 +92,21 @@ public class OpenBookInteraction extends SimpleInstantInteraction {
 
     private BookData initializeNewBook(Ref<EntityStore> playerRef, Player player, ItemStack heldItem) {
         UUIDComponent uuidComp = playerRef.getStore().getComponent(playerRef, UUIDComponent.getComponentType());
+
         if (uuidComp == null) return null;
 
         String uuidStr = uuidComp.getUuid().toString();
 
-        BookData newData = new BookData();
-        newData.setPlayerUUID(uuidStr);
-        newData.setPlayerName(player.getDisplayName());
-        newData.setPageNumber(0);
+
 
         //ItemStack updatedItem = heldItem.withMetadata(BookData.KEYED_CODEC, newData);
         byte slot = player.getInventory().getActiveHotbarSlot();
         PlayerRef playerRefComp = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
 
+        BookData newData = new BookData();
+        newData.setPlayerUUID(uuidStr);
+        newData.setPlayerName(playerRefComp.getUsername());
+        newData.setPageNumber(0);
 
         if (playerRefComp != null) {
             Item newbook = syncCustomBookDisplay(playerRefComp, newData.getPlayerUUID(), newData.getPlayerName());

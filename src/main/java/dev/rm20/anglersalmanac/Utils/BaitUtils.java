@@ -116,7 +116,7 @@ public class BaitUtils {
                     icon,
                     NotificationStyle.Success);
         } catch (Exception e) {
-            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + player.getDisplayName() + ": " + e.getMessage());
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + playerRef1.getUsername() + ": " + e.getMessage());
         }
     }
 
@@ -139,7 +139,7 @@ public class BaitUtils {
                     icon
                     );
         } catch (Exception e) {
-            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + player.getDisplayName() + ": " + e.getMessage());
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + playerRef1.getUsername() + ": " + e.getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ public class BaitUtils {
                     NotificationStyle.Danger
                     );
         } catch (Exception e) {
-            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + player.getDisplayName() + ": " + e.getMessage());
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to send notification to " + playerRef1.getUsername() + ": " + e.getMessage());
         }
     }
 

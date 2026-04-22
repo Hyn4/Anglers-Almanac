@@ -34,7 +34,7 @@ public class OpenConfig extends AbstractPlayerCommand {
             commandContext.sendMessage(Message.raw("This command can only be run by a player!"));
             return;
         }
-        if(!((Player) commandContext.sender()).hasPermission("AnglersAlmanac.admin"))
+        if(!commandContext.sender().hasPermission("AnglersAlmanac.admin"))
         {
             commandContext.sendMessage(Message.raw("You do not have permission to run this command"));
             return;

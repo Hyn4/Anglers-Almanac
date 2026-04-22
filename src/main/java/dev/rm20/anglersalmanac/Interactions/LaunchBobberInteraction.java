@@ -3,9 +3,12 @@ package dev.rm20.anglersalmanac.Interactions;
 
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.*;
+import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
@@ -13,7 +16,6 @@ import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -75,7 +77,10 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
             }
 
             if (shouldReset) {
-                AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata for: "+player.getDisplayName());
+                PlayerRef playerRef1 = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
+                if (playerRef1 != null) {
+                    AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata for: "+playerRef1.getUsername());
+                }
                 cancelFishing(commandBuffer, player, heldItem);
                 meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
             }
@@ -108,15 +113,15 @@ public class LaunchBobberInteraction extends SimpleInstantInteraction {
         Ref<EntityStore> playerRef = interactionContext.getOwningEntity();
         TransformComponent transform = playerRef.getStore().getComponent(playerRef, TransformComponent.getComponentType());
         Transform lookTransform = TargetUtil.getLook(playerRef, commandBuffer);
-        Vector3d spawnPos = transform.getPosition().clone();
+        Vector3d spawnPos = new Vector3d(transform.getPosition());
         spawnPos.add(0, 1.5, 0);
         Vector3d lookDir = lookTransform.getDirection();
         Vector3d launchVelocity = new Vector3d(lookDir.x * 15, (lookDir.y * 15) + 2, lookDir.z * 15);
         Holder<EntityStore> bobberHolder = EntityStore.REGISTRY.newHolder();
-        Vector3f rotation = new Vector3f();
+        Rotation3f rotation = new Rotation3f();
         HeadRotation playerHead = commandBuffer.getComponent(playerRef, HeadRotation.getComponentType());
         if (playerHead != null) {
-            rotation.setYaw(playerHead.getRotation().getYaw() + (float) (Math.PI / 180.0) * 180.0F);
+            rotation.setYaw(playerHead.getRotation().yaw() + (float) (Math.PI / 180.0) * 180.0F);
         }
 
         bobberHolder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rotation));
