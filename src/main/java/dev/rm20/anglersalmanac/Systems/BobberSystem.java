@@ -10,6 +10,7 @@ import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
@@ -52,8 +53,8 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 }
                 return;
             }
-
-            ItemStack heldItem = player.getInventory().getItemInHand();
+            InventoryComponent.Hotbar inv = player.getReference().getStore().getComponent(player.getReference(), InventoryComponent.Hotbar.getComponentType());
+            ItemStack heldItem = inv != null ? inv.getActiveItem() : null;
             FishingRodData meta = (heldItem != null) ? heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC) : null;
             UUIDComponent uuidComp = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
             UUID bobberUuid = (uuidComp != null) ? uuidComp.getUuid() : null;
@@ -73,7 +74,7 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                 }
                 return;
             }
-            slot = player.getInventory().getActiveHotbarSlot();
+            slot = inv.getActiveSlot();
             fishingRod = heldItem;
         } else {
             player = null;
