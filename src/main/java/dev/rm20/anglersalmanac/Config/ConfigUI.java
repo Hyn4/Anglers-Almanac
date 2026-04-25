@@ -42,7 +42,6 @@ public class ConfigUI extends InteractiveCustomUIPage<ConfigUI.BindingData> {
         uiCommandBuilder.append("Almanac/Config/AlmanacConfig.ui");
 
         var config = AnglersAlmanac.MOD_CONFIG;
-
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#BaitRequired #CheckBox", EventData.of("@BaitRequired", "#BaitRequired #CheckBox.Value"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#XpEnabled #CheckBox", EventData.of("@XpEnabled", "#XpEnabled #CheckBox.Value"), false);
         uiEventBuilder.addEventBinding(CustomUIEventBindingType.ValueChanged, "#TensionBarEnabled #CheckBox", EventData.of("@TensionBarEnabled", "#TensionBarEnabled #CheckBox.Value"), false);
