@@ -80,7 +80,7 @@ public class SimulateFishingCommand extends AbstractPlayerCommand {
         }
 
         logSimulation(locationInfo, results, totalRolls, failures);
-        commandContext.sendMessage(Message.translation("cmd.sim.done"));
+        commandContext.sendMessage(Message.translation("anglersalmanac.cmd.sim.done"));
     }
 
 
