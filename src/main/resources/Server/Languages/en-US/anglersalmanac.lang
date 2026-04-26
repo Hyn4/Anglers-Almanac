@@ -2,6 +2,7 @@
 # Angler's Almanac - English (US) Translation File
 # Language: en-US
 # Keys format: {category}.{key}
+# Usage: anglersalmanac.{category}.{key}
 # ============================================================
 
 ### Command general error
@@ -22,7 +23,8 @@ cmd.sim.done = Simulation complete. Check server console for breakdown.
 
 
 ### Config UI
-config.tensionBar.text = Enable TensionBar
+config.label = Anglers Almanac's Config
+config.tensionBar.text = Enable TensionBar test
 config.tensionBar.tooltip = Enabled the Stardew Valley minigame, turning it off means no no minigame
 
 config.baitRequired.text = Require Bait to fish
