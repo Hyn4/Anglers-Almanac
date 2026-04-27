@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 import org.gradle.internal.os.OperatingSystem
@@ -39,4 +40,16 @@ base {
 }
 tasks.named('jar') {
     archiveFileName.set("AnglersAlmanac-API-${version}.jar")
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            groupId = "com.github.rm20killer"
+            artifactId = "api"
+            version = "${version}"
+        }
+    }
 }
