@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '../../Core/src/main/resources/Server/Languages/**'
+      - '../../core/src/main/resources/Server/Languages/**'
 
 jobs:
   copy-to-translation:
