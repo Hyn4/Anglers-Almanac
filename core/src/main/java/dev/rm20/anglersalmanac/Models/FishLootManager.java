@@ -14,7 +14,6 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.validation.Validators;
-import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Metadata.FishingContext;
 import dev.rm20.anglersalmanac.Metadata.FishingModifier;
 import dev.rm20.anglersalmanac.Registration.HytaleAsset;
@@ -126,7 +125,7 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
             .addValidator(Validators.min(0)).add()
             .appendInherited(new KeyedCodec<>("Size", Codec.INTEGER), (t, v) -> t.size = v, t -> t.size, (t, p) -> t.size = p.size)
             .addValidator(Validators.min(0)).add()
-            .appendInherited(new KeyedCodec<>("Quantity", Quantity_CODEC), (t, v) -> t.quantity = v, t -> t.quantity, (t, p) -> t.quantity = p.quantity).add()
+            .appendInherited(new KeyedCodec<>("Quantity", Quantity_CODEC), (t, v) -> t.quantity = (FishLoot.Quantity) v, t -> t.quantity, (t, p) -> t.quantity = p.quantity).add()
             .appendInherited(new KeyedCodec<>("IsGlobal", Codec.BOOLEAN), (t, v) -> t.isGlobal = v, t -> t.isGlobal, (t, p) -> t.isGlobal = p.isGlobal).add()
             .appendInherited(new KeyedCodec<>("Habitats", HABITATS_CODEC), (t, v) -> t.habitats = v, t -> t.habitats, (t, p) -> t.habitats = p.habitats).add()
             .appendInherited(new KeyedCodec<>("Minigame_stats", STATS_CODEC), (t, v) -> t.minigameStats = v, t -> t.minigameStats, (t, p) -> t.minigameStats = p.minigameStats).add()
@@ -147,17 +146,7 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
     private String id;
     private AssetExtraInfo.Data data;
 
-    private String itemID;
-    private String name;
-    private String description;
-    private String familyId;
-    private String rarity;
-    private int weight;
     private int size;
-    private boolean isGlobal;
-    private Quantity quantity;
-    private Habitats habitats;
-    private MinigameStats minigameStats;
     private BookInfo bookInfo;
 
     public FishLootManager() {
@@ -168,90 +157,18 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
         return id;
     }
 
-    public String getItemID() {
-        return itemID;
-    }
-
-    public Habitats getHabitats() {
-        return habitats;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public boolean isGlobal() {
-        return isGlobal;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getFamilyId() {
-        return familyId;
-    }
-
-    public String getRarity() {
-        return rarity;
-    }
-
-    public Quantity getQuantity() {
-        return quantity;
-    }
 
     public BookInfo getBookInfo() {
         return bookInfo;
     }
     // Classes used by BuilderCodec
 
-    public static class Habitats {
-        public String[] zones = new String[0];
-        public Integer[] tier = new Integer[0];
-        public String[] regions = new String[0];
-        public String[] biomes = new String[0];
-        public TimePeriod[] time_of_day = new TimePeriod[0];
-        public String[] required_weather = new String[0];
-        public Integer[] moon_phase = new Integer[0];
-        public int min_depth = 0;
-        public Height height = new Height(0, -1);
-        public String[] exclude_zones = new String[0];
-        public Integer[] exclude_tiers = new Integer[0];
-        public String[] exclude_biomes = new String[0];
-        public String[] exclude_regions = new String[0];
-        //public ExcludeHabitats excludeHabitats;
-        public float weight_multiplier = 0.0f;
-    }
 
     public static class ExcludeHabitats {
         Map<String, Float> exclude_zones = new HashMap<>();
     }
 
 
-    public static class Height {
-        public int min_y;
-        public int max_y;
-
-        public Height(int min, int max) {
-            this.min_y = min;
-            this.max_y = max;
-        }
-    }
-
-    public static class MinigameStats {
-        public int difficulty = 1;
-        public MinigameBehaviour behavior = MinigameBehaviour.NONE;
-        public int stamina = 1;
-    }
-
-    public static class Quantity {
-        public int min_amount = 1;
-        public int max_amount = 1;
-    }
 
     public static class BookInfo {
         public String image_file;
@@ -279,37 +196,6 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
         geoLootCache.invalidateAll();
     }
 
-    @Deprecated
-    public static FishLootManager getRandomWeightedLoot(FishingContext ctx) {
-        GeoKey key = new GeoKey(ctx.biome(), ctx.region(), ctx.zone(), ctx.tier());
-        List<FishLootManager> geoPossible = geoLootCache.get(key);
-
-        List<FishLootManager> possibleLoot = new ArrayList<>();
-        int totalWeight = 0;
-        for (FishLootManager loot : Objects.requireNonNull(geoPossible)) {
-            if (checkEnvironment(loot, ctx)) {
-                int w = loot.getExclusionWeight(loot, ctx);
-                if (w > 0) {
-                    possibleLoot.add(loot);
-                    totalWeight += w;
-                }
-            }
-        }
-
-        if (possibleLoot.isEmpty()) {
-            AnglersAlmanac.LOGGER.atInfo().log("No eligible fish found for this context!");
-            return null;
-        }
-
-        int randomIndex = ThreadLocalRandom.current().nextInt(totalWeight);
-        int currentSum = 0;
-
-        for (FishLootManager loot : possibleLoot) {
-            currentSum += loot.getExclusionWeight(loot, ctx);
-            if (randomIndex < currentSum) return loot;
-        }
-        return possibleLoot.getFirst();
-    }
 
     public static FishLootManager getRandomWeightedLoot(FishingContext ctx, @Nullable FishingModifier.Modifiers modifiers) {
         GeoKey key = new GeoKey(ctx.biome(), ctx.region(), ctx.zone(), ctx.tier());
@@ -467,17 +353,6 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
         }
 
         return this.weight;
-    }
-
-    public MinigameStats getMinigameStats() {
-        if(minigameStats == null)
-        {
-            MinigameStats stats = new MinigameStats();
-            stats.stamina=0;
-            stats.difficulty=0;
-            stats.behavior=MinigameBehaviour.NONE;
-        }
-        return minigameStats;
     }
 
 

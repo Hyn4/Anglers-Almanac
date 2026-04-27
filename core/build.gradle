@@ -36,8 +36,6 @@ if (!hasHytaleHome) {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(java_version)
-    withSourcesJar()
-    withJavadocJar()
 }
 
 // Quiet warnings about missing Javadocs.

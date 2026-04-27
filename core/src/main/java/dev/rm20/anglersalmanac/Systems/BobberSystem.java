@@ -23,7 +23,6 @@ import dev.rm20.anglersalmanac.Metadata.FishingRodData;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 

@@ -71,7 +71,7 @@ public class SimulateFishingCommand extends AbstractPlayerCommand {
         int failures = 0;
 
         for (int i = 0; i < totalRolls; i++) {
-            FishLootManager lootEntry = FishLootManager.getRandomWeightedLoot(locationInfo);
+            FishLootManager lootEntry = FishLootManager.getRandomWeightedLoot(locationInfo, null);
             if (lootEntry != null && lootEntry.getItemID() != null) {
                 results.merge(lootEntry.getItemID(), 1, Integer::sum);
             } else {

@@ -15,6 +15,7 @@ idea {
                 if (coreProj.ext.has('createServerRunArguments')) {
                     'HytaleServer'(org.jetbrains.gradle.ext.Application) {
                         mainClass = 'com.hypixel.hytale.Main'
+                        moduleName = 'AnglersAlmanac.core.main'
                         programParameters = coreProj.ext.createServerRunArguments(coreProj.sourceSets.main.java.srcDirs.first().parentFile.absolutePath)
                         workingDirectory = coreProj.ext.serverRunDir.absolutePath
                     }

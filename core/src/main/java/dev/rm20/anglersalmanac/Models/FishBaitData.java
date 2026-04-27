@@ -9,7 +9,6 @@ import com.hypixel.hytale.assetstore.map.JsonAssetWithMap;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import dev.rm20.anglersalmanac.Metadata.FishingModifier;
-import dev.rm20.anglersalmanac.Metadata.RodStats;
 import dev.rm20.anglersalmanac.Registration.HytaleAsset;
 
 @HytaleAsset(

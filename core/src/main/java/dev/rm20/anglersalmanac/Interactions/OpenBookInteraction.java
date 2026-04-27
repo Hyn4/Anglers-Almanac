@@ -15,7 +15,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import dev.rm20.anglersalmanac.AlmanacBook.AlmanacRepository;
 import dev.rm20.anglersalmanac.AlmanacBook.BookPageManager;
-import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Metadata.BookData;
 
 import javax.annotation.Nonnull;
