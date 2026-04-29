@@ -14,9 +14,11 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.codec.codecs.EnumCodec;
 import com.hypixel.hytale.codec.codecs.array.ArrayCodec;
 import com.hypixel.hytale.codec.validation.Validators;
+import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Metadata.FishingContext;
 import dev.rm20.anglersalmanac.Metadata.FishingModifier;
 import dev.rm20.anglersalmanac.Registration.HytaleAsset;
+import dev.rm20.anglersalmanac.Utils.Validator.GameIcon;
 import dev.rm20.anglersalmanac.Utils.Validator.MinigameBehaviour;
 import dev.rm20.anglersalmanac.Utils.Validator.TimePeriod;
 
@@ -101,6 +103,7 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
             .addValidator(Validators.nonNull()).add()
             .append(new KeyedCodec<>("Stamina", Codec.INTEGER), (s, v) -> s.stamina = v, s -> s.stamina)
             .addValidator(Validators.nonNull()).add()
+            .append(new KeyedCodec<> ("GameIcon", new EnumCodec<>(GameIcon.class)), (s, v) -> s.gameIcon = v, s -> s.gameIcon).add()
             .build();
 
 
@@ -114,7 +117,9 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
                     t -> t.data
             )
             .appendInherited(new KeyedCodec<>("ItemId", Codec.STRING), (t, v) -> t.itemID = v, t -> t.itemID, (t, p) -> t.itemID = p.itemID)
-            .addValidator(Validators.nonEmptyString()).add()
+            .add()
+            .appendInherited(new KeyedCodec<>("EntityId", Codec.STRING), (t, v) -> t.entityID = v, t -> t.entityID, (t, p) -> t.entityID = p.entityID)
+            .add()
             .appendInherited(new KeyedCodec<>("Name", Codec.STRING), (t, v) -> t.name = v, t -> t.name, (t, p) -> t.name = p.name)
             .addValidator(Validators.nonEmptyString()).add()
             .appendInherited(new KeyedCodec<>("Description", Codec.STRING), (t, v) -> t.description = v, t -> t.description, (t, p) -> t.description = p.description).add()
@@ -211,6 +216,7 @@ public class FishLootManager extends FishLoot implements JsonAssetWithMap<String
                 if (weight > 0) {
                     if (modifiers != null) {
                         weight *= calculateFinalMultiplier(loot, ctx, modifiers);
+                        AnglersAlmanac.LOGGER.atInfo().log(loot.getId() + ":" + weight);
                     }
 
                     if (weight > 0) {

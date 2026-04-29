@@ -1,10 +1,12 @@
 package dev.rm20.anglersalmanac.Models;
 
+import dev.rm20.anglersalmanac.Utils.Validator.GameIcon;
 import dev.rm20.anglersalmanac.Utils.Validator.MinigameBehaviour;
 import dev.rm20.anglersalmanac.Utils.Validator.TimePeriod;
 
 public class FishLoot {
     protected String itemID;
+    protected String entityID;
     protected String name;
     protected String description;
     protected String familyId;
@@ -18,7 +20,13 @@ public class FishLoot {
 
     // Getters
     public String getItemID() {
+        if(itemID == null) {
+            return "entity:"+entityID;
+        }
         return itemID;
+    }
+    public String getEntityID() {
+        return entityID;
     }
     public String getName() {
         return name;
@@ -77,6 +85,7 @@ public class FishLoot {
         public int difficulty = 1;
         public MinigameBehaviour behavior = MinigameBehaviour.NONE;
         public int stamina = 1;
+        public GameIcon gameIcon = GameIcon.FISH;
     }
 
     public static class Quantity {

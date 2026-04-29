@@ -1,8 +1,12 @@
 package dev.rm20.anglersalmanac.MinigameManager;
 
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.protocol.ChangeVelocityType;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.HytaleServer;
@@ -14,20 +18,26 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.modules.projectile.system.StandardPhysicsTickSystem;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.WorldMapTracker;
+import com.hypixel.hytale.server.core.universe.world.npc.INonPlayerCharacter;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
+import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.npc.util.InventoryHelper;
 import dev.rm20.anglersalmanac.AlmanacBook.BookPageManager;
 import dev.rm20.anglersalmanac.AnglersAlmanac;
 import dev.rm20.anglersalmanac.Components.BobberComponent;
 import dev.rm20.anglersalmanac.Components.MinigameComponent_TensionBar;
+import dev.rm20.anglersalmanac.Components.PhysicsComponent;
 import dev.rm20.anglersalmanac.IEvents.LootCaughtEvent;
 import dev.rm20.anglersalmanac.Interactions.LaunchBobberInteraction;
 import dev.rm20.anglersalmanac.Metadata.FishingContext;
@@ -39,6 +49,7 @@ import dev.rm20.anglersalmanac.Models.FishLootManager;
 import dev.rm20.anglersalmanac.Models.MinigameRodStats;
 import dev.rm20.anglersalmanac.Utils.EnvironmentParser;
 import dev.rm20.anglersalmanac.Utils.TimeUtils;
+import it.unimi.dsi.fastutil.Pair;
 import org.jspecify.annotations.NonNull;
 
 import java.awt.*;
@@ -219,6 +230,7 @@ public class MinigameManager {
         if (lootEntry == null) {
             return FishLootManager.getFishData("Stick");
         }
+        AnglersAlmanac.LOGGER.atInfo().log(lootEntry.getId());
         String lootID = lootEntry.getItemID();
         return lootEntry;
 
@@ -238,7 +250,49 @@ public class MinigameManager {
     }
 
     public static void DropLoot(FishLootManager loot, Player player, CommandBuffer<EntityStore> commandBuffer, Ref<EntityStore> bobberRef, int rating) {
+        AnglersAlmanac.LOGGER.atInfo().log(loot.getItemID());
         if (loot == null) return;
+        if (loot.getEntityID() !=null)
+        {
+            AnglersAlmanac.LOGGER.atInfo().log("Spawning entity");
+            //spawn entity
+            World world = player.getWorld();
+            Store<EntityStore> store = world.getEntityStore().getStore();
+            Vector3d position = bobberRef.getStore().getComponent(bobberRef, TransformComponent.getComponentType()).getPosition();
+            position.setY(position.getY() + 2);
+            TransformComponent transform = player.getReference().getStore().getComponent(player.getReference(), TransformComponent.getComponentType());
+            Vector3d PlayerPos = transform.getPosition();
+            Vector3d direction = PlayerPos.clone().subtract(position).normalize();
+            Vector3f lookat = new Vector3f(Vector3f.lookAt(position, PlayerPos.toVector3f()));
+            world.execute(() -> {
+                Pair<Ref<EntityStore>, INonPlayerCharacter> result = NPCPlugin.get().spawnNPC(store, "Feran_Cub", null, position, lookat);
+
+                if (result != null) {
+                    Ref<EntityStore> npcRef = result.first();
+                    INonPlayerCharacter npc = result.second();
+                    Vector3d launchVelocity = new Vector3d(direction.x * 15, 1, direction.z * 15).scale(30);
+                    Velocity velocity = npcRef.getStore().getComponent(npcRef, Velocity.getComponentType());
+                    if (velocity != null) {
+                        AnglersAlmanac.LOGGER.atInfo().log("applied velocity");
+                        AnglersAlmanac.LOGGER.atInfo().log(launchVelocity.toString());
+                        velocity.addInstruction(launchVelocity, null, ChangeVelocityType.Add);
+                    }
+                    else
+                    {
+                        AnglersAlmanac.LOGGER.atInfo().log("applied velocity with new compoent");
+                        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
+                        holder.addComponent(Velocity.getComponentType(), new Velocity(launchVelocity));
+                    }
+                    HeadRotation headRotation = npcRef.getStore().getComponent(npcRef, HeadRotation.getComponentType());
+                    if (headRotation != null) {
+                        headRotation.setRotation(Vector3f.ZERO);
+                    }
+                }
+            });
+
+            SaveLoot(player, loot, rating);
+            return;
+        }
         if (loot.getItemID() == null) return;
         ItemStack fishStack;
         fishStack = InventoryHelper.createItem(loot.getItemID());

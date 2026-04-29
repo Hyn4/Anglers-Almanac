@@ -110,7 +110,7 @@ public class StatUiPage extends InteractiveCustomUIPage<pageUtils.AlmanacGuiData
                     if(item.isValid())
                     {
                         String itemName =  Message.translation(item.getItem().getTranslationKey()).getAnsiMessage();
-                        if(itemName.isEmpty())
+                        if(itemName.isEmpty()||itemName.equals("server.items.Unknown.name"))
                         {
                             uiCommandBuilder.set(labelId + ".TextSpans", Message.raw("- " + loot.getName() + " : " + entry.getValue()));
                         }
