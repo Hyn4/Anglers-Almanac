@@ -9,6 +9,7 @@ public class FishLoot {
     protected String entityID;
     protected String name;
     protected String description;
+    protected String[] category;
     protected String familyId;
     protected String rarity;
     protected int weight;
@@ -35,6 +36,7 @@ public class FishLoot {
     public String getDescription() {
         return description;
     }
+    public String[] getCategory() { return category; }
     public String getFamilyId() {
         return familyId;
     }
@@ -80,6 +82,9 @@ public class FishLoot {
         public String[] exclude_regions = new String[0];
         //public ExcludeHabitats excludeHabitats;
         public float weight_multiplier = 0.0f;
+
+        public String[] required_bait = new String[0];
+        public int required_power = 0;
     }
 
     public static class Height {

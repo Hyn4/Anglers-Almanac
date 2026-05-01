@@ -147,10 +147,15 @@ public class MinigameManager {
         Store<EntityStore> store = bobberRef.getStore();
         BobberComponent bobberComp = store.getComponent(bobberRef, BobberComponent.getComponentType());
         FishingModifier.Modifiers baitMods = null;
+        String baitID = null;
         if (bobberComp != null && bobberComp.getBaitName() != null) {
             FishBaitData baitAsset = BaitUtils.getBaitData(bobberComp.getBaitName());
             //AnglersAlmanac.LOGGER.atInfo().log(baitAsset.getId());
-            if (baitAsset != null) baitMods = baitAsset.modifiers;
+            if (baitAsset != null)
+            {
+                baitMods = baitAsset.modifiers;
+                baitID = baitAsset.getId();
+            }
         }
         FishingModifier.Modifiers rodMods = null;
         InventoryComponent.Hotbar hotbarComp = player.getReference().getStore().getComponent(player.getReference(), InventoryComponent.Hotbar.getComponentType());
@@ -221,7 +226,9 @@ public class MinigameManager {
                 Biome,
                 y,
                 "clear",
-                depth
+                depth,
+                baitID,
+                1
         );
         // get fish
 
