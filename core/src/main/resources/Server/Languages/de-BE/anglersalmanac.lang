@@ -38,6 +38,12 @@ config.baitRequired.tooltip = Legt fest, ob Köder zum Angeln zwingend erforderl
 config.xpEnabled.text = EP durch Angeln
 config.xpEnabled.tooltip = [WIP] Erhalte Erfahrungspunkte beim Angeln, falls eine EP-Mod installiert ist.
 
+config.LocationCheck.text = Habitat check
+config.LocationCheck.tooltip = Disabled will mark all fish as global
+
+config.EnvironmentCheck.text = Environment check
+config.EnvironmentCheck.tooltip = Should the mod check environment check, e.g y level, time, depth etc
+
 ### Fischen
 fishing.bait.no = KEIN KÖDER
 fishing.bait.used = wurde verbraucht
