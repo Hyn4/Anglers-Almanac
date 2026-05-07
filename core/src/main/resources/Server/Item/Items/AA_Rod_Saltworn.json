@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "Salt-worn Rod",
-    "Description": "The rod of a veteran fisherman. Well worn with use."
+    "Name": "fishingrods.saltworn.name",
+    "Description": "fishingrods.saltworn.description"
   },
   "Categories": [
     "Items.Tools"
