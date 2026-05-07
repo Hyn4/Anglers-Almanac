@@ -40,7 +40,6 @@ import dev.rm20.anglersalmanac.Components.MinigameComponent_TensionBar;
 import dev.rm20.anglersalmanac.Components.PhysicsComponent;
 import dev.rm20.anglersalmanac.IEvents.LootCaughtEvent;
 import dev.rm20.anglersalmanac.Interactions.Rod.UseRodInteraction;
-import dev.rm20.anglersalmanac.Interactions.UseRodInteraction;
 import dev.rm20.anglersalmanac.Metadata.*;
 import dev.rm20.anglersalmanac.Models.FishBaitData;
 import dev.rm20.anglersalmanac.Models.FishLootManager;

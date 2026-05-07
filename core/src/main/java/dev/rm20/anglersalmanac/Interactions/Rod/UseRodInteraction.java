@@ -113,10 +113,8 @@ public class UseRodInteraction extends SimpleInstantInteraction {
             }
 
             if (shouldReset) {
-                AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata for: "+player.getDisplayName());
-                cancelFishing(commandBuffer, player, heldItem);
                 //meta = heldItem.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
-                return false;
+                return false; // Something has broken.
             }
             return true; // All seems okay.
         }
@@ -248,22 +246,6 @@ public class UseRodInteraction extends SimpleInstantInteraction {
         }
     }
 
-
-//    public static void updateMetadata(Inventory inventory, byte slot, ItemStack stack, @Nullable UUID bobberId, @Nullable UUID minigameId, int rodMode) {
-//        ItemStack newRod;
-//
-//        FishingRodData fishingMetaData = stack.getFromMetadataOrNull(FishingRodData.KEY, FishingRodData.CODEC);
-//        if (fishingMetaData == null) {
-//            fishingMetaData = new FishingRodData();
-//        }
-//        fishingMetaData.setBoundBobber(bobberId);
-//        fishingMetaData.setBoundMinigame(minigameId);
-//        fishingMetaData.setMode(rodMode);
-//        newRod = stack.withMetadata(FishingRodData.KEYED_CODEC, fishingMetaData);
-//
-//        inventory.getHotbar().replaceItemStackInSlot(slot, stack, newRod);
-//        //AnglersAlmanac.LOGGER.atInfo().log("Updated metadata: %s, %s, %s", fishingMetaData.getBoundBobber(), fishingMetaData.getBoundMinigame(), fishingMetaData.getMode());
-//    }
 
     public static void updateMetadata(InventoryComponent.Hotbar inventory, byte slot, ItemStack stack, @Nullable UUID bobberId, @Nullable UUID minigameId, int rodMode) {
         ItemStack newRod;

@@ -142,7 +142,7 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
                 //AnglersAlmanac.LOGGER.atInfo().log("YOU WIN");
                 MinigamePRating.PerformanceRating  rating = Minigame.getPerformanceRating(game.getPerformancePercentage());
                 //AnglersAlmanac.LOGGER.atInfo().log("Minigame performance rating = %s", rating);
-                if(rating == MinigamePRating.PerformanceRating.FAIL) LaunchBobberInteraction.cancelFishing(commandBuffer, player, game.fishingRod);
+                if(rating == MinigamePRating.PerformanceRating.FAIL) UseRodInteraction.cancelFishing(commandBuffer, player, game.fishingRod);
                 // Deal rewards.
                 game.stateTrigger = MinigameComponent_TensionBar.Trigger.DONE;
                 if(game.fishHooked!=null)

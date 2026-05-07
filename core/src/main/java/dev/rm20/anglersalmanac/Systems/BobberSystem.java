@@ -131,7 +131,7 @@ public class BobberSystem extends EntityTickingSystem<EntityStore> {
                         AnglersAlmanac.LOGGER.atWarning().withCause(e).log("Failed to remove bobber");
                     }
                 } else {
-                    UseRodInteraction.cancelFishing(commandBuffer, player, fishingRod, slot);
+                    UseRodInteraction.cancelFishing(commandBuffer, player, component.fishingRod, component.slot);
                 }
                 return;
             }
