@@ -1,0 +1,13 @@
+{
+  "Habitats": [
+    {
+      "ZoneName": "Global",
+      "Spread": [
+        {
+          "UiFile": "Almanac/Fish/AlmanacFish.ui",
+          "LeftPage": "Rare_Trout_SilverScale"
+        }
+      ]
+    }
+  ]
+}
