@@ -1,14 +1,14 @@
 {
   "Parent": "Template_Fish_Item",
-  "Quality": "Rare",
+  "Quality": "Epic",
   "TranslationProperties": {
-    "Name": "angler.fish.trout.silverscaled.name",
-    "Description": "angler.fish.trout.silverscaled.description"
+    "Name": "angler.fish.bonefish.frost.name",
+    "Description": "angler.fish.bonefish.frost.description"
   },
   "Model": "NPC/Fish/BoneFish/Model.blockymodel",
-  "Texture": "NPC/Fish/BoneFish/Texture.png",
+  "Texture": "NPC/Fish/BoneFish/Frost.png",
   "Animation": "NPC/Swimming_Wildlife/Bluegill/Animations/Swim/Swim.blockyanim",
-  "Icon": "Icons/ItemsGenerated/Fish_Bone_Item.png",
+  "Icon": "Icons/ItemsGenerated/Fish_Bone_Frost_Item.png",
   "IconProperties": {
     "Scale": 0.3,
     "Rotation": [
@@ -45,44 +45,17 @@
       "Quality": "Epic",
       "ItemEntity": {
         "ParticleSystemId": "Drop_Epic"
-      },
-      "ResourceTypes": [
-        {
-          "Id": "Fish",
-          "Quantity": 1
-        },
-        {
-          "Id": "Fish_Rare"
-        }
-      ]
+      }
     },
     "Legendary": {
       "Variant": true,
       "Quality": "Legendary",
       "ItemEntity": {
         "ParticleSystemId": "Drop_Legendary"
-      },
-      "ResourceTypes": [
-        {
-          "Id": "Fish",
-          "Quantity": 1
-        },
-        {
-          "Id": "Fish_Legendary"
-        }
-      ]
+      }
     }
   },
   "ItemEntity": {
     "ParticleSystemId": "Drop_Rare"
-  },
-  "ResourceTypes": [
-    {
-      "Id": "Fish",
-      "Quantity": 1
-    },
-    {
-      "Id": "Fish_Rare"
-    }
-  ]
+  }
 }
