@@ -40,7 +40,7 @@ public class HabitatCommand extends AbstractPlayerCommand {
             context.sendMessage(Message.translation("anglersalmanac.cmd.error.notPlayer"));
             return;
         }
-        if(!((Player) context.sender()).hasPermission("AnglersAlmanac.admin"))
+        if(!playerRef.hasPermission("AnglersAlmanac.admin"))
         {
             context.sendMessage(Message.translation("anglersalmanac.cmd.error.noPerms"));
             return;

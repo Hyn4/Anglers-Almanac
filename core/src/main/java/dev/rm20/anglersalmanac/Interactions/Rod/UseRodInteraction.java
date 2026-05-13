@@ -4,8 +4,9 @@ package dev.rm20.anglersalmanac.Interactions.Rod;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.*;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.math.vector.Vector3d;
-import com.hypixel.hytale.math.vector.Vector3f;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 import com.hypixel.hytale.protocol.*;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
@@ -56,7 +57,9 @@ public class UseRodInteraction extends SimpleInstantInteraction {
 
 
         if(!checkSaneMetadata(heldItem, commandBuffer)){
-            AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata within UseRodInteraction for: "+player.getDisplayName());
+            PlayerRef playerRef1 = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
+            if(playerRef1 == null) return;
+            AnglersAlmanac.LOGGER.atInfo().log("Fixing busted metadata within UseRodInteraction for: "+playerRef1.getUsername());
             cancelFishing(commandBuffer, player, heldItem);
             context.getState().state = InteractionState.Failed;
         }
@@ -172,7 +175,9 @@ public class UseRodInteraction extends SimpleInstantInteraction {
         }
         else
         {
-            AnglersAlmanac.LOGGER.atWarning().log("Failed to clear" + heldItem.getItem() +" on "+ player.getDisplayName());
+            PlayerRef playerRef1 = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
+            if(playerRef1 == null) return;
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to clear" + heldItem.getItem() +" on "+ playerRef1.getUsername());
         }
 
 
@@ -195,7 +200,9 @@ public class UseRodInteraction extends SimpleInstantInteraction {
         }
         else
         {
-            AnglersAlmanac.LOGGER.atWarning().log("Failed to clear" + heldItem.getItem() +" on "+ player.getDisplayName());
+            PlayerRef playerRef1 = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
+            if(playerRef1 == null) return;
+            AnglersAlmanac.LOGGER.atWarning().log("Failed to clear" + heldItem.getItem() +" on "+ playerRef1.getUsername());
         }
 
     }

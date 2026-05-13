@@ -74,7 +74,7 @@ public class MinigameSystem_TensionBar extends EntityTickingSystem<EntityStore> 
         if(rodMeta != null)
         {
             game.fishingRod = rodItem;
-            game.Slot = player.getInventory().getActiveHotbarSlot();
+            game.Slot = inv.getActiveSlot();
         }
 
 

@@ -20,6 +20,8 @@ import dev.rm20.anglersalmanac.MinigameManager.MinigameManager;
 import dev.rm20.anglersalmanac.Metadata.FishingRodData;
 import org.jspecify.annotations.NonNull;
 
+import static dev.rm20.anglersalmanac.Interactions.Rod.UseRodInteraction.updateMetadata;
+
 public class MinigameInteraction extends SimpleInstantInteraction {
     public static final BuilderCodec<MinigameInteraction> CODEC = BuilderCodec.builder(
             MinigameInteraction.class, MinigameInteraction::new, SimpleInstantInteraction.CODEC
@@ -61,7 +63,7 @@ public class MinigameInteraction extends SimpleInstantInteraction {
             {
                 return;
             }
-            LaunchBobberInteraction.updateMetadata(inv, inv.getActiveSlot(), heldItem, null, null, 0);
+            updateMetadata(inv, inv.getActiveSlot(), heldItem, null, null, 0);
             PlayerRef playerRefComp = playerRef.getStore().getComponent(playerRef, PlayerRef.getComponentType());
             if(playerRefComp !=null) {
                 AnglersAlmanac.LOGGER.atInfo().log("Fixing busted rod for: "+playerRefComp.getUsername());

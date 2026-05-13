@@ -39,7 +39,8 @@ public class SimulateFishingCommand extends AbstractPlayerCommand {
             commandContext.sendMessage(Message.translation("anglersalmanac.cmd.error.notPlayer"));
             return;
         }
-        if (!((Player) commandContext.sender()).hasPermission("AnglersAlmanac.admin")) {
+        if(!playerRef.hasPermission("AnglersAlmanac.admin"))
+        {
             commandContext.sendMessage(Message.translation("anglersalmanac.cmd.error.noPerms"));
             return;
         }
